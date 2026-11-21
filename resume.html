@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Resume · Brayden Paterson</title>
+<meta name="description" content="Answer three questions and get the version of Brayden Paterson's resume that fits your role.">
+<meta name="theme-color" content="#050706">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400..800&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<!-- hide the CSS monitor while the 3D one loads, so it doesn't flash first; crt3d.js shows it again if the model can't load -->
+<script>document.documentElement.classList.add('crt-loading'); setTimeout(() => document.documentElement.classList.remove('crt-loading'), 10000);</script>
+</head>
+<body class="resume-page">
+
+<!-- A dark room lit only by a green CRT. -->
+<div class="dark-room">
+  <header class="topbar"><a href="index.html">Brayden Paterson</a></header>
+
+  <main class="resume">
+    <div class="resume-intro">
+      <h1>Resume</h1>
+      <div>
+        <p>Answer three questions on the screen and you'll get the version of my resume that fits your role. You can click this button underneath to skip this and choose a resume but that's no fun</p>
+        <!-- The skip button opens a small menu of every resume version (filled in from resume-data.js by resume.js) -->
+        <div class="quick-wrap">
+          <button class="quick" id="quick" type="button" aria-expanded="false" aria-controls="quick-menu">Just give me a damn resume</button>
+          <div class="quick-menu" id="quick-menu" hidden>
+            <p>well I'll still ask you one more question, which would you want?</p>
+            <ul id="quick-list"></ul>
+          </div>
+          <noscript><a class="quick" href="assets/Resumes/BraydenPatersonIT.pdf" download>Download my resume</a></noscript>
+        </div>
+      </div>
+    </div>
+
+    <!-- The CRT monitor, built as a 3D box in CSS: a front with the screen, tapered sides, top and bottom going
+         back to a smaller rear, and a stand. It tilts slightly towards the mouse. Only the terminal is real content. -->
+    <div class="stage">
+      <div class="monitor" id="monitor">
+        <i class="m-left" aria-hidden="true"></i><i class="m-right" aria-hidden="true"></i>
+        <i class="m-top" aria-hidden="true"></i><i class="m-bottom" aria-hidden="true"></i><i class="m-back" aria-hidden="true"></i>
+        <div class="m-front">
+          <div class="crt-screen">
+            <div class="term" id="term" aria-live="polite">
+              <noscript><p>This terminal needs JavaScript. Use the button above to download my resume.</p></noscript>
+            </div>
+            <i class="glass" aria-hidden="true"></i>
+          </div>
+          <div class="m-chin" aria-hidden="true"><span>BP-2027</span><i class="m-led"></i><i class="m-power"></i></div>
+        </div>
+        <i class="m-neck" aria-hidden="true"></i><i class="m-base" aria-hidden="true"></i>
+      </div>
+    </div>
+  </main>
+</div>
+
+<footer>
+  <span>Served from an HP Z420 running FreeBSD.</span>
+  <span>© 2026 Brayden Paterson</span>
+</footer>
+
+<!-- three.js for the CRT model (crt3d.js); the page works without it -->
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
+<script type="module" src="resume.js"></script>
+<script type="module" src="crt3d.js" onerror="document.documentElement.classList.remove('crt-loading')"></script>
+</body>
+</html>
