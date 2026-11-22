@@ -20,16 +20,17 @@ a{color:inherit}
 :focus-visible{outline:2px solid var(--ink);outline-offset:4px;border-radius:2px}
 
 /* ===== Home: the name in the middle of the top row, a photo link either side of it and three underneath =====
-   The grid's width is tied to the screen's height, which sets how big the cards are (raise the 2.22 for bigger cards). */
+   The grid's width is worked out from the screen's height so both rows (cards + labels + stagger) fit on the first screen:
+   a card is (width / 5) wide and 4/3 of that tall, and two rows of them plus labels, gaps and padding ≈ 100svh. */
 .tiles{display:grid;grid-template-columns:repeat(5,1fr);grid-template-areas:"a n n n b" ". c d e .";gap:clamp(14px,1.6vw,24px);align-items:center;
-  max-width:max(912px,calc((100svh - 2 * var(--gutter) - 110px) * 2.22));margin:0 auto;container-type:inline-size;padding:var(--gutter) var(--gutter) clamp(60px,10vh,120px)}
+  max-width:max(760px,calc((100svh - 250px) * 1.875 + 96px + 2 * var(--gutter)));margin:0 auto;container-type:inline-size;padding:var(--gutter) var(--gutter) 32px}
 .tiles > .tile:nth-of-type(1){grid-area:a}
 .tiles > .tile:nth-of-type(2){grid-area:b;text-align:right}   /* Resume: its name under the right corner */
-.tiles > .tile:nth-of-type(3){grid-area:c;translate:-18% -16%}       /* the bottom three: spread apart and staggered */
-.tiles > .tile:nth-of-type(4){grid-area:d;translate:0 -5%;display:flex;flex-direction:column-reverse}   /* About me: its name above the photo */
+.tiles > .tile:nth-of-type(3){grid-area:c;translate:-18% 0}       /* the bottom three: spread apart and staggered */
+.tiles > .tile:nth-of-type(4){grid-area:d;display:flex;flex-direction:column-reverse}   /* About me: its name above the photo */
 .tiles > .tile:nth-of-type(4) b{margin:0 0 12px}
-.tiles > .tile:nth-of-type(5){grid-area:e;translate:18% -12%}
-.tiles .title{grid-area:n;text-align:center;padding-top:clamp(24px,7vh,80px)}
+.tiles > .tile:nth-of-type(5){grid-area:e;translate:18% 24px}
+.tiles .title{grid-area:n;align-self:end;text-align:center}   /* sits at the bottom of the top row */
 /* sized so "Paterson" (8 letters at 0.6em each, minus the tightened spacing) spans the three middle columns (--name-w) */
 .title h1{font-family:var(--font-name);font-weight:700;font-size:min(calc(var(--name-w,47.5cqw) / 4.6),220px);line-height:.9;letter-spacing:-.04em}
 .title h1 > span{display:block;overflow:hidden;padding-bottom:.3em;margin-bottom:-.3em}  /* each line is a window the word rises through, with room for the y's tail */
@@ -204,24 +205,26 @@ html:has(.resume-page),.resume-page{background:#050706}
   .term .ascii{font-size:2.1cqw}
 }
 
-/* ===== How this site runs: the machine room at night. Dark concrete wall, warm text, orange headline, LED-green ticker ===== */
-html:has(.runs-page),.runs-page{--cream:#ffe9cf;--dim:rgba(255,214,170,.66);--rule:rgba(255,140,50,.2);--orange:#ff8a1e;--led:#39ff6a;--led-down:#ff4d4d;
-  /* a concrete wall: fine grain, sparse dark pits (the aggregate), lit softly from above, darker at the edges */
+/* ===== How this site runs: a glass office tower on a sunny day. Sky-blue curtain wall, orange headline, LED-green ticker ===== */
+html:has(.runs-page),.runs-page{--cream:#fff3e0;--dim:rgba(240,247,255,.84);--rule:rgba(255,255,255,.22);--orange:#ff8a1e;--led:#39ff6a;--led-down:#ff4d4d;
+  /* the glass wall, front to back: the sun's reflection (top left, where the server's light comes from), two glare streaks,
+     the window frames (mullions), and the sky it reflects, bright at the top and deeper blue lower down */
   background:
-    radial-gradient(ellipse 70% 55% at 50% 0,rgba(255,236,210,.07),transparent 70%),
-    radial-gradient(ellipse 120% 90% at 50% 40%,transparent 55%,rgba(0,0,0,.45)),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.45' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -7 2.6'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='.35'/%3E%3C/svg%3E"),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.16'/%3E%3C/svg%3E"),
-    #2a2a2b;
+    radial-gradient(circle at 12% 6%,rgba(255,252,235,.75),rgba(255,245,210,.25) 12%,transparent 32%),
+    linear-gradient(115deg,transparent 26%,rgba(255,255,255,.17) 33%,transparent 41%,transparent 57%,rgba(255,255,255,.1) 62%,transparent 68%),
+    repeating-linear-gradient(90deg,rgba(14,38,66,.5) 0 3px,transparent 3px 200px),
+    repeating-linear-gradient(0deg,rgba(14,38,66,.5) 0 3px,transparent 3px 260px),
+    linear-gradient(180deg,#86c8f0,#4a92cc 45%,#1f5487);
   background-attachment:fixed;color:var(--cream)}
 .runs-page{position:relative;padding-bottom:84px}   /* room for the ticker */
-.runs-page .topbar a{color:var(--cream)}
+.runs-page .topbar a{color:var(--cream);text-shadow:0 1px 2px rgba(0,20,45,.8),0 0 12px rgba(0,20,45,.5)}   /* readable in the sun's glare */
 .runs-page :focus-visible{outline-color:var(--orange)}
 .runs-page footer{border-top-color:var(--rule);color:var(--dim)}
 .runs{max-width:1800px;margin:0 auto;padding:0 var(--gutter) clamp(24px,4vh,48px)}
 .runs-title{max-width:22ch;margin:0 auto clamp(16px,3vh,36px);text-align:center;text-wrap:balance;
-  font:900 clamp(38px,5.6vw,96px)/.95 var(--font);letter-spacing:-.045em;color:var(--orange);text-shadow:0 0 40px rgba(255,120,20,.35)}
+  font:900 clamp(38px,5.6vw,96px)/.95 var(--font);letter-spacing:-.045em;color:var(--orange);text-shadow:0 3px 0 #8a3f00,0 10px 30px rgba(0,25,55,.45)}   /* a dark edge so it reads against the bright sky */
 .runs-title em{font-style:normal;color:#ffb347}
+.runs-info{padding:clamp(20px,2.4vw,36px);border:1px solid var(--rule);border-radius:10px;background:rgba(8,28,52,.55);backdrop-filter:blur(8px)}   /* a tinted pane, so the text reads on the glass */
 .runs-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:clamp(24px,3vw,56px);align-items:center}
 .runs-section + .runs-section{margin-top:clamp(24px,4vh,40px);padding-top:clamp(24px,4vh,40px);border-top:1px solid var(--rule)}
 .runs-section h2{font:500 13px var(--font-name);letter-spacing:.1em;text-transform:uppercase;color:var(--orange);margin-bottom:14px}
@@ -232,14 +235,14 @@ html:has(.runs-page),.runs-page{--cream:#ffe9cf;--dim:rgba(255,214,170,.66);--ru
 .rig-btn,.rig-hint{display:none}
 .rig.is-3d .rig-btn{display:block;position:absolute;left:50%;bottom:34px;transform:translateX(-50%);padding:11px 18px;border:0;border-radius:6px;background:var(--orange);color:#1a0d00;font:700 15px var(--font);cursor:pointer}
 .rig.is-3d .rig-hint{display:block;position:absolute;left:0;right:0;bottom:4px;text-align:center;font:500 12px var(--font-name);color:var(--dim);pointer-events:none}
-.rig-tip{position:absolute;z-index:2;max-width:260px;padding:10px 12px;border:1px solid var(--rule);border-radius:6px;background:#140f1f;font-size:14px;line-height:1.4;color:var(--dim);pointer-events:none;transform:translate(-50%,calc(-100% - 16px))}
+.rig-tip{position:absolute;z-index:2;max-width:260px;padding:10px 12px;border:1px solid var(--rule);border-radius:6px;background:#0b2340;font-size:14px;line-height:1.4;color:var(--dim);pointer-events:none;transform:translate(-50%,calc(-100% - 16px))}
 .rig-tip b,.parts b{display:block;font:500 14px var(--font-name);color:var(--orange)}
 .parts{list-style:none;padding:0;display:grid;gap:14px;font-size:15px;color:var(--dim)}
 .rig:not(.is-3d){height:auto}
 .rig.is-3d .parts{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}   /* still read by screen readers */
 /* the path a request takes: numbered steps in a row */
 .path{list-style:none;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;counter-reset:step}
-.path li{padding:14px;border:1px solid var(--rule);border-radius:6px;background:rgba(255,140,50,.04);counter-increment:step}
+.path li{padding:14px;border:1px solid var(--rule);border-radius:6px;background:rgba(255,255,255,.06);counter-increment:step}
 .path li::before{content:counter(step,decimal-leading-zero);display:block;margin-bottom:6px;font:500 12px var(--font-name);color:var(--led)}
 .path b{display:block;font-weight:600;margin-bottom:4px;color:var(--cream)}
 .path span{font-size:14px;line-height:1.45;color:var(--dim)}
@@ -284,7 +287,7 @@ footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px 24px;pa
 /* ===== Phones: two staggered columns instead of a squashed row ===== */
 @media (max-width:760px){
   .tiles{grid-template-columns:1fr 1fr;grid-template-areas:"n n" "a b" "c d" "e .";row-gap:28px;max-width:none}
-  .tiles .title{--name-w:100cqw;margin:8vh 0 4vh;padding-top:0}
+  .tiles .title{--name-w:100cqw;margin:8vh 0 4vh}
   .tiles > .tile{translate:none}
 }
 @media (prefers-reduced-motion:reduce){
@@ -295,6 +298,6 @@ footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px 24px;pa
   .quick-menu,.quick-menu :is(p,li){animation:none}
   .feed i{animation:none!important}
   .ticker-track{animation:none;transition:none}
-  .ticker-window{overflow-x:auto}
+  .ticker-window{overflow-x:auto;scrollbar-width:none}
   .ticker-set + .ticker-set{display:none}
 }

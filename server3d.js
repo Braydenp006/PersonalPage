@@ -65,11 +65,10 @@ if(gl){
   box([.102, .026, .147], 0x7a7f86, [-.02, -.125, DRIVE_Z], 'pool2');
   box([.07, .007, .1], 0x23262b, [-.02, -.095, DRIVE_Z + .02], 'ssd');
 
-  scene.add(new THREE.HemisphereLight(0xfff4e6, 0x1a1c1f, 1.3));
+  scene.add(new THREE.HemisphereLight(0xbfe2ff, 0x2a3442, 1.4));   // daylight: blue sky above, darker ground below
   const light = (color, power, x, y, z) => { const l = new THREE.DirectionalLight(color, power); l.position.set(x, y, z); scene.add(l); };
-  light(0xffffff, 2.4, -1, 1.3, 1.5);   // key, from the front left
-  light(0xffffff, .6, 1, .2, 1);        // fill
-  light(0xff8a1e, 3, 1, .6, -1.5);      // orange rim from behind, to match the page
+  light(0xfff1d6, 3.6, -1.2, 2, 1.2);   // the sun: warm white, high up on the left, like the glare on the page behind
+  light(0x9fd4ff, .8, 1, .3, -1);       // sky bouncing off the glass behind it
 
   const camera = new THREE.PerspectiveCamera(30, 1, .05, 10);
   camera.position.set(-.8, .4, 1);
