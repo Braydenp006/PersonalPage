@@ -4,3 +4,15 @@ unused
 
 # placeholder photos I do not have the rights to: local only, never commit
 assets/Pictures/work/temp-*
+
+# my local Claude Code settings (permissions, hooks): machine-specific
+.claude/settings.local.json
+
+# Impeccable's installed copies (reinstall with: npx impeccable install). PRODUCT.md, DESIGN.md and
+# .impeccable/config.json, design.json and surfaces/ are the parts worth committing.
+.claude/skills/impeccable/
+.claude/agents/impeccable-*
+.opencode/
+.impeccable/hook.cache.json
+# downloaded style reference images (not mine to publish)
+.impeccable/reference/
