@@ -205,54 +205,59 @@ html:has(.resume-page),.resume-page{background:#050706}
   .term .ascii{font-size:2.1cqw}
 }
 
-/* ===== How this site runs: a glass office tower on a sunny day. Sky-blue curtain wall, orange headline, LED-green ticker ===== */
-html:has(.runs-page),.runs-page{--cream:#fff3e0;--dim:rgba(240,247,255,.84);--rule:rgba(255,255,255,.22);--orange:#ff8a1e;--led:#39ff6a;--led-down:#ff4d4d;
-  /* the glass wall, front to back: the sun's reflection (top left, where the server's light comes from), two glare streaks,
-     the window frames (mullions), and the sky it reflects, bright at the top and deeper blue lower down */
-  background:
-    radial-gradient(circle at 12% 6%,rgba(255,252,235,.75),rgba(255,245,210,.25) 12%,transparent 32%),
-    linear-gradient(115deg,transparent 26%,rgba(255,255,255,.17) 33%,transparent 41%,transparent 57%,rgba(255,255,255,.1) 62%,transparent 68%),
-    repeating-linear-gradient(90deg,rgba(14,38,66,.5) 0 3px,transparent 3px 200px),
-    repeating-linear-gradient(0deg,rgba(14,38,66,.5) 0 3px,transparent 3px 260px),
-    linear-gradient(180deg,#86c8f0,#4a92cc 45%,#1f5487);
-  background-attachment:fixed;color:var(--cream)}
+/* ===== How this site runs: an old home computer's screen. Bright blue page, white panels and text, monospace everything, LED ticker ===== */
+html:has(.runs-page),.runs-page{--blue:#4148d8;--deep:#2d33b8;--text:#fff;--dim:rgba(255,255,255,.8);--white:#fff;--rule:#fff;--led:#39ff6a;--led-down:#ff4d4d;
+  background:var(--blue);color:var(--text);font-family:var(--font-name)}
 .runs-page{position:relative;padding-bottom:84px}   /* room for the ticker */
-.runs-page .topbar a{color:var(--cream);text-shadow:0 1px 2px rgba(0,20,45,.8),0 0 12px rgba(0,20,45,.5)}   /* readable in the sun's glare */
-.runs-page :focus-visible{outline-color:var(--orange)}
-.runs-page footer{border-top-color:var(--rule);color:var(--dim)}
-.runs{max-width:1800px;margin:0 auto;padding:0 var(--gutter) clamp(24px,4vh,48px)}
-.runs-title{max-width:22ch;margin:0 auto clamp(16px,3vh,36px);text-align:center;text-wrap:balance;
-  font:900 clamp(38px,5.6vw,96px)/.95 var(--font);letter-spacing:-.045em;color:var(--orange);text-shadow:0 3px 0 #8a3f00,0 10px 30px rgba(0,25,55,.45)}   /* a dark edge so it reads against the bright sky */
-.runs-title em{font-style:normal;color:#ffb347}
-.runs-info{padding:clamp(20px,2.4vw,36px);border:1px solid var(--rule);border-radius:10px;background:rgba(8,28,52,.55);backdrop-filter:blur(8px)}   /* a tinted pane, so the text reads on the glass */
-.runs-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:clamp(24px,3vw,56px);align-items:center}
-.runs-section + .runs-section{margin-top:clamp(24px,4vh,40px);padding-top:clamp(24px,4vh,40px);border-top:1px solid var(--rule)}
-.runs-section h2{font:500 13px var(--font-name);letter-spacing:.1em;text-transform:uppercase;color:var(--orange);margin-bottom:14px}
-.svc-text{font-size:17px;line-height:1.65;color:var(--dim)}
-/* the server: no frame, it floats on the page. Without 3D it's the parts list as text */
-.rig{position:relative;height:min(74svh,820px)}
+.runs-page :focus-visible{outline-color:#fff}
+.runs-page footer{border-top-color:rgba(255,255,255,.4);color:var(--dim)}
+/* the top bar: home link, keys, clock. White, with blue text */
+.term-bar{display:flex;align-items:center;gap:18px;padding:8px var(--gutter);background:#fff;color:var(--deep);font:500 13px var(--font-name)}
+.term-bar a{text-decoration:none;font-weight:700}
+.term-bar a:hover{text-decoration:underline;text-underline-offset:3px}
+.keys{display:flex;gap:6px;flex-wrap:wrap}
+.keys b{padding:2px 8px;background:var(--blue);color:#fff;font-weight:500;font-size:12px}
+.keys b:last-child{background:var(--deep);font-weight:700}
+.clock{margin-left:auto;font-weight:700;font-variant-numeric:tabular-nums}
+.runs{max-width:1800px;margin:0 auto;padding:clamp(20px,4vh,40px) var(--gutter) clamp(24px,4vh,48px)}
+.runs-title{margin:0 auto clamp(18px,3.5vh,40px);text-align:center;text-wrap:balance;font:700 clamp(28px,3.8vw,62px)/1.1 var(--font-name);letter-spacing:-.03em;color:#fff;text-transform:uppercase}
+.runs-title::after{content:"";display:inline-block;width:.55em;height:.9em;margin-left:.15em;vertical-align:-.08em;background:#fff;animation:blink 1.1s steps(1) infinite}   /* the cursor */
+@keyframes blink{50%{opacity:0}}
+/* panels: text on the left, the server on the right spanning both rows */
+.runs-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);grid-template-areas:"about rig" "path rig";grid-template-rows:auto 1fr;gap:clamp(14px,1.4vw,22px);align-items:start}
+.panel-about{grid-area:about}.panel-path{grid-area:path}.panel-rig{grid-area:rig}
+.panel{border:2px solid #fff;background:var(--deep)}
+.panel h2{margin:0;padding:6px 12px;background:#fff;font:700 13px var(--font-name);letter-spacing:.06em;text-transform:uppercase;color:var(--deep)}
+.panel h2 span{color:var(--blue);margin-right:6px}
+.svc-text{padding:16px 18px;font-size:15px;line-height:1.75}
+/* the route, as a data table */
+.path{width:100%;border-collapse:collapse;font-size:14px}
+.path th{padding:8px 14px;text-align:left;font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);border-bottom:2px solid #fff}
+.path td{padding:10px 14px;vertical-align:top;line-height:1.5}
+.path tbody tr:nth-child(odd){background:rgba(255,255,255,.08)}
+.path tbody tr:hover{background:rgba(255,255,255,.2)}
+.path td:first-child{color:#c9ccff}
+.path td:nth-child(2){font-weight:700;white-space:nowrap}
+.path-note{padding:12px 14px 14px;border-top:2px solid #fff;font-size:13px;color:var(--dim)}
+/* the server, drawn in coloured ASCII. Without 3D it's the parts list as text */
+.rig{position:relative;height:clamp(380px,calc(100svh - 380px),760px);overflow:hidden}   /* fits above the ticker */
 .rig canvas{display:block;width:100%;height:100%}
 .rig-btn,.rig-hint{display:none}
-.rig.is-3d .rig-btn{display:block;position:absolute;left:50%;bottom:34px;transform:translateX(-50%);padding:11px 18px;border:0;border-radius:6px;background:var(--orange);color:#1a0d00;font:700 15px var(--font);cursor:pointer}
-.rig.is-3d .rig-hint{display:block;position:absolute;left:0;right:0;bottom:4px;text-align:center;font:500 12px var(--font-name);color:var(--dim);pointer-events:none}
-.rig-tip{position:absolute;z-index:2;max-width:260px;padding:10px 12px;border:1px solid var(--rule);border-radius:6px;background:#0b2340;font-size:14px;line-height:1.4;color:var(--dim);pointer-events:none;transform:translate(-50%,calc(-100% - 16px))}
-.rig-tip b,.parts b{display:block;font:500 14px var(--font-name);color:var(--orange)}
-.parts{list-style:none;padding:0;display:grid;gap:14px;font-size:15px;color:var(--dim)}
+.rig.is-3d .rig-btn{display:block;position:absolute;z-index:1;left:50%;bottom:34px;transform:translateX(-50%);padding:8px 14px;border:0;background:#fff;color:var(--deep);font:700 13px var(--font-name);text-transform:uppercase;letter-spacing:.04em;cursor:pointer}
+.rig.is-3d .rig-btn:hover{background:#dfe1ff}
+.rig.is-3d .rig-hint{display:block;position:absolute;left:0;right:0;bottom:8px;text-align:center;font-size:12px;color:var(--dim);pointer-events:none}
+.rig-tip{position:absolute;z-index:2;max-width:280px;padding:8px 10px;background:#fff;font-size:13px;line-height:1.45;color:var(--deep);pointer-events:none;transform:translate(-50%,calc(-100% - 16px))}
+.rig-tip b,.parts b{display:block;font-weight:700}
+.parts{list-style:none;padding:16px 18px;display:grid;gap:12px;font-size:14px;color:var(--dim)}
+.parts b{color:#fff}
 .rig:not(.is-3d){height:auto}
 .rig.is-3d .parts{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}   /* still read by screen readers */
-/* the path a request takes: numbered steps in a row */
-.path{list-style:none;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;counter-reset:step}
-.path li{padding:14px;border:1px solid var(--rule);border-radius:6px;background:rgba(255,255,255,.06);counter-increment:step}
-.path li::before{content:counter(step,decimal-leading-zero);display:block;margin-bottom:6px;font:500 12px var(--font-name);color:var(--led)}
-.path b{display:block;font-weight:600;margin-bottom:4px;color:var(--cream)}
-.path span{font-size:14px;line-height:1.45;color:var(--dim)}
-.path-note{margin-top:14px;font-size:14px;color:var(--dim)}
-/* the stats ticker: an LED board along the bottom. The feed's state stays put, the numbers scroll past */
+/* the stats ticker: an LED board along the bottom in white-grey; only the arrows are green or red. The feed's state stays put */
 .ticker{position:fixed;left:0;right:0;bottom:0;z-index:10;display:flex;align-items:center;height:76px;padding-bottom:env(safe-area-inset-bottom);box-sizing:content-box;
-  background:#050505;border-top:3px solid #1b1b1b;box-shadow:0 -10px 30px rgba(0,0,0,.6);font-family:'Doto',var(--font-name);font-weight:900}
+  background:#000;border-top:2px solid #fff;box-shadow:0 -10px 30px rgba(0,0,0,.35);font-family:'Doto',var(--font-name);font-weight:900}
 .ticker::after{content:"";position:absolute;inset:0;pointer-events:none;   /* the LED grid: dark gaps between the lit dots */
   background:radial-gradient(circle,transparent 1.1px,rgba(0,0,0,.55) 1.6px) 0 0/4px 4px}
-.feed{display:flex;align-items:center;gap:10px;flex:none;height:100%;margin:0;padding:0 20px;border-right:3px solid #1b1b1b;color:#ffb347;font-size:20px;text-transform:uppercase;text-shadow:0 0 8px rgba(255,170,60,.7)}
+.feed{display:flex;align-items:center;gap:10px;flex:none;height:100%;margin:0;padding:0 20px;border-right:2px solid #333;color:var(--white);font-size:20px;text-transform:uppercase;text-shadow:0 0 8px rgba(255,255,255,.5)}
 .feed i{width:12px;height:12px;border-radius:50%;background:#e0b25c}
 .feed[data-state="live"] i{background:var(--led);box-shadow:0 0 10px var(--led);animation:pulse 2s infinite}
 .feed[data-state="offline"] i{background:var(--led-down)}
@@ -263,20 +268,17 @@ html:has(.runs-page),.runs-page{--cream:#fff3e0;--dim:rgba(240,247,255,.84);--ru
 .ticker-track.dim{opacity:.45}
 .ticker-set{display:flex;margin:0}
 .ticker-set > div{display:flex;align-items:baseline;gap:14px;padding:0 40px;white-space:nowrap}
-.ticker dt{font-size:22px;text-transform:uppercase;color:#ffb347;text-shadow:0 0 8px rgba(255,170,60,.6)}
-.ticker dd{margin:0;font-size:38px;color:var(--led);text-shadow:0 0 6px var(--led),0 0 18px rgba(57,255,106,.5);font-variant-numeric:tabular-nums}
-.ticker dd::before{content:"▲ ";font-size:.7em}
-.ticker dd[data-dir="down"]{color:var(--led-down);text-shadow:0 0 6px var(--led-down),0 0 18px rgba(255,77,77,.5)}
-.ticker dd[data-dir="down"]::before{content:"▼ "}
+.ticker dt{font-size:22px;text-transform:uppercase;color:#9aa6bd;text-shadow:0 0 6px rgba(200,210,230,.35)}
+.ticker dd{margin:0;font-size:38px;color:#e8ecf4;text-shadow:0 0 6px rgba(232,236,244,.7),0 0 18px rgba(232,236,244,.3);font-variant-numeric:tabular-nums}
+.ticker dd::before{content:"▲ ";font-size:.7em;color:var(--led);text-shadow:0 0 6px var(--led)}
+.ticker dd[data-dir="down"]::before{content:"▼ ";color:var(--led-down);text-shadow:0 0 6px var(--led-down)}
 @keyframes tick{to{transform:translateX(-50%)}}
 @media (max-width:1100px){
-  .runs-grid{grid-template-columns:1fr}
-  .rig{order:-1;height:min(64svh,600px)}
-  .path{grid-template-columns:1fr 1fr}
+  .runs-grid{grid-template-columns:1fr;grid-template-areas:"about" "rig" "path"}
+  .rig{height:min(60svh,560px)}
 }
 @media (max-width:560px){
-  .path{grid-template-columns:1fr}
-  .feed span{display:none}   /* just the dot on phones */
+  .keys,.feed span{display:none}   /* phones: no function keys, just the feed's dot */
   .ticker{height:60px}
   .ticker dd{font-size:30px}
 }
@@ -296,7 +298,7 @@ footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px 24px;pa
   .title h1 > span > span,.tagline,.socials{animation:none}
   .frame img{transition:none}
   .quick-menu,.quick-menu :is(p,li){animation:none}
-  .feed i{animation:none!important}
+  .feed i,.runs-title::after{animation:none!important}
   .ticker-track{animation:none;transition:none}
   .ticker-window{overflow-x:auto;scrollbar-width:none}
   .ticker-set + .ticker-set{display:none}

@@ -80,6 +80,8 @@ addEventListener('popstate', async e => {
   const s = shapes(link, w.layer);
   await w.layer.animate({ clipPath: [s.full, s.card] }, { duration: 520, easing: GROW, fill: 'forwards' }).finished;
   await w.layer.animate({ clipPath: [s.card, s.dot] }, { duration: 260, easing: OPEN, fill: 'forwards' }).finished;
+  // drop the held pixel shapes: back on the stylesheet's inset(50%), the window stays hidden even if the zoom or window size changes
+  w.layer.getAnimations().forEach(a => a.cancel());
   busy = false;
 });
 

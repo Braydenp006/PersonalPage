@@ -2,6 +2,12 @@
 import { watchStats } from './stats.js';
 
 const feed = document.getElementById('feed'), ticker = document.getElementById('ticker');
+
+// the clock in the top bar, like a terminal's
+const clock = document.getElementById('clock');
+const tick = () => { clock.textContent = new Date().toLocaleTimeString([], { hour12: false }); };
+tick();
+setInterval(tick, 1000);
 // a second copy right after the first, so the scroll loops without a gap (screen readers skip it)
 const copy = ticker.firstElementChild.cloneNode(true);
 copy.setAttribute('aria-hidden', 'true');

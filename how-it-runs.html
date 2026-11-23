@@ -5,61 +5,75 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>How this site runs · Brayden Paterson</title>
 <meta name="description" content="This site is self-hosted on an HP Z420 running FreeBSD in Brayden Paterson's home. Live server stats, a look inside the machine and how a request gets here.">
-<meta name="theme-color" content="#4a92cc">
+<meta name="theme-color" content="#4148d8">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400..900&family=Doto:wght@700..900&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Doto:wght@700..900&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body class="runs-page">
 
-<header class="topbar"><a href="index.html">Brayden Paterson</a></header>
+<!-- the terminal's top bar: home link, a few function keys, a clock (how-it-runs.js) -->
+<header class="term-bar">
+  <a href="index.html">Brayden Paterson</a>
+  <span class="keys" aria-hidden="true"><b>HOME</b><b>SRV</b><b>Z420</b><b>FREEBSD</b><b>&lt;GO&gt;</b></span>
+  <time class="clock" id="clock"></time>
+</header>
 
 <main class="runs">
-  <h1 class="runs-title">You're reading this off a workstation <em>in my house.</em></h1>
+  <h1 class="runs-title">You're reading this off a workstation in my house.</h1>
 
   <div class="runs-grid">
-    <div class="runs-info">
-      <!-- ===== EDIT HERE: about the server ===== -->
-      <section class="runs-section" aria-labelledby="about-h">
-        <h2 id="about-h">About the server</h2>
-        <p class="svc-text">No cloud host. This site is served by an HP Z420 running FreeBSD, with one jail per service and
-          bhyve Linux VMs for the apps that only ship for Docker. Besides this site it runs my own Git server (Forgejo, mirroring my GitHub), my email,
-          a Minecraft server, Valheim and Sons of the Forest servers I start when they're needed, and willbot, my local AI assistant.
-          Behind my VPN it also keeps my passwords (Vaultwarden), files and calendar (Nextcloud), photos (Immich),
-          databases (PostgreSQL) and monitoring (Prometheus). [TODO: why you host what you do]</p>
-      </section>
+    <!-- ===== EDIT HERE: about the server ===== -->
+    <section class="panel panel-about" aria-labelledby="about-h">
+      <h2 id="about-h"><span>1)</span> About the server</h2>
+      <p class="svc-text">No cloud host. This site is served by an HP Z420 running FreeBSD, with one jail per service and
+        bhyve Linux VMs for the apps that only ship for Docker. Besides this site it runs my own Git server (Forgejo, mirroring my GitHub), my email,
+        a Minecraft server, Valheim and Sons of the Forest servers I start when they're needed, and willbot, my local AI assistant.
+        Behind my VPN it also keeps my passwords (Vaultwarden), files and calendar (Nextcloud), photos (Immich),
+        databases (PostgreSQL) and monitoring (Prometheus). [TODO: why you host what you do]</p>
+    </section>
 
-      <!-- TODO: update these steps when the site moves behind the Cloudflare proxy / tunnel (see Security in CONTEXT.md) -->
-      <section class="runs-section" aria-labelledby="path-h">
-        <h2 id="path-h">How your visit got here</h2>
-        <ol class="path">
-          <li><b>Cloudflare DNS</b><span>Finds my home. A dynamic DNS updater keeps it current when the IP changes.</span></li>
-          <li><b>Home router</b><span>Forwards the HTTPS request into the server.</span></li>
-          <li><b>nginx reverse proxy</b><span>Handles HTTPS with a Let's Encrypt certificate and passes the request on.</span></li>
-          <li><b>nginx web server</b><span>Serves these plain HTML, CSS and JavaScript files. No framework, no build step.</span></li>
-        </ol>
-        <p class="path-note">I manage the server only over my own WireGuard VPN. Nothing for admin is open to the internet.</p>
-      </section>
-    </div>
+    <!-- TODO: update these steps when the site moves behind the Cloudflare proxy / tunnel (see Security in CONTEXT.md) -->
+    <section class="panel panel-path" aria-labelledby="path-h">
+      <h2 id="path-h"><span>2)</span> How your visit got here</h2>
+      <table class="path">
+        <thead><tr><th>#</th><th>Hop</th><th>What it does</th></tr></thead>
+        <tbody>
+          <tr><td>01</td><td>Cloudflare DNS</td><td>Finds my home. A dynamic DNS updater keeps it current when the IP changes.</td></tr>
+          <tr><td>02</td><td>Home router</td><td>Forwards the HTTPS request into the server.</td></tr>
+          <tr><td>03</td><td>nginx reverse proxy</td><td>Handles HTTPS with a Let's Encrypt certificate and passes the request on.</td></tr>
+          <tr><td>04</td><td>nginx web server</td><td>Serves these plain HTML, CSS and JavaScript files. No framework, no build step.</td></tr>
+        </tbody>
+      </table>
+      <p class="path-note">I manage the server only over my own WireGuard VPN. Nothing for admin is open to the internet.</p>
+    </section>
 
-    <!-- The server in 3D (server3d.js). Without WebGL the parts list below is shown as plain text instead. -->
-    <section class="rig" id="rig" aria-label="The server, in 3D">
-      <button class="rig-btn" id="panel-toggle" type="button" aria-pressed="false">Open the side panel</button>
-      <p class="rig-hint" aria-hidden="true">Drag to turn · hover a part</p>
-      <div class="rig-tip" id="rig-tip" hidden></div>
-      <!-- ===== EDIT HERE: the hover labels. data-part matches the pieces in server3d.js ===== -->
-      <ul class="parts" id="parts">
-        <li data-part="panel"><b>Side panel</b>Click it, or the button, to open the case.</li>
-        <li data-part="cpu"><b>Intel Xeon E5-2697 v2</b>12 cores / 24 threads, under this cooler.</li>
-        <li data-part="ram"><b>64 GB DDR3 ECC memory</b>Error-correcting RAM, which ZFS is happiest with.</li>
-        <li data-part="ssd"><b>256 GB SSD</b>The boot drive. FreeBSD runs from here.</li>
-        <li data-part="mirror"><b>~2 TB mirrored ZFS pool</b>Two drives holding the same data, so one can fail without losing anything.</li>
-        <li data-part="pool2"><b>1 TB secondary ZFS pool</b>A second pool for everything else.</li>
-        <li data-part="board"><b>Motherboard</b>HP's Z420 board.</li>
-        <li data-part="psu"><b>Power supply</b></li>
-        <li data-part="fan"><b>Rear exhaust fan</b></li>
-      </ul>
+    <!-- The server in 3D, drawn in ASCII (server3d.js). Without WebGL the parts list below is shown as plain text instead. -->
+    <section class="panel panel-rig" aria-labelledby="rig-h">
+      <h2 id="rig-h"><span>3)</span> HP Z420 · live view</h2>
+      <div class="rig" id="rig">
+        <button class="rig-btn" id="panel-toggle" type="button" >Open the side panel</button>
+        <p class="rig-hint" aria-hidden="true">Drag to turn · hover a part</p>
+        <div class="rig-tip" id="rig-tip" hidden></div>
+        <!-- ===== EDIT HERE: the hover labels. data-part matches the pieces in server3d.js ===== -->
+        <ul class="parts" id="parts">
+          <li data-part="panel"><b>Side panel</b>Click it, or the button, to take it off.</li>
+          <li data-part="cpu"><b>Intel Xeon E5-2697 v2</b>12 cores / 24 threads, under this cooler.</li>
+          <li data-part="ram"><b>64 GB DDR3 ECC memory</b>Error-correcting RAM, which ZFS is happiest with.</li>
+          <li data-part="ssd"><b>256 GB SSD</b>The boot drive. FreeBSD runs from here.</li>
+          <li data-part="mirror"><b>~2 TB mirrored ZFS pool</b>Two drives holding the same data, so one can fail without losing anything.</li>
+          <li data-part="pool2"><b>1 TB secondary ZFS pool</b>A second pool for everything else.</li>
+          <li data-part="board"><b>Motherboard</b>HP's Z420 board.</li>
+          <li data-part="slots"><b>Expansion slots</b>PCIe slots, empty for now.</li>
+          <li data-part="chipset"><b>Chipset heatsink</b>Keeps the Intel C602 chipset cool.</li>
+          <li data-part="bays"><b>5.25″ bays</b>Three empty bays behind the front covers.</li>
+          <li data-part="psu"><b>Power supply</b></li>
+          <li data-part="fan"><b>Rear exhaust fan</b></li>
+          <li data-part="wires"><b>Cables</b>Power from the PSU to the board and drives, and data from the board to the drives.</li>
+          <li data-part="io"><b>Rear I/O</b>USB, Ethernet, PS/2 and audio ports.</li>
+        </ul>
+      </div>
     </section>
   </div>
 </main>
@@ -90,6 +104,6 @@
 
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
 <script type="module" src="how-it-runs.js"></script>
-<script type="module" src="server3d.js"></script>
+<script type="module" src="server3d.js?v=14"></script>   <!-- bump ?v= after editing it, so browsers fetch the new copy -->
 </body>
 </html>
