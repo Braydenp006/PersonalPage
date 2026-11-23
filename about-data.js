@@ -112,10 +112,13 @@ export const ME = {
   school: "Queen's University",
   status: 'Open to a co-op from May 2027',
   facts: [['Program', 'Computing'], ['Focus', 'Cybersecurity'], ['Minor', 'Mathematics'], ['School', "Queen's"], ['Based in', 'Holland Landing'], ['Co-op', '4 months, May 2027']],
-  contact: [   // the Links box (an odd last one spans the row)
+  // the symbols lit on the sign under my name: [label, icon in assets/icons/]
+  marks: [['Servers & infrastructure', 'mark-server'], ['Technical sales', 'mark-talk'], ['Cybersecurity', 'mark-shield'], ['Mathematics', 'mark-sigma']],
+  contact: [   // the links at the foot of the sign (an odd last one spans the row)
+    ['Resume', 'resume.html'],
+    ['Contact me', 'mailto:braydenp006@gmail.com'],
     ['GitHub', 'https://github.com/Braydenp006'],
     ['LinkedIn', 'https://www.linkedin.com/in/braydenpaterson/'],
-    ['Contact me', 'mailto:braydenp006@gmail.com'],
   ],
   numbers: [   // shortcut: not shown since the one-page layout (no spot in the sketch); kept for the resume/projects pages. The grid of figures: [label, value]. All from my resumes and my server.
     ['Employees in my phishing test', '200+'],
@@ -139,11 +142,11 @@ export const LIVE = [
   { label: 'Hours of music listened', value: null },     // [TODO: from Spotify or Last.fm; this year or all time]
 ];
 
-// ===== EDIT HERE: the Equipment slots: what I work with. `icon` is a file in assets/icons/ (no icon: initials). =====
+// ===== EDIT HERE: the Equipment slots: what I work with. `icon` is a file in assets/icons/ (no icon: initials). `group` sets its row. =====
 export const EQUIPMENT = [
   { group: 'Systems', name: 'Linux', icon: 'linux', text: 'My daily driver: command line, shell scripting, package management, system administration.' },
   { group: 'Systems', name: 'FreeBSD', icon: 'freebsd', text: 'Runs my home server: one jail per service, every service set up by hand.' },
-  { group: 'Systems', name: 'Windows', text: 'Supported it across two service desks, and led a Linux-to-Windows migration with Clonezilla.' },
+  { group: 'Systems', name: 'Windows', icon: 'window', text: 'Supported it across two service desks, and led a Linux-to-Windows migration with Clonezilla.' },
   { group: 'Systems', name: 'HP Z420', icon: 'hp', text: 'The home server this site runs on.' },
   { group: 'Languages', name: 'Python', icon: 'python', text: '[TODO: what I have built with it]' },
   { group: 'Languages', name: 'Java', icon: 'openjdk', text: '[TODO: what I have built with it]' },
@@ -153,24 +156,24 @@ export const EQUIPMENT = [
   { group: 'Tools', name: 'Docker', icon: 'docker', text: 'Ran my previous Debian server: Nextcloud, Jellyfin, Immich, Vaultwarden and more.' },
   { group: 'Tools', name: 'Jira', icon: 'jira', text: 'Ticketing on the service desk.' },
   { group: 'Tools', name: 'SendGrid', icon: 'sendgrid', text: 'Sent the phishing simulation to 200+ employees.' },
-  { group: 'Tools', name: 'Clonezilla', text: 'Imaged and deployed the OS for a Linux-to-Windows migration.' },
+  { group: 'Tools', name: 'Clonezilla', icon: 'disc-copy', text: 'Imaged and deployed the OS for a Linux-to-Windows migration.' },
   { group: 'Tools', name: 'Ollama', icon: 'ollama', text: 'Local LLM hosting for willbot, my voice assistant.' },
   { group: 'Network', name: 'WireGuard', icon: 'wireguard', text: 'My VPN: the only way into my server for admin.' },
   { group: 'Network', name: 'Tailscale', icon: 'tailscale', text: 'Remote access to my devices.' },
   { group: 'Network', name: 'OpenWrt', icon: 'openwrt', text: 'Router set up as a routed wireless client, with separate zones for servers, personal devices and IoT.' },
   { group: 'Hardware', name: 'Raspberry Pi', icon: 'raspberrypi', text: 'Wake-word activation for willbot.' },
   { group: 'Hardware', name: 'Arduino', icon: 'arduino', text: '[TODO: what I have built with it]' },
-  { group: 'Hardware', name: 'SolidWorks', text: '3D modelling.' },
-  { group: 'Hardware', name: 'PC building', text: 'Built and sold 5 custom gaming PCs for local customers.' },
+  { group: 'Hardware', name: 'SolidWorks', icon: 'cube', text: '3D modelling.' },
+  { group: 'Hardware', name: 'PC building', icon: 'pc-tower', text: 'Built and sold 5 custom gaming PCs for local customers.' },
 ];
 
 // ===== EDIT HERE: the "Journal" tab: hobbies and interests. =====
 export const JOURNAL = [
-  { title: 'Brazilian Jiu-Jitsu', kind: 'Activity', text: '[TODO: a few lines about it]' },
-  { title: 'Rock climbing', kind: 'Activity', text: '[TODO: a few lines about it]' },
-  { title: 'Skiing', kind: 'Activity', text: '[TODO: a few lines about it]' },
-  { title: 'Weightlifting', kind: 'Activity', text: '[TODO: a few lines about it]' },
-  { title: 'Cybersecurity', kind: 'Interest', text: '[TODO: a few lines about it]' },
-  { title: 'Self-hosting', kind: 'Interest', text: '[TODO: a few lines about it]' },
-  { title: 'Vintage electronics', kind: 'Interest', text: '[TODO: a few lines about it]' },
+  { title: 'Brazilian Jiu-Jitsu', kind: 'Activity', icon: 'belt', text: '[TODO: a few lines about it]' },
+  { title: 'Rock climbing', kind: 'Activity', icon: 'carabiner', text: '[TODO: a few lines about it]' },
+  { title: 'Skiing', kind: 'Activity', icon: 'mountain', text: '[TODO: a few lines about it]' },
+  { title: 'Weightlifting', kind: 'Activity', icon: 'dumbbell', text: '[TODO: a few lines about it]' },
+  { title: 'Cybersecurity', kind: 'Interest', icon: 'mark-shield', text: '[TODO: a few lines about it]' },
+  { title: 'Self-hosting', kind: 'Interest', icon: 'mark-server', text: '[TODO: a few lines about it]' },
+  { title: 'Vintage electronics', kind: 'Interest', icon: 'tube', text: '[TODO: a few lines about it]' },
 ];

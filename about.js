@@ -12,37 +12,46 @@ $('char-name').textContent = ME.name;
 $('char-role').textContent = `${ME.role} · ${ME.school}`;
 $('char-status').textContent = ME.status;
 $('facts').innerHTML = rows(ME.facts);
+// what I'm after, as symbols lit on the sign
+$('marks').innerHTML = ME.marks.map(([label, ic]) => `<li><span class="mark"><span class="icon" style="--icon:url(assets/icons/${ic}.svg)" aria-hidden="true"></span></span>${esc(label)}</li>`).join('');
 // live stats: a value, or a dash until its server script exists
 $('counters').innerHTML = rows(LIVE.map(s => [s.label, s.value ?? '–']));
 // the Links box: each with its logo (Simple Icons paths for GitHub and LinkedIn, CC0; an envelope for email)
 const LOGOS = {
   github: 'M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.6 18.3 5 18.3 5c.6 1.6.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3',
   linkedin: 'M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zm1.78 13.02H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z',
+  resume: 'M6 2h9l5 5v15H6zm8 1.5V8h4.5M9 12h8M9 15h8M9 18h5',
   mailto: 'M2 4h20a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm0 2v.5l10 6.25L22 6.5V6H2zm20 2.86-10 6.25L2 8.86V18h20V8.86z',
 };
 const logo = href => { const k = Object.keys(LOGOS).find(k => href.includes(k)); return k ? `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${LOGOS[k]}"/></svg>` : ''; };
-const SITE_COLOUR = { github: '#0d1117', linkedin: '#f4f2ee' };   // what each site opens onto, for the leaving transition
+const SITE_COLOUR = { github: '#0d1117', linkedin: '#f4f2ee', resume: '#050706' };   // what each site opens onto, for the leaving transition
 $('contact').innerHTML = ME.contact.map(([label, href]) => {
   const to = Object.entries(SITE_COLOUR).find(([k]) => href.includes(k))?.[1];
   return `<li><a href="${esc(href)}"${to ? ` data-to="${to}"` : ''}>${logo(href)}${esc(label)}</a></li>`;
 }).join('');
 
-// ===== EQUIPMENT and hobbies: two rows of slots sharing one bar underneath, like an item's description =====
+// ===== EQUIPMENT (a row of slots per group) and hobbies (one row, under Stats), sharing one readout, like an item's inspect panel =====
 const icon = it => it.icon ? `<span class="icon" style="--icon:url(assets/icons/${it.icon}.svg)" aria-hidden="true"></span>`
   : `<span class="icon initials" aria-hidden="true">${esc(it.name.split(/\s+/).map(w => w[0]).join('').slice(0, 2))}</span>`;
-const things = [...EQUIPMENT, ...JOURNAL.map(j => ({ name: j.title, group: j.kind, text: j.text }))];
-const slots = (box, from, to) => box.innerHTML = things.slice(from, to).map((it, i) =>
-  `<button type="button" class="pick" data-i="${from + i}" aria-label="${esc(it.name)}">${icon(it)}</button>`).join('');
-slots($('slots'), 0, EQUIPMENT.length);
-slots($('hobbies'), EQUIPMENT.length);
-const items = $('me').querySelector('.items');
+const things = [...EQUIPMENT, ...JOURNAL.map(j => ({ name: j.title, group: j.kind, icon: j.icon, text: j.text }))];
+const slot = (it, i) => `<button type="button" class="pick" data-i="${i}" aria-label="${esc(it.name)}">${icon(it)}</button>`;
+const groups = [...new Set(EQUIPMENT.map(it => it.group))];
+$('slots').innerHTML = groups.map(g => `<div class="gear-row" role="group" aria-label="${esc(g)}"><span class="gear-group" aria-hidden="true">${esc(g)}</span><div class="gear-slots">${
+  things.map((it, i) => i < EQUIPMENT.length && it.group === g ? slot(it, i) : '').join('')}</div></div>`).join('');
+$('hobbies').innerHTML = things.map((it, i) => i >= EQUIPMENT.length ? slot(it, i) : '').join('');
+const picks = [...document.querySelectorAll('.pick')], readout = $('item-card');
+let shown = null;
 const describe = b => {
-  items.querySelectorAll('.pick').forEach(x => x.setAttribute('aria-pressed', x === b));
+  if(b === shown) return;
+  shown = b;
+  picks.forEach(x => x.setAttribute('aria-pressed', x === b));
   const it = things[b.dataset.i];
-  $('item-card').innerHTML = `<b>${esc(it.name)}</b><span>${esc(it.group)}</span>${esc(it.text)}`;
+  readout.innerHTML = `<span class="readout-icon">${icon(it)}</span><span class="readout-head"><b>${esc(it.name)}</b><span>${esc(it.group)}</span></span><p>${esc(it.text)}</p>`;
+  if(!reduceMotion) readout.animate({ opacity: [.35, 1], transform: ['translateY(4px)', 'none'] }, { duration: 260, easing: 'cubic-bezier(.16,1,.3,1)' });
 };
-for(const ev of ['click', 'focusin', 'mouseover']) items.addEventListener(ev, e => { const b = e.target.closest('.pick'); if(b) describe(b); });
-describe(items.querySelector('.pick'));
+for(const box of [$('slots'), $('hobbies')]) for(const ev of ['click', 'focusin', 'mouseover'])
+  box.addEventListener(ev, e => { const b = e.target.closest('.pick'); if(b) describe(b); });
+describe(picks[0]);
 $('commits').innerHTML = '<i></i>'.repeat(7 * 40);   // an empty chart until GitHub is connected
 
 // ===== WORK: places as a timeline (and as numbered pins on the map). Work is numbered; school isn't =====
@@ -121,8 +130,8 @@ function buildMap(){
     style: 'assets/map/lab-style.json',   // the page's greys, blue and orange (assets/map/make-style.py)
     bounds: allPins = places.reduce((b, p) => b.extend([p.at[1], p.at[0]]), new ml.LngLatBounds()),   // MapLibre wants [lng, lat]
     fitBoundsOptions: { padding: 50 },
-    maxBounds: [[-81.2, 42.9], [-74.8, 45.4]],   // southern Ontario, Toronto to Kingston, with a little room
-    minZoom: 6.5,
+    maxBounds: [[-82.5, 41.5], [-73.5, 46.6]],   // southern Ontario, Toronto to Kingston, with room for a tall phone-width map to zoom out
+    minZoom: 5.5,   // low enough that a phone-width map fits Newmarket and Kingston
     dragRotate: false, pitchWithRotate: false, touchPitch: false,   // keep it flat, like a paper map
     attributionControl: { compact: true },
   });
@@ -141,10 +150,23 @@ function buildMap(){
     };
     pin.addEventListener('pointerenter', side);
     pin.addEventListener('focus', side);
-    pin.setAttribute('aria-label', `${p.kind === 'work' ? `${p.label}: ` : ''}${p.role}, ${p.place}`);
     pin.addEventListener('click', e => { e.stopPropagation(); openPlace(p, pin); });
-    new ml.Marker({ element: pin }).setLngLat([p.at[1], p.at[0]]).addTo(map);
+    p.marker = new ml.Marker({ element: pin }).setLngLat([p.at[1], p.at[0]]).addTo(map);
+    pin.setAttribute('aria-label', `${p.kind === 'work' ? `${p.label}: ` : ''}${p.role}, ${p.place}`);   // after: Marker labels it "Map marker"
   }
+  // pins closer than a pin's width (Newmarket has four) fan out in a small ring around their spot, so each can be clicked
+  const spread = () => {
+    const at = places.map(p => map.project([p.at[1], p.at[0]])), done = new Set();
+    places.forEach((p, i) => {
+      if(done.has(i)) return;
+      const near = places.map((_, j) => j).filter(j => !done.has(j) && at[i].dist(at[j]) < 34);
+      near.forEach(j => done.add(j));
+      const r = near.length > 1 ? Math.max(18, 34 / (2 * Math.sin(Math.PI / near.length))) : 0;   // neighbours 34px apart round the ring
+      near.forEach((j, k) => { const a = -Math.PI / 2 + k * 2 * Math.PI / near.length; places[j].marker.setOffset([r * Math.cos(a), r * Math.sin(a)]); });
+    });
+  };
+  map.on('zoom', spread);
+  map.once('load', () => { map.fitBounds(allPins, { padding: 40, duration: 0 }); spread(); });   // fit again once laid out: on a phone the box isn't its final size when the map is made
   mapEl.insertAdjacentHTML('beforeend', '<div class="map-legend"><span><i class="job-pin work"></i>Work</span><span><i class="job-pin school"></i>School</span></div>');
   return map;
 }

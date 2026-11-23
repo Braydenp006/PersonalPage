@@ -11,29 +11,31 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600&display=swap" rel="stylesheet">
 <!-- MapLibre: draws the map (OpenStreetMap data served by OpenFreeMap, styled by assets/map/teal-style.json) -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.css">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css?v=43">
 </head>
 <body class="about-page">
 
-<!-- About me, one screen: me down the left with my links; the map and my details in the middle; stats and what I use
-     on the right; the other pages as cards along the bottom. Looks: a light, hazy world with dark see-through panels,
-     corner brackets and pixel headings. Every word comes from about-data.js (filled in by about.js). Links leave with a
-     little transition (data-to: the colour of where they go). -->
+<!-- About me, one screen, as a test chamber: the chamber sign down the left (my name, what I'm after as lit symbols,
+     my details, and a dark foot with my availability and links); me standing on a plate in the middle; the map as an
+     observation window; what I use as a wall of slots, grouped; stats and hobbies beside it; the other pages along the
+     bottom. Every word comes from about-data.js (filled in by about.js). Links leave with a little transition (data-to). -->
 <main class="menu">
   <section class="me" id="me">
-    <div class="char-card">
-      <a class="menu-home" href="index.html" data-to="#f4ead6">◂ Home</a>
+    <!-- the chamber sign -->
+    <header class="sign">
+      <a class="menu-home" href="index.html" data-to="#000">◂ Home</a>
       <h1 class="char-name" id="char-name"></h1>
       <p class="char-role" id="char-role"></p>
-      <!-- the 3D figure (me3d.js): idles, nods and shakes its head now and then. shortcut: a stand-in mannequin until I have a model of myself -->
-      <div class="char-stage" id="char-stage"></div>
-      <p class="char-status"><span class="dot" aria-hidden="true"></span><span id="char-status"></span></p>
-    </div>
-    <div class="box links">
-      <h2 class="label">Links</h2>
-      <ul class="contact-links" id="contact"></ul>
-    </div>
-    <!-- where I've worked: the map; Expand opens it over the page with the timeline beside it -->
+      <ul class="marks" id="marks" aria-label="What I'm working towards"></ul>
+      <dl class="facts" id="facts"></dl>
+      <div class="sign-foot">
+        <p class="char-status"><span class="dot" aria-hidden="true"></span><span id="char-status"></span></p>
+        <ul class="contact-links" id="contact"></ul>
+      </div>
+    </header>
+    <!-- me, on a plate in the chamber (me3d.js): breathes and sways a little -->
+    <div class="char-stage" id="char-stage"></div>
+    <!-- where I've worked: the map, as an observation window; Expand opens it over the page with the timeline beside it -->
     <div class="map-slot">
       <div class="box map-box" id="map-box" role="region" aria-labelledby="map-h">
         <div class="map-top">
@@ -45,9 +47,11 @@
         </div>
       </div>
     </div>
-    <div class="box data">
-      <h2 class="label">About</h2>
-      <dl class="rows" id="facts"></dl>
+    <!-- what I work with: one row of slots per group; pointing at one shows it in the readout underneath -->
+    <div class="box items">
+      <h2 class="label">Equipment</h2>
+      <div class="gear" id="slots"></div>
+      <div class="readout" id="item-card" aria-live="polite"></div>
     </div>
     <div class="box counters">
       <h2 class="label">Stats</h2>
@@ -56,15 +60,8 @@
         <span class="github-name">GitHub ↗</span>
         <span class="commits" id="commits" role="img" aria-label="GitHub commit chart, not connected yet"></span>
       </a>
-    </div>
-    <!-- what I work with (three rows) and what I do off the clock (one row), each named underneath; pointing at one
-         shows it in the bar at the bottom -->
-    <div class="box items">
-      <div class="gear-slots" id="slots"></div>
-      <h2 class="label">Equipment</h2>
+      <h2 class="label off">Off the clock</h2>
       <div class="gear-slots" id="hobbies"></div>
-      <h2 class="label">Off the clock</h2>
-      <p class="item-bar" id="item-card" aria-live="polite"></p>
     </div>
     <!-- the big map: Expand moves the map into here and uncovers it from the small map's spot; the timeline sits beside it -->
     <div class="map-big" id="map-big" role="dialog" aria-label="Where I've worked" hidden>
@@ -83,7 +80,7 @@
     <nav class="cards" aria-label="More">
       <a class="tile" href="projects.html" style="--to:#f4ead6;--tint:#6f8199"><span class="frame"><span class="ph">[PHOTO: a project on the bench]</span></span><b>Projects</b></a>
       <a class="tile" href="resume.html" style="--to:#050706;--tint:#5d7262"><span class="frame"><img src="assets/Pictures/funnyres.webp" alt="" loading="lazy"></span><b>Resume</b></a>
-      <a class="tile" href="how-it-runs.html" style="--to:#4148d8;--tint:#4148d8"><span class="frame net"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><ellipse cx="12" cy="12" rx="4.2" ry="10"/><path d="M2 12h20M3.5 7h17M3.5 17h17"/></svg></span><b>How this site runs</b></a>
+      <a class="tile" href="how-it-runs.html" style="--to:#4148d8;--tint:#5a62a8"><span class="frame net"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><ellipse cx="12" cy="12" rx="4.2" ry="10"/><path d="M2 12h20M3.5 7h17M3.5 17h17"/></svg></span><b>How this site runs</b></a>
       <a class="tile" href="other-work.html" style="--to:#f4ead6;--tint:#9a8350"><span class="frame"><span class="ph">[PHOTO: a PC build]</span></span><b>Other work</b></a>
     </nav>
   </section>
@@ -103,7 +100,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
-<script type="module" src="about.js?v=34"></script>
+<script type="module" src="about.js?v=39"></script>
 <script type="module" src="home.js?v=4"></script>
 <script type="module" src="me3d.js?v=8"></script>
 </body>
