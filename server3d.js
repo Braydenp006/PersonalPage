@@ -206,7 +206,14 @@ if(gl){
     ascii.material.uniforms.grid.value.set(cols, rows);
     gl.setPixelRatio(Math.min(devicePixelRatio, 2));
     gl.setSize(w, h, false);
-    dirty = true;
+    render();   // now, not next frame: resizing clears the canvas, and a frame of blank is the flicker
+  }
+  function render(){
+    dirty = false;
+    gl.setRenderTarget(cells);   // the scene, one pixel per character
+    gl.render(scene, camera);
+    gl.setRenderTarget(null);    // then the characters
+    gl.render(screen, flat);
   }
   fit();
   new ResizeObserver(fit).observe(rig);
@@ -267,11 +274,6 @@ if(gl){
       if(hinge.position.y < -1.5){ scene.remove(hinge); fall = null; }   // well below the bottom of the view
       dirty = true;
     }
-    if(!dirty) return;
-    dirty = false;
-    gl.setRenderTarget(cells);   // the scene, one pixel per character
-    gl.render(scene, camera);
-    gl.setRenderTarget(null);    // then the characters
-    gl.render(screen, flat);
+    if(dirty) render();
   });
 }

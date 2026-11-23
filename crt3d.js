@@ -50,10 +50,10 @@ if(gl) new GLTFLoader().load('assets/models/CRT.glb', ({ scene: model }) => {
     camera.aspect = w / h;
     // back off until the whole model fits with a little room around it. Below the PC layout (see styles.css)
     // stop before the glass gets narrower than ~760px (or 90% of a phone's width), so the terminal stays readable
-    const whole = Math.max(size.y * .52 / tan, size.x * .52 / (tan * camera.aspect)) + size.z / 2;
+    const whole = Math.max(size.y * .5 / tan, size.x * .5 / (tan * camera.aspect)) + size.z / 2;
     const glassFills = GLASS.w / 2 / Math.min(.9, 760 / w) / (tan * camera.aspect) + GLASS.z;
     const dist = matchMedia('(min-width:1100px)').matches ? whole : Math.min(whole, glassFills);
-    camera.position.set(0, dist < whole ? GLASS.y : .02, dist);
+    camera.position.set(0, dist < whole ? GLASS.y : 0, dist);   // level with the model's centre, so the space above and below it is even
     camera.updateProjectionMatrix();
     gl.setPixelRatio(Math.min(devicePixelRatio, 2));
     gl.setSize(w, h, false);
@@ -63,6 +63,8 @@ if(gl) new GLTFLoader().load('assets/models/CRT.glb', ({ scene: model }) => {
     screen.style.width = `${px}px`;
     screen.style.height = `${Math.round(px * GLASS.h / GLASS.w)}px`;
     glass.scale.setScalar(GLASS.w / px);
+    gl.render(scene, camera);   // now, not next frame: resizing clears the canvas, and a frame of blank is the flicker
+    css.render(scene, camera);
     draw();
   }
 

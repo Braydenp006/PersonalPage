@@ -106,8 +106,8 @@ chart.addEventListener('pointermove', e => {
   chart.querySelector('#c-cross').setAttribute('visibility', 'visible');
   Object.entries({ cx, cy, visibility: 'visible' }).forEach(([k, v]) => chart.querySelector('#c-hover').setAttribute(k, v));
   chartTip.innerHTML = `<b>${scale.fmt(p.d[shown])}</b>${clockTime(p.t)}`;
-  chartTip.style.left = `${cx + 14}px`;   // .chart-box's padding lines this up with the svg
-  chartTip.style.top = `${cy}px`;
+  chartTip.style.left = `${cx + 14}px`;   // the svg sits 14px in from .chart-box's left edge
+  chartTip.style.top = `${cy + 10}px`;   // ...and its 10px top offset
   chartTip.hidden = false;
 });
 chart.addEventListener('pointerleave', () => {

@@ -122,13 +122,14 @@ html:has(.resume-page),.resume-page{background:#050706}
 /* PC: the whole TV and the blurb + skip button side by side, the gap between them on the page's centre line (1100px matches crt3d.js) */
 @media (min-width:1100px){
   .dark-room{--glow-x:28%}   /* the glow follows the TV over to the left */
-  .resume{max-width:none;display:grid;grid-template-columns:1.3fr 1fr;gap:0 110px;align-items:center}
+  .resume{max-width:none;display:grid;grid-template-columns:1.3fr 1fr;gap:0 110px;align-items:center;padding-top:0}
   .resume-intro{display:contents}
   .resume-intro > div{grid-area:1/2;max-width:360px}
   .stage{grid-area:1/1;justify-self:end;width:min(100%,calc((100svh - 100px) * .95));container-type:inline-size}
-  .stage.is-3d{padding:0 0 20px}
+  .stage.is-3d{padding:0 0 12px}
   .monitor{--w:min(100cqw,calc((100svh - 60px) * 1.22));--ry-rest:8deg}   /* the TV sits left, so it turns a little towards the middle */   /* the CSS fallback monitor fits the middle column */
-  .crt3d{aspect-ratio:.95;max-height:calc(100svh - 100px)}   /* the whole TV fits on screen under the top bar */
+  .crt3d{aspect-ratio:.95;max-height:calc(100svh - 140px)}   /* the whole TV, the top bar (~70px) and the footer (~56px) fit on one screen: no scrolling */
+  .resume-page footer{padding-top:16px;padding-bottom:calc(16px + env(safe-area-inset-bottom))}
 }
 /* a resume open on the screen: the PDF fills the glass (inside the rounded corners), options along the bottom */
 .viewer{position:absolute;inset:4.5% 6% 3%;z-index:1;display:flex;flex-direction:column;gap:.6em;font:500 clamp(12px,2.05cqw,22px)/1.55 var(--font-name);
@@ -244,8 +245,8 @@ html:has(.runs-page),.runs-page{--blue:#4148d8;--deep:#2d33b8;--text:#fff;--dim:
 .chart-tabs button{padding:5px 10px;border:1px solid #fff;background:transparent;color:#fff;font:500 12px var(--font-name);text-transform:uppercase;letter-spacing:.04em;cursor:pointer}
 .chart-tabs button:hover{background:rgba(255,255,255,.15)}
 .chart-tabs button[aria-pressed="true"]{background:#fff;color:var(--deep);font-weight:700}
-.chart-box{position:relative;flex:1;display:flex;flex-direction:column;padding:10px 14px 0}
-#chart{display:block;flex:1;width:100%;min-height:200px;overflow:visible}
+.chart-box{position:relative;flex:1;min-height:200px}
+#chart{position:absolute;top:10px;left:14px;width:calc(100% - 28px);height:calc(100% - 10px);overflow:visible}   /* absolute, like the server canvas, so it can shrink */
 #chart text{fill:var(--dim);font:500 11px var(--font-name)}
 #chart .c-empty{font-size:13px}
 #chart .c-grid{stroke:rgba(255,255,255,.18);stroke-width:1}
@@ -259,7 +260,7 @@ html:has(.runs-page),.runs-page{--blue:#4148d8;--deep:#2d33b8;--text:#fff;--dim:
 /* the server, drawn in coloured ASCII. Without 3D it's the parts list as text */
 .panel-rig{align-self:stretch;display:flex;flex-direction:column}   /* as tall as the three panels beside it */
 .rig{position:relative;flex:1;min-height:380px;overflow:hidden}
-.rig canvas{display:block;width:100%;height:100%}
+.rig canvas{position:absolute;inset:0;display:block;width:100%;height:100%}   /* absolute: a canvas left in the flow keeps its last size and stops the panel shrinking back */
 .rig-btn,.rig-hint{display:none}
 .rig.is-3d .rig-btn{display:block;position:absolute;z-index:1;left:50%;bottom:34px;transform:translateX(-50%);padding:8px 14px;border:0;background:#fff;color:var(--deep);font:700 13px var(--font-name);text-transform:uppercase;letter-spacing:.04em;cursor:pointer}
 .rig.is-3d .rig-btn:hover{background:#dfe1ff}
