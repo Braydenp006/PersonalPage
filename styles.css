@@ -208,7 +208,7 @@ html:has(.resume-page),.resume-page{background:#050706}
 /* ===== How this site runs: an old home computer's screen. Bright blue page, white panels and text, monospace everything, LED ticker ===== */
 html:has(.runs-page),.runs-page{--blue:#4148d8;--deep:#2d33b8;--text:#fff;--dim:rgba(255,255,255,.8);--white:#fff;--rule:#fff;--led:#39ff6a;--led-down:#ff4d4d;
   background:var(--blue);color:var(--text);font-family:var(--font-name)}
-.runs-page{position:relative;padding-bottom:84px}   /* room for the ticker */
+.runs-page{position:relative;padding-bottom:84px;display:flex;flex-direction:column;min-height:100svh}   /* bottom padding: room for the ticker */
 .runs-page :focus-visible{outline-color:#fff}
 .runs-page footer{border-top-color:rgba(255,255,255,.4);color:var(--dim)}
 /* the top bar: home link, keys, clock. White, with blue text */
@@ -219,28 +219,46 @@ html:has(.runs-page),.runs-page{--blue:#4148d8;--deep:#2d33b8;--text:#fff;--dim:
 .keys b{padding:2px 8px;background:var(--blue);color:#fff;font-weight:500;font-size:12px}
 .keys b:last-child{background:var(--deep);font-weight:700}
 .clock{margin-left:auto;font-weight:700;font-variant-numeric:tabular-nums}
-.runs{max-width:1800px;margin:0 auto;padding:clamp(20px,4vh,40px) var(--gutter) clamp(24px,4vh,48px)}
+.runs{flex:1;display:flex;flex-direction:column;width:100%;max-width:2200px;margin:0 auto;padding:clamp(16px,3vh,32px) var(--gutter) clamp(16px,3vh,32px)}   /* fills the window; the spare height goes to the chart */
+.runs-grid{flex:1}
 .runs-title{margin:0 auto clamp(18px,3.5vh,40px);text-align:center;text-wrap:balance;font:700 clamp(28px,3.8vw,62px)/1.1 var(--font-name);letter-spacing:-.03em;color:#fff;text-transform:uppercase}
 .runs-title::after{content:"";display:inline-block;width:.55em;height:.9em;margin-left:.15em;vertical-align:-.08em;background:#fff;animation:blink 1.1s steps(1) infinite}   /* the cursor */
 @keyframes blink{50%{opacity:0}}
 /* panels: text on the left, the server on the right spanning both rows */
-.runs-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);grid-template-areas:"about rig" "path rig";grid-template-rows:auto 1fr;gap:clamp(14px,1.4vw,22px);align-items:start}
-.panel-about{grid-area:about}.panel-path{grid-area:path}.panel-rig{grid-area:rig}
+.runs-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);grid-template-areas:"about rig" "path rig" "chart rig";grid-template-rows:auto auto 1fr;gap:clamp(14px,1.4vw,22px);align-items:start}
+.panel-about{grid-area:about}.panel-path{grid-area:path}.panel-chart{grid-area:chart;align-self:stretch;display:flex;flex-direction:column}.panel-rig{grid-area:rig}
 .panel{border:2px solid #fff;background:var(--deep)}
 .panel h2{margin:0;padding:6px 12px;background:#fff;font:700 13px var(--font-name);letter-spacing:.06em;text-transform:uppercase;color:var(--deep)}
-.panel h2 span{color:var(--blue);margin-right:6px}
 .svc-text{padding:16px 18px;font-size:15px;line-height:1.75}
 /* the route, as a data table */
-.path{width:100%;border-collapse:collapse;font-size:14px}
-.path th{padding:8px 14px;text-align:left;font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);border-bottom:2px solid #fff}
-.path td{padding:10px 14px;vertical-align:top;line-height:1.5}
+.path{width:100%;border-collapse:collapse;font-size:13px}
+.path th{padding:8px 12px;text-align:left;font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);border-bottom:2px solid #fff}
+.path td{padding:9px 12px;vertical-align:top;line-height:1.5;white-space:nowrap}   /* each hop on one line */
+@media (max-width:1800px){ .path td:last-child{white-space:normal} }   /* not enough room for one line: let the descriptions wrap rather than be cut off */
 .path tbody tr:nth-child(odd){background:rgba(255,255,255,.08)}
 .path tbody tr:hover{background:rgba(255,255,255,.2)}
 .path td:first-child{color:#c9ccff}
 .path td:nth-child(2){font-weight:700;white-space:nowrap}
-.path-note{padding:12px 14px 14px;border-top:2px solid #fff;font-size:13px;color:var(--dim)}
+/* stats over time: stat buttons, then one white line on the panel's blue */
+.chart-tabs{display:flex;flex-wrap:wrap;gap:6px;padding:12px 14px 0}
+.chart-tabs button{padding:5px 10px;border:1px solid #fff;background:transparent;color:#fff;font:500 12px var(--font-name);text-transform:uppercase;letter-spacing:.04em;cursor:pointer}
+.chart-tabs button:hover{background:rgba(255,255,255,.15)}
+.chart-tabs button[aria-pressed="true"]{background:#fff;color:var(--deep);font-weight:700}
+.chart-box{position:relative;flex:1;display:flex;flex-direction:column;padding:10px 14px 0}
+#chart{display:block;flex:1;width:100%;min-height:200px;overflow:visible}
+#chart text{fill:var(--dim);font:500 11px var(--font-name)}
+#chart .c-empty{font-size:13px}
+#chart .c-grid{stroke:rgba(255,255,255,.18);stroke-width:1}
+#chart .c-area{fill:rgba(255,255,255,.12)}
+#chart .c-line{fill:none;stroke:#fff;stroke-width:3.5;stroke-linejoin:round;stroke-linecap:round}
+#chart .c-dot{fill:#fff;stroke:var(--deep);stroke-width:2}
+#chart .c-cross{stroke:rgba(255,255,255,.55);stroke-width:1;stroke-dasharray:3 3}
+.chart-tip{position:absolute;z-index:2;padding:6px 9px;background:#fff;color:var(--deep);font-size:12px;line-height:1.35;pointer-events:none;transform:translateY(-50%);white-space:nowrap}
+.chart-tip b{display:block;font-size:14px}
+.chart-note{padding:8px 14px 12px;font-size:12px;color:var(--dim)}
 /* the server, drawn in coloured ASCII. Without 3D it's the parts list as text */
-.rig{position:relative;height:clamp(380px,calc(100svh - 380px),760px);overflow:hidden}   /* fits above the ticker */
+.panel-rig{align-self:stretch;display:flex;flex-direction:column}   /* as tall as the three panels beside it */
+.rig{position:relative;flex:1;min-height:380px;overflow:hidden}
 .rig canvas{display:block;width:100%;height:100%}
 .rig-btn,.rig-hint{display:none}
 .rig.is-3d .rig-btn{display:block;position:absolute;z-index:1;left:50%;bottom:34px;transform:translateX(-50%);padding:8px 14px;border:0;background:#fff;color:var(--deep);font:700 13px var(--font-name);text-transform:uppercase;letter-spacing:.04em;cursor:pointer}
@@ -274,7 +292,7 @@ html:has(.runs-page),.runs-page{--blue:#4148d8;--deep:#2d33b8;--text:#fff;--dim:
 .ticker dd[data-dir="down"]::before{content:"▼ ";color:var(--led-down);text-shadow:0 0 6px var(--led-down)}
 @keyframes tick{to{transform:translateX(-50%)}}
 @media (max-width:1100px){
-  .runs-grid{grid-template-columns:1fr;grid-template-areas:"about" "rig" "path"}
+  .runs-grid{grid-template-columns:1fr;grid-template-areas:"about" "rig" "path" "chart"}
   .rig{height:min(60svh,560px)}
 }
 @media (max-width:560px){

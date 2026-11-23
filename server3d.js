@@ -182,7 +182,7 @@ if(gl){
   gl.setClearColor(0x000000, 0);   // the ASCII pass sits on the page's own background
 
   const controls = new OrbitControls(camera, gl.domElement);
-  Object.assign(controls, { enableZoom: false, enablePan: false, enableDamping: !reduceMotion });   // no zoom: the scroll wheel keeps scrolling the page
+  Object.assign(controls, { enableDamping: !reduceMotion });   // left-drag turns, scroll zooms, right-drag moves it around
   controls.target.set(0, -.06, 0);   // aim a little low, so the case sits higher in the panel, clear of the button
   gl.domElement.setAttribute('aria-hidden', 'true');   // the #parts list says what's there for screen readers
   rig.prepend(gl.domElement);
@@ -198,7 +198,9 @@ if(gl){
     camera.updateProjectionMatrix();
     // back off until a sphere round the case fits the narrower side
     const half = THREE.MathUtils.degToRad(15), across = Math.min(half, Math.atan(Math.tan(half) * camera.aspect));
-    camera.position.setLength(.36 / Math.sin(across));
+    const fitted = .36 / Math.sin(across);
+    camera.position.sub(controls.target).setLength(fitted).add(controls.target);
+    Object.assign(controls, { minDistance: fitted * .25, maxDistance: fitted * 1.8 });   // zoom right in to the parts, or out a bit
     const cols = w / CELL.w, rows = h / CELL.h;
     cells.setSize(Math.ceil(cols), Math.ceil(rows));
     ascii.material.uniforms.grid.value.set(cols, rows);
