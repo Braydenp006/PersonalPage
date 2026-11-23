@@ -192,13 +192,14 @@ if(gl){
   drawSheet();
   document.fonts?.ready.then(drawSheet);   // again once IBM Plex Mono has loaded
 
+  let fitted = 1;   // the camera distance that fits the case for the current size (set by fit)
   function fit(){
     const w = rig.clientWidth, h = rig.clientHeight;
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
     // back off until a sphere round the case fits the narrower side
     const half = THREE.MathUtils.degToRad(15), across = Math.min(half, Math.atan(Math.tan(half) * camera.aspect));
-    const fitted = .36 / Math.sin(across);
+    fitted = .36 / Math.sin(across);
     camera.position.sub(controls.target).setLength(fitted).add(controls.target);
     Object.assign(controls, { minDistance: fitted * .25, maxDistance: fitted * 1.8 });   // zoom right in to the parts, or out a bit
     const cols = w / CELL.w, rows = h / CELL.h;
@@ -219,16 +220,32 @@ if(gl){
   new ResizeObserver(fit).observe(rig);
   controls.addEventListener('change', () => { dirty = true; });
 
-  // opening the panel: it falls off the case and drops out of the bottom of the view, for good
+  // opening the panel: it falls off the case and drops out of the bottom of the view (Reset puts it back)
   let fall = null;   // { y speed, time } while it's falling
+  const allHits = [...hits];
   function dropPanel(){
     if(fall || !hinge.parent) return;
-    toggle.remove();   // there's no putting it back
+    toggle.hidden = true;
     hits.splice(0, hits.length, ...hits.filter(m => m.userData.part !== 'panel'));   // the raycaster still hits hidden meshes, so drop them
     if(reduceMotion){ scene.remove(hinge); dirty = true; return; }
     fall = { v: 0, t: performance.now() };
   }
   toggle.addEventListener('click', dropPanel);
+
+  // Reset: the view glides back to where it started (zoom, turn and pan), and a fallen panel is back on the case
+  const START = { dir: camera.position.clone().sub(controls.target).normalize(), target: controls.target.clone() };   // the opening view, at whatever distance fits now
+  let back = null;   // { from, t } while gliding back
+  document.getElementById('rig-reset').addEventListener('click', () => {
+    fall = null;
+    hinge.position.set(-W / 2, 0, -D / 2);
+    hinge.rotation.set(0, 0, 0);
+    scene.add(hinge);
+    hits.splice(0, hits.length, ...allHits);
+    toggle.hidden = false;
+    back = { from: { pos: camera.position.clone(), target: controls.target.clone() }, t: 0 };
+    if(reduceMotion) back.t = 1;
+    dirty = true;
+  });
 
   // hovering: light the part up and show its label next to the pointer
   const ray = new THREE.Raycaster(), ptr = new THREE.Vector2();
@@ -264,6 +281,14 @@ if(gl){
   gl.setAnimationLoop(now => {
     const dt = Math.min(.1, (now - last) / 1000);
     last = now;
+    if(back){
+      back.t = Math.min(1, back.t + dt / .7);
+      const k = 1 - (1 - back.t) ** 3;   // ease out
+      camera.position.lerpVectors(back.from.pos, START.dir.clone().multiplyScalar(fitted).add(START.target), k);
+      controls.target.lerpVectors(back.from.target, START.target, k);
+      if(back.t === 1) back = null;
+      dirty = true;
+    }
     if(controls.update()) dirty = true;   // true while the view is turning (including the damping glide)
     if(fall){
       // tips out from the top as it drops, sliding away from the case, speeding up like it's falling

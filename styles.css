@@ -19,30 +19,152 @@ img{display:block;max-width:100%}
 a{color:inherit}
 :focus-visible{outline:2px solid var(--ink);outline-offset:4px;border-radius:2px}
 
-/* ===== Home: the name in the middle of the top row, a photo link either side of it and three underneath =====
-   The grid's width is worked out from the screen's height so both rows (cards + labels + stagger) fit on the first screen:
-   a card is (width / 5) wide and 4/3 of that tall, and two rows of them plus labels, gaps and padding ≈ 100svh. */
-.tiles{display:grid;grid-template-columns:repeat(5,1fr);grid-template-areas:"a n n n b" ". c d e .";gap:clamp(14px,1.6vw,24px);align-items:center;
-  max-width:max(760px,calc((100svh - 250px) * 1.875 + 96px + 2 * var(--gutter)));margin:0 auto;container-type:inline-size;padding:var(--gutter) var(--gutter) 32px}
-.tiles > .tile:nth-of-type(1){grid-area:a}
-.tiles > .tile:nth-of-type(2){grid-area:b;text-align:right}   /* Resume: its name under the right corner */
-.tiles > .tile:nth-of-type(3){grid-area:c;translate:-18% 0}       /* the bottom three: spread apart and staggered */
-.tiles > .tile:nth-of-type(4){grid-area:d;display:flex;flex-direction:column-reverse}   /* About me: its name above the photo */
-.tiles > .tile:nth-of-type(4) b{margin:0 0 12px}
-.tiles > .tile:nth-of-type(5){grid-area:e;translate:18% 24px}
-.tiles .title{grid-area:n;align-self:end;text-align:center}   /* sits at the bottom of the top row */
-/* sized so "Paterson" (8 letters at 0.6em each, minus the tightened spacing) spans the three middle columns (--name-w) */
-.title h1{font-family:var(--font-name);font-weight:700;font-size:min(calc(var(--name-w,47.5cqw) / 4.6),220px);line-height:.9;letter-spacing:-.04em}
-.title h1 > span{display:block;overflow:hidden;padding-bottom:.3em;margin-bottom:-.3em}  /* each line is a window the word rises through, with room for the y's tail */
-.title h1 > span > span{display:block;animation:rise 1.1s cubic-bezier(.2,.75,.15,1) both}
-.title h1 > span + span > span{animation-delay:.12s}
-@keyframes rise{from{transform:translateY(105%)}}
-.tagline{margin-top:clamp(12px,2vh,22px);font:500 clamp(15px,1.4vw,20px) var(--font);color:var(--grey);animation:fade .8s .5s both}
-.socials{display:flex;justify-content:center;gap:18px;margin-top:14px;animation:fade .8s .65s both}
-.socials a{display:block;width:28px;height:28px;color:var(--ink);transition:color .2s,transform .2s}
-.socials a:hover{color:var(--slate);transform:translateY(-2px)}
-.socials svg{display:block;width:100%;height:100%;fill:currentColor}
-@keyframes fade{from{opacity:0;transform:translateY(8px)}}
+/* ===== Home: a teletext service. Black screen, the eight broadcast colours, one blocky face, every page a number =====
+   Colours are tokens on .tt below. Text sizes come from --fs; one character is .6 of it wide. */
+@font-face{font-family:'Bedstead';src:url('assets/fonts/bedstead.woff2') format('woff2');font-display:block}   /* public domain (CC0), by bjh21: the classic teletext character set */
+html:has(.tt){background:#000;scrollbar-color:#fff #000;scroll-padding-top:var(--head,76px)}
+.tt{--tt-black:#000;--tt-white:#fff;--tt-yellow:#ffeb1a;--tt-cyan:#2ee0f0;--tt-green:#38e05a;--tt-red:#ff4433;--tt-magenta:#ff4df2;--tt-blue:#1f33ff;
+  --tt-font:'Bedstead',ui-monospace,monospace;
+  --fs:clamp(15px,1.25vw,20px);                       /* body text size: one character is .6 of it wide */
+  --pad:clamp(16px,3vw,48px);
+  background:#000;color:var(--tt-white);font:400 var(--fs)/1.35 var(--tt-font);letter-spacing:0;font-variant-ligatures:none;-webkit-font-smoothing:none}
+.tt ::selection{background:var(--tt-yellow);color:#000}
+.tt :focus-visible{outline:2px solid var(--tt-yellow);outline-offset:3px;border-radius:0}
+.tt a{color:inherit;text-decoration:none}
+/* faint scan lines over the whole screen, like the glass of an old set */
+.tt::after{content:"";position:fixed;inset:0;z-index:50;pointer-events:none;background:repeating-linear-gradient(to bottom,transparent 0 2px,rgba(0,0,0,.22) 2px 3px)}
+.tt-c{color:var(--tt-cyan)}.tt-g{color:var(--tt-green)}.tt-r{color:var(--tt-red)}.tt-m{color:var(--tt-magenta)}
+.tt-pg{color:var(--tt-yellow)}
+
+/* the header row: P100  BPTEXT  100  Mon 23 Nov 20:14:07 */
+.tt-head{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;gap:2ch;align-items:flex-start;height:var(--head,76px);padding:8px var(--pad) 0;background:var(--tt-blue);white-space:nowrap}
+.tt-head > span{display:block;transform:scaleY(2);transform-origin:top}   /* the whole header row is double height */
+.tt-asked{color:var(--tt-white)}
+.tt-name{color:var(--tt-white)}
+.tt-count{color:var(--tt-yellow);font-variant-numeric:tabular-nums}
+.tt-count.searching{color:var(--tt-white)}
+.tt-count.missing{background:var(--tt-red);color:#000;padding:0 .5ch}
+.tt-clock{margin-left:auto;color:var(--tt-yellow)}
+
+.tt main.tiles{display:block;padding:var(--head,76px) 0 0}
+.tt-index{padding:clamp(28px,5vh,56px) var(--pad)}
+
+/* P100: the name, the offer and the way in on the left; the server and the page list on the right */
+.tt-index{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,24vw);gap:clamp(24px,4vw,64px);align-items:start;min-height:calc(100svh - var(--head,76px) - 52px)}
+/* the name fills its column: PATERSON is 8 characters at .6em each */
+/* the name, double height: the letters stretched to twice their height, like a teletext headline. The transform doesn't
+   take up room, so padding-bottom holds the extra height. 16 characters (BRAYDEN PATERSON) at .6em each fill the column. */
+.tt-name-big{font-weight:400;line-height:1;color:var(--tt-yellow);font-size:min(calc((100vw - 2 * var(--pad) - max(300px,24vw) - 4vw) / 9.7),112px);
+  margin:0 0 .3em;padding-bottom:1em;transform:scaleY(2);transform-origin:top;white-space:nowrap}
+.tt-name-big span + span{color:var(--tt-white)}
+.tt-lede{max-width:52ch;margin:0 0 1.2em;font-size:calc(var(--fs) * 1.15)}
+.tt-offer{display:grid;gap:.35em;margin:0 0 1.6em}
+.tt-offer div{display:grid;grid-template-columns:13ch 1fr;gap:1ch}
+.tt-offer dt{color:var(--tt-cyan)}
+.tt-offer dd{margin:0}
+.tt-actions{display:flex;flex-wrap:wrap;gap:1.2em 2ch;align-items:center;margin:1.6em 0 0}
+
+/* buttons are boxes drawn in the text colour; pointing at one fills it in, no fade (teletext can't fade) */
+.tt .tt-btn{display:inline-block;padding:.55em 1.4ch;border:2px solid var(--tt-white);color:var(--tt-white);line-height:1.1}
+.tt .tt-btn:hover{background:var(--tt-white);color:#000}
+.tt .tt-btn-main{border-color:var(--tt-yellow);color:var(--tt-yellow);font-size:calc(var(--fs) * 1.2)}
+.tt .tt-btn-main:hover{background:var(--tt-yellow);color:#000}
+.tt .tt-btn:hover .tt-pg{color:inherit}
+.tt .tt-btn .frame{display:inline;aspect-ratio:auto;border-radius:0;background:none;overflow:visible}
+.tt .tt-link{color:var(--tt-cyan);text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:.3em}
+.tt .tt-link:hover{background:var(--tt-cyan);color:#000;text-decoration:none}
+
+/* the server, drawn in blocks, with its live numbers */
+.tt-side{display:grid;gap:clamp(20px,4vh,40px)}
+.tt-rig{display:grid;grid-template-columns:auto 1fr;gap:2ch;align-items:end}
+.tt-z420{display:block;width:clamp(96px,8vw,132px);height:auto;shape-rendering:crispEdges}
+.tt-z420 .led{animation:blink 1.6s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.tt-rig-text p{margin:0 0 .6em}
+.tt-rig-title{color:var(--tt-yellow)}
+.tt-live{display:grid;gap:.2em;margin:.8em 0 .4em}
+.tt-live div{display:flex;justify-content:space-between;gap:1ch}
+.tt-live dt{color:var(--tt-white)}
+.tt-live dd{margin:0;color:var(--tt-cyan);font-variant-numeric:tabular-nums}
+.tt-state{font-size:.85em;color:var(--tt-yellow)}
+.tt-state.offline{color:var(--tt-red)}
+.tt-contents-title{color:var(--tt-cyan);margin:0 0 .4em}
+.tt-contents ol{list-style:none;padding:0;margin:0;border-top:2px solid var(--tt-cyan)}
+.tt-contents a{display:flex;gap:2ch;padding:.45em 1ch;border-bottom:1px solid var(--tt-blue)}
+.tt-contents a:hover{background:var(--tt-cyan);color:#000}
+.tt-contents a:hover .tt-pg{color:#000}
+
+/* the TV under the title card: one page at a time as a channel. The screen shows its preview in teletext blocks
+   (home-teletext.js); the guide beside it says what's on and changes channel. --band is the channel's colour. */
+.tt-tv{--band:var(--tt-green);display:grid;grid-template-columns:minmax(0,1.5fr) minmax(320px,1fr);gap:clamp(24px,4vw,64px);align-items:start;
+  padding:clamp(28px,5vh,56px) var(--pad);border-top:2px solid var(--band);min-height:calc(100svh - var(--head,76px) - 52px)}
+.tt .tt-screen{display:block}
+.tt .tt-screen .frame{position:relative;display:block;aspect-ratio:16/10;border:3px solid var(--band);border-radius:0;background:#000;overflow:hidden;cursor:pointer}
+.tt-screen canvas{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}
+#screen-snow{opacity:0}
+.tt-osd{position:absolute;top:4%;right:4%;color:var(--tt-green);font-size:calc(var(--fs) * 1.5);line-height:1;transform:scaleY(2);transform-origin:top;
+  background:#000;padding:0 .4ch;opacity:0}
+.tt-osd.on{opacity:1}
+.tt-screen-cap{margin:.6em 0 0;font-size:.85em}
+.tt-screen:hover + .tt-screen-cap,.tt-screen:focus-visible + .tt-screen-cap{color:var(--tt-yellow)}
+.tt-tuner{display:flex;align-items:flex-start;justify-content:space-between;gap:1ch;margin:0 0 1.2em}
+.tt-tuner button{font:inherit;color:var(--tt-white);background:none;border:2px solid var(--tt-white);padding:.4em 1ch;cursor:pointer}
+.tt-tuner button:hover{background:var(--tt-white);color:#000}
+.tt-ch-num{font-size:calc(var(--fs) * 2.2);line-height:1;color:var(--tt-yellow);transform:scaleY(2);transform-origin:top;padding-bottom:1em;font-variant-numeric:tabular-nums}
+.js .tt-ch:not(.on){display:none}
+.tt-ch p{margin:0 0 .9em;max-width:52ch}
+.tt-band{display:flex;justify-content:space-between;margin:0 0 1.2em;padding:.15em 1ch;background:var(--band);color:var(--band-ink,#000);font-weight:400;font-size:calc(var(--fs) * 1.5);line-height:1}
+.tt-band span{display:block;transform:scaleY(2);transform-origin:top;padding-bottom:1em}   /* teletext double height: the same letters, twice as tall */
+.tt-facts{display:grid;gap:.35em;margin:0 0 1em}
+.tt-facts div{display:grid;grid-template-columns:15ch 1fr;gap:1ch}
+.tt-facts dt{color:var(--tt-cyan)}
+.tt-facts dd{margin:0}
+.tt-table{width:100%;border-collapse:collapse;margin:.4em 0 1em;font-size:.9em;font-variant-numeric:tabular-nums}
+.tt-table caption{text-align:left;color:var(--tt-cyan);padding-bottom:.4em}
+.tt-table th{text-align:left;font-weight:400;color:var(--tt-yellow);padding:.25em 1ch .25em 0;border-bottom:2px solid var(--tt-cyan)}
+.tt-table td{padding:.3em 1ch .3em 0;border-bottom:1px solid var(--tt-blue);vertical-align:top}
+.tt-table td:first-child{color:var(--tt-cyan)}
+.tt-chlist{list-style:none;padding:0;margin:1.6em 0 0;border-top:2px solid var(--tt-cyan)}
+.tt-chlist button{display:flex;gap:2ch;width:100%;font:inherit;text-align:left;color:var(--tt-white);background:none;border:0;border-bottom:1px solid var(--tt-blue);padding:.45em 1ch;cursor:pointer}
+.tt-chlist button:hover{background:var(--tt-cyan);color:#000}
+.tt-chlist button:hover .tt-pg{color:#000}
+.tt-chlist button[aria-pressed="true"]{background:var(--band);color:var(--band-ink,#000)}
+.tt-chlist button[aria-pressed="true"] .tt-pg{color:inherit}
+
+.tt-foot{display:flex;justify-content:space-between;gap:2ch;flex-wrap:wrap;padding:24px var(--pad) 96px;border-top:2px solid var(--tt-blue);color:var(--tt-white);font-size:.85em}
+
+/* Fastext: the coloured shortcuts and the page-number box, fixed along the bottom */
+.tt-fast{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;gap:clamp(8px,1.6vw,24px);align-items:center;padding:10px var(--pad) calc(12px + env(safe-area-inset-bottom));background:#000;border-top:2px solid var(--tt-blue);white-space:nowrap}
+.tt-fast a{padding:.5em 1.4ch;color:#000;background:var(--key)}
+.tt-fast a:hover{background:#fff}
+.tt-fast .r{--key:var(--tt-red)}.tt-fast .g{--key:var(--tt-green)}.tt-fast .y{--key:var(--tt-yellow)}.tt-fast .c{--key:var(--tt-cyan)}
+.tt-key{margin-left:auto;color:var(--tt-white)}
+.tt-key input{width:4.2ch;margin-left:.3ch;font:inherit;color:var(--tt-yellow);caret-color:var(--tt-yellow);background:#000;border:2px solid var(--tt-white);padding:.1em .4ch;border-radius:0}
+.tt-key input::placeholder{color:#fff}
+.tt-key input:focus{outline:none;border-color:var(--tt-yellow)}
+
+
+@media (max-width:900px){
+  .tt{--fs:clamp(14px,4.1vw,17px)}
+  .tt-index{grid-template-columns:1fr;min-height:0}
+  .tt-name-big{font-size:min(calc((100vw - 2 * var(--pad)) / 4.9),60px);white-space:normal;padding-bottom:2em}   /* two lines, each doubled */
+  .tt-name-big span{display:block}
+  .tt{--head:64px}
+  .tt .tt-btn-main{font-size:var(--fs)}   /* so GET MY RESUME and EMAIL ME share one row on a phone's first screen */
+  .tt-actions{gap:1em 2ch}
+  .tt-offer div{grid-template-columns:1fr;gap:0}
+  .tt-tv{grid-template-columns:1fr;min-height:0}
+  .tt-facts div{grid-template-columns:1fr;gap:0}
+  .tt-rig{grid-template-columns:auto 1fr}
+  .tt-date{display:none}
+  .tt-fast{font-size:.9em}
+}
+@media (max-width:420px){
+  .tt-fast .c{display:none}   /* four shortcuts and the number box don't fit a narrow phone: Projects is still in the page list */
+}
+@media (prefers-reduced-motion:reduce){
+  .tt-z420 .led{animation:none}
+}
 
 /* ===== The five photo links ===== */
 .tile{display:block;text-decoration:none}
@@ -61,6 +183,10 @@ a{color:inherit}
 .tile-window{position:fixed;inset:0;z-index:100;clip-path:inset(50% 50%);pointer-events:none}
 .tile-window.open{pointer-events:auto}   /* filled the screen: it is the page now */
 .tile-window iframe{display:block;width:100%;height:100%;border:0;opacity:0;transition:opacity .3s}
+.tune-static{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;pointer-events:none;opacity:0}   /* the home page's TV static (home.js) */
+/* the next page sliding down in from the top (slide.js): a full-screen frame holding the real page, out of sight while it waits */
+.slide-frame{position:fixed;inset:0;z-index:100;width:100%;height:100%;border:0;visibility:hidden}
+.slide-frame.in{visibility:visible}
 /* browsers that can, cross-fade from that last frame into the real page */
 @view-transition{navigation:auto}
 
@@ -217,8 +343,8 @@ html:has(.runs-page),.runs-page{--blue:#4148d8;--deep:#2d33b8;--text:#fff;--dim:
 .term-bar a{text-decoration:none;font-weight:700}
 .term-bar a:hover{text-decoration:underline;text-underline-offset:3px}
 .keys{display:flex;gap:6px;flex-wrap:wrap}
-.keys b{padding:2px 8px;background:var(--blue);color:#fff;font-weight:500;font-size:12px}
-.keys b:last-child{background:var(--deep);font-weight:700}
+.keys a{padding:2px 8px;background:var(--blue);color:#fff;font-weight:500;font-size:12px;text-transform:uppercase;text-decoration:none}
+.term-bar .keys a:hover{background:var(--deep);font-weight:700;text-decoration:none}   /* pressed in, like the old <GO> key */
 .clock{margin-left:auto;font-weight:700;font-variant-numeric:tabular-nums}
 .runs{flex:1;display:flex;flex-direction:column;width:100%;max-width:2200px;margin:0 auto;padding:clamp(16px,3vh,32px) var(--gutter) clamp(16px,3vh,32px)}   /* fills the window; the spare height goes to the chart */
 .runs-grid{flex:1}
@@ -261,9 +387,13 @@ html:has(.runs-page),.runs-page{--blue:#4148d8;--deep:#2d33b8;--text:#fff;--dim:
 .panel-rig{align-self:stretch;display:flex;flex-direction:column}   /* as tall as the three panels beside it */
 .rig{position:relative;flex:1;min-height:380px;overflow:hidden}
 .rig canvas{position:absolute;inset:0;display:block;width:100%;height:100%}   /* absolute: a canvas left in the flow keeps its last size and stops the panel shrinking back */
-.rig-btn,.rig-hint{display:none}
+.rig-btn,.rig-hint,.rig-reset{display:none}
 .rig.is-3d .rig-btn{display:block;position:absolute;z-index:1;left:50%;bottom:34px;transform:translateX(-50%);padding:8px 14px;border:0;background:#fff;color:var(--deep);font:700 13px var(--font-name);text-transform:uppercase;letter-spacing:.04em;cursor:pointer}
 .rig.is-3d .rig-btn:hover{background:#dfe1ff}
+.rig.is-3d .rig-btn[hidden]{display:none}
+/* Reset: back to the opening view (and the panel back on), top right of the view */
+.rig.is-3d .rig-reset{display:block;position:absolute;z-index:1;top:10px;right:10px;padding:6px 12px;border:1px solid #fff;background:none;color:#fff;font:700 12px var(--font-name);text-transform:uppercase;letter-spacing:.04em;cursor:pointer}
+.rig.is-3d .rig-reset:hover{background:#fff;color:var(--deep)}
 .rig.is-3d .rig-hint{display:block;position:absolute;left:0;right:0;bottom:8px;text-align:center;font-size:12px;color:var(--dim);pointer-events:none}
 .rig-tip{position:absolute;z-index:2;max-width:280px;padding:8px 10px;background:#fff;font-size:13px;line-height:1.45;color:var(--deep);pointer-events:none;transform:translate(-50%,calc(-100% - 16px))}
 .rig-tip b,.parts b{display:block;font-weight:700}
@@ -297,28 +427,242 @@ html:has(.runs-page),.runs-page{--blue:#4148d8;--deep:#2d33b8;--text:#fff;--dim:
   .rig{height:min(60svh,560px)}
 }
 @media (max-width:560px){
-  .keys,.feed span{display:none}   /* phones: no function keys, just the feed's dot */
+  .feed span{display:none}   /* phones: just the feed's dot */
   .ticker{height:60px}
   .ticker dd{font-size:30px}
 }
 
+/* ===== About me: a game's character / equipment screen, in a test-lab look: a white grid on light grey, brushed-grey
+   tiles, little yellow-orange headings, black corner brackets around me with a bright light behind, and the two portal
+   colours, blue and orange, as accents (work and school pins, numbers, buttons, what's picked). The map is in the same
+   colours (assets/map/lab-style.json). ===== */
+.about-page{
+  --bg:#dcdcdc;                      /* the world behind everything */
+  --ink:#1d1d1d;--ink-dim:#555;      /* text straight on the backdrop */
+  --panel:linear-gradient(#cacaca,#a9a9a9);--panel-solid:#bdbdbd;   /* panels: brushed grey */
+  --well:rgba(255,255,255,.4);       /* sunken: slots, bars */
+  --line:rgba(0,0,0,.16);            /* hairlines, slot edges */
+  --blue:#2f8fd0;--orange:#f7931e;   /* the accents */
+  --glow:var(--blue);                /* what's picked, focus; work pins */
+  --text:#1b1b1b;--dim:#474747;      /* text in panels */
+  --value:#0b6fae;                   /* numbers */
+  --accent:var(--orange);            /* an item's kind, school pins */
+  --halo:rgba(255,255,255,.95);      /* the light behind me */
+  --btn:var(--blue);--btn-text:#fff; /* buttons */
+  --head:700 14px var(--sans);       /* headings */
+  --sans:'Barlow',system-ui,sans-serif;--caps:'Barlow Condensed','Barlow',sans-serif;
+  display:flex;flex-direction:column;min-height:100svh;color:var(--ink);font:400 17px/1.4 var(--sans);
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.7) 0 2px,transparent 2px 64px),repeating-linear-gradient(0deg,rgba(255,255,255,.7) 0 2px,transparent 2px 64px),
+    radial-gradient(ellipse 80% 70% at 30% 40%,#f2f2f2,transparent 75%),linear-gradient(#e2e2e2,#c9c9c9);background-attachment:fixed}
+html:has(.about-page){background:#c9c9c9}
+.about-page :focus-visible{outline:2px solid var(--glow);outline-offset:2px}
+.about-page footer{border-top-color:var(--line);color:var(--ink-dim)}
+.box,.cards .tile,.map-big,.place{position:relative;background:var(--panel);border:1px solid var(--line);color:var(--text)}
+.box{padding:14px 18px;overflow:auto}
+.label{display:flex;align-items:center;gap:10px;margin:0 0 10px;font:var(--head);letter-spacing:.14em;text-transform:uppercase;color:var(--text)}
+.label::after{content:"";flex:1;height:1px;background:var(--line)}
+.menu{flex:1;display:flex;width:100%;max-width:1600px;margin:0 auto;padding:clamp(16px,3vh,28px) var(--gutter)}
+/* label / value rows */
+.rows > div{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:4px 0;border-bottom:1px solid var(--line)}
+.rows > div:last-child{border-bottom:0}
+.rows dt{color:var(--text)}
+.rows dd{margin:0;color:var(--value);font:600 18px var(--caps);letter-spacing:.04em;text-align:right}
+.data .rows > div{justify-content:flex-start}
+.data .rows dt{flex:0 0 6.5em;color:var(--dim)}
+.data .rows dd{text-align:left}
+.me{flex:1;display:grid;gap:16px;grid-template-columns:minmax(240px,300px) minmax(0,1.3fr) minmax(0,1fr);
+  grid-template-rows:minmax(240px,1fr) auto auto;grid-template-areas:"me map stats" "me data gear" "links cards cards"}
+.char-card{grid-area:me}.links{grid-area:links}
+.map-slot{grid-area:map;min-height:0}
+.data{grid-area:data}.counters{grid-area:stats}.items{grid-area:gear}.cards{grid-area:cards}
+/* me: straight on the backdrop, with a coloured glow behind (like a character screen's light) */
+.char-card{display:flex;flex-direction:column;min-height:0}
+.menu-home{align-self:flex-start;margin-bottom:10px;font:600 14px var(--caps);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim);text-decoration:none}
+.menu-home:hover{color:var(--ink)}
+.char-name{font:600 36px/1 var(--caps);letter-spacing:.04em;text-transform:uppercase;color:var(--ink)}
+.char-role{margin-top:6px;font-weight:500;color:var(--ink-dim)}
+.char-stage{position:relative;flex:1;min-height:260px;margin:0 -10px;
+  background:radial-gradient(ellipse 48% 46% at 50% 46%,var(--halo),rgba(47,143,208,.12) 60%,transparent 74%)}
+.char-stage::before{content:"";position:absolute;left:26%;right:26%;bottom:3%;height:20px;background:radial-gradient(closest-side,rgba(0,0,0,.45),transparent)}
+.char-stage canvas{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}   /* drawn small and blown up */
+.char-status{display:flex;align-items:center;gap:10px;padding:6px 12px;background:var(--panel);border:1px solid var(--line);color:var(--text);font:600 16px var(--caps);letter-spacing:.12em;text-transform:uppercase}
+.char-status .dot{width:9px;height:9px;border-radius:50%;background:var(--orange);box-shadow:0 0 8px var(--orange)}
+/* buttons: links, Expand / Close */
+.contact-links{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0;list-style:none}
+.contact-links a,.map-grow{display:flex;align-items:center;justify-content:center;gap:8px;padding:6px 12px;border:1px solid var(--btn);background:var(--btn);color:var(--btn-text);
+  font:600 15px var(--caps);letter-spacing:.12em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:filter .2s,transform .2s}
+.contact-links a:hover,.map-grow:hover{filter:brightness(1.12);transform:translateY(-1px)}
+.contact-links svg{width:17px;height:17px;fill:currentColor}
+.contact-links li:last-child:nth-child(odd){grid-column:1/-1}   /* an odd one out spans the row */
+/* the GitHub chart, under the stats; the whole chart links to my GitHub */
+.github{display:block;margin-top:12px;color:inherit;text-decoration:none}
+.github-name{display:block;margin-bottom:6px;font:600 15px var(--caps);letter-spacing:.12em;text-transform:uppercase}
+.github:hover .github-name{color:var(--glow)}
+.commits{display:grid;grid-template-rows:repeat(7,1fr);grid-auto-flow:column;gap:2px}
+.commits i{aspect-ratio:1;background:var(--well);border:1px solid var(--line)}
+.github:hover .commits i{border-color:var(--blue)}
+/* the things I use (three rows) and do off the clock (one row), each named underneath; the picked one shows below,
+   in a bar of fixed height so the layout doesn't move as you point at things */
+.gear-slots{display:grid;grid-template-columns:repeat(7,42px);gap:4px}
+.items .label{margin:8px 0 16px}
+.pick{display:grid;place-items:center;aspect-ratio:1;padding:0;border:1px solid var(--line);background:var(--well);color:var(--text);cursor:pointer;font:inherit}
+.pick:hover{border-color:var(--orange)}
+.pick[aria-pressed="true"]{box-shadow:inset 0 0 0 2px var(--blue);background:rgba(47,143,208,.14)}
+.pick[aria-pressed="true"] .icon{background:var(--blue)}
+.pick[aria-pressed="true"] .icon.initials{background:none;color:var(--blue)}
+.icon{display:block;width:22px;height:22px;background:var(--text);-webkit-mask:var(--icon) center/contain no-repeat;mask:var(--icon) center/contain no-repeat}
+.icon.initials{display:grid;place-items:center;width:auto;height:auto;background:none;-webkit-mask:none;mask:none;color:var(--text);font:600 15px var(--caps);letter-spacing:.04em}
+.item-bar{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;height:calc(4 * 1.35em + 18px);overflow:hidden;margin-top:2px;padding:8px 12px;background:var(--well);border:1px solid var(--line);font-size:15px;line-height:1.35}
+.item-bar b{font:600 17px var(--caps);letter-spacing:.06em;text-transform:uppercase}
+.item-bar span{margin:0 8px;color:var(--accent);font:600 13px var(--caps);letter-spacing:.14em;text-transform:uppercase}
+/* the map panel. Expand moves the map into the big panel over the page, uncovered from the small map's spot (about.js) */
+.map-box{display:flex;flex-direction:column;height:100%;overflow:hidden}
+.map-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+.map-top .label{flex:1;margin:0}
+.map-grow{--btn:var(--orange)}
+.map-hole{position:relative;flex:1;min-height:160px;overflow:hidden;background:var(--panel-solid)}
+.map-hole > .work-map,.map-spot > .work-map{position:absolute;inset:0;height:auto}
+.work-map.quiet :is(.maplibregl-control-container,.map-legend){opacity:0}   /* the map's buttons and key fade out while it moves */
+.work-map :is(.maplibregl-control-container,.map-legend){transition:opacity .25s}
+.map-big{position:fixed;z-index:50;inset:clamp(12px,3vw,40px);display:flex;flex-direction:column;padding:14px 18px;background:var(--panel-solid);box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.map-big[hidden]{display:none}
+.map-big .map-body{flex:1;display:grid;grid-template-columns:minmax(0,1fr) min(340px,30vw);gap:16px;min-height:0}
+.map-spot{position:relative;overflow:hidden}
+.map-big .quests{overflow:auto}
+.map-dim{position:fixed;inset:0;z-index:49;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .56s}
+.map-dim.on{opacity:1;pointer-events:auto}
+/* the timeline, beside the big map */
+.quest-head{margin:4px 0 8px;font:600 14px var(--caps);letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+.quest-head:not(:first-child){margin-top:18px}
+.quest{display:block;width:100%;margin-bottom:6px;padding:8px 12px;border:1px solid var(--line);background:var(--well);color:var(--text);text-align:left;font:inherit}
+button.quest{cursor:pointer}
+button.quest:hover{border-color:var(--orange)}
+.quest b{display:block;font:600 18px var(--caps);letter-spacing:.04em}
+.quest span{font-size:14px;color:var(--dim)}
+.quest.active{box-shadow:inset 3px 0 0 var(--value)}
+/* the other pages, as picture panels with their names on a plate */
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.cards .tile{display:block;min-height:110px;padding:6px;text-decoration:none}
+.cards .frame{position:absolute;inset:6px;aspect-ratio:auto;border-radius:0}
+.cards .frame > *{position:absolute;inset:0}
+.cards .frame img{object-position:top}
+.cards .ph{align-items:flex-start;font-size:13px}
+.cards .tile b{position:absolute;left:12px;bottom:12px;z-index:1;margin:0;padding:3px 9px;background:var(--panel-solid);border:1px solid var(--line);font:600 15px var(--caps);letter-spacing:.12em;text-transform:uppercase;color:var(--text)}
+.cards .tile:hover{border-color:var(--orange)}
+.cards .tile:hover b{text-decoration:none;color:var(--orange)}
+.cards .net{display:grid;place-items:center}
+.cards .net svg{position:static;width:46px;height:46px;fill:none;stroke:#fff;stroke-width:1.5}
+/* leaving: the next page's colour growing out of the link that was clicked (about.js) */
+.page-cover{position:fixed;inset:0;z-index:100;clip-path:inset(50%)}
+/* the lab touches */
+.about-page .label{color:#ffa31a;text-shadow:0 1px 1px rgba(0,0,0,.75),0 0 1px rgba(0,0,0,.6)}
+.about-page .box,.about-page .cards .tile{box-shadow:0 2px 0 rgba(255,255,255,.6) inset,0 6px 16px rgba(0,0,0,.18)}
+.about-page .char-stage::after{content:"";position:absolute;inset:4% 6%;border:2px solid #1d1d1d;pointer-events:none;
+  --c:conic-gradient(#000 0 0);-webkit-mask:var(--c) top left/18px 18px no-repeat,var(--c) top right/18px 18px no-repeat,var(--c) bottom left/18px 18px no-repeat,var(--c) bottom right/18px 18px no-repeat;
+  mask:var(--c) top left/18px 18px no-repeat,var(--c) top right/18px 18px no-repeat,var(--c) bottom left/18px 18px no-repeat,var(--c) bottom right/18px 18px no-repeat}
+.about-page .char-status{background:#2b2b2b;color:#fff;border:0}
+.about-page .map-dim{background:rgba(255,255,255,.5)}
+
+@media (max-width:1000px){
+  .me{grid-template-columns:1fr;grid-template-rows:none;grid-template-areas:"me" "links" "map" "data" "stats" "gear" "cards"}
+  .cards{grid-template-columns:1fr 1fr}
+  .map-slot{height:60svh}
+  .map-big .map-body{grid-template-columns:1fr;grid-template-rows:1fr 30%}
+}
+/* the map fills the section; clicking a numbered marker opens that job's popup */
+.work-map{position:relative;height:min(72svh,680px);background:var(--panel-solid);overflow:hidden}
+/* darker edges over the map (clicks pass through) */
+.work-map::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at center,transparent 60%,rgba(0,0,0,.3))}
+.job-when,.job-where{font-size:15px;color:var(--dim)}
+.job-when{display:flex;align-items:center;gap:10px;font-family:var(--caps);letter-spacing:.06em}
+.job-num,.job-pin{display:grid;place-items:center;width:26px;height:26px;padding:0;border-radius:50%;background:var(--ink);color:var(--paper);font:700 13px var(--font-name)}
+/* map pins: a ring in the theme colour with its number (school: the second colour, no number); filled in when hovered, tabbed to or open */
+.job-pin{width:28px;height:28px;border:2px solid var(--glow);background:var(--glow);color:var(--panel-solid);font:600 15px/1 var(--caps);cursor:pointer}
+.job-pin.school,.job-num.school{border-color:var(--accent);background:var(--accent);color:var(--panel-solid)}
+.place .job-num:not(.school){background:var(--glow);color:var(--panel-solid)}
+.work-map .job-pin:not(.on,:hover,:focus-visible){background:var(--panel-solid);color:var(--glow)}
+.work-map .job-pin.school:not(.on,:hover,:focus-visible){background:var(--panel-solid);color:var(--accent)}
+/* the place's name on a small plate beside the pin while hovered or tabbed to */
+.work-map button.job-pin::after{content:attr(data-name);position:absolute;left:calc(100% + 8px);top:50%;transform:translateY(-50%);padding:3px 9px;
+  border:1px solid var(--line);background:var(--panel-solid);color:var(--text);font:600 15px/1.2 var(--caps);letter-spacing:.06em;
+  white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .15s}
+.work-map button.job-pin:is(:hover,:focus-visible)::after{opacity:1}
+.work-map button.job-pin.flip::after{left:auto;right:calc(100% + 8px)}
+.work-map .job-pin:is(:hover,:focus-visible){z-index:3}   /* its label sits above the neighbouring pins */
+.work-map .job-pin{z-index:2}
+.job-pin:focus-visible{outline:2px solid var(--text);outline-offset:2px}
+.map-legend{position:absolute;left:10px;bottom:10px;z-index:2;display:flex;gap:14px;padding:5px 10px;border:1px solid var(--line);background:var(--panel-solid);font:600 14px var(--caps);letter-spacing:.1em;text-transform:uppercase;color:var(--text)}
+.map-legend span{display:flex;align-items:center;gap:6px}
+.map-legend .job-pin{width:13px;height:13px;border-width:2px;background:none;box-shadow:none;cursor:default}
+.work-map :is(.maplibregl-ctrl-group,.maplibregl-ctrl-attrib){background:var(--panel-solid);border:1px solid var(--line);box-shadow:none}   /* map controls in the theme, not white */
+.work-map .maplibregl-ctrl-group button + button{border-top-color:var(--line)}
+.work-map .maplibregl-ctrl-attrib,.work-map .maplibregl-ctrl-attrib a{color:var(--dim)}
+/* the window a pin opens: photo on the left, details on the right (stacked on phones) */
+.place{margin:auto;width:min(940px,92vw);max-height:88svh;padding:0;background:linear-gradient(rgba(220,220,220,.52),rgba(175,175,175,.52));-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);color:var(--text);box-shadow:0 30px 80px rgba(0,0,0,.6);overflow:auto}
+.place::backdrop{background:rgba(0,0,0,.3)}   /* light, so the map shows through the see-through window */
+.place-body{display:grid;grid-template-columns:1.2fr 1fr}
+.place.no-photo .place-body{grid-template-columns:1fr}
+.place-photo{margin:0}
+.place-photo img{display:block;width:100%;height:min(60svh,500px);object-fit:cover}   /* capped, so tall photos keep the window and its credit on screen */
+.place-photo figcaption{padding:6px 12px;font-size:13px;color:var(--dim)}
+.place-text{padding:28px 30px}
+.place h3{margin:8px 0 2px;font:600 30px/1.1 var(--caps);letter-spacing:.03em;color:var(--text)}
+.place h3 span{color:var(--value)}
+.place ul{margin:14px 0 0;padding-left:20px;font-size:17px;line-height:1.45}
+.place-close{position:absolute;top:10px;right:12px;z-index:3;width:34px;height:34px;border:1px solid var(--glow);background:var(--panel-solid);color:var(--text);font:400 24px/1 var(--sans);cursor:pointer}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+@media (max-width:900px){ .place-body{grid-template-columns:1fr} .place-photo img{min-height:200px;max-height:40svh} }
+
 /* ===== Footer ===== */
 footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px 24px;padding:28px var(--gutter) calc(28px + env(safe-area-inset-bottom));border-top:1px solid var(--line);font-size:14px;color:var(--grey)}
 
-/* ===== Phones: two staggered columns instead of a squashed row ===== */
-@media (max-width:760px){
-  .tiles{grid-template-columns:1fr 1fr;grid-template-areas:"n n" "a b" "c d" "e .";row-gap:28px;max-width:none}
-  .tiles .title{--name-w:100cqw;margin:8vh 0 4vh}
-  .tiles > .tile{translate:none}
-}
 @media (prefers-reduced-motion:reduce){
   .term,.term > p:last-child::after,.crt-screen::after{animation:none}
   .monitor{transition:none}
-  .title h1 > span > span,.tagline,.socials{animation:none}
   .frame img{transition:none}
   .quick-menu,.quick-menu :is(p,li){animation:none}
   .feed i,.runs-title::after{animation:none!important}
+  .char-status .dot{animation:none}
+  .work-map button.job-pin::after{transition:none}
   .ticker-track{animation:none;transition:none}
   .ticker-window{overflow-x:auto;scrollbar-width:none}
   .ticker-set + .ticker-set{display:none}
 }
+
+/* ===== MOCK Projects page (projects.html): shelves on a dark wall. A placeholder until the real 3D shelves are built ===== */
+html:has(.shelf-page),.shelf-page{background:#1c1714;color:#efe6da}
+.shelf-page{font:400 17px/1.55 var(--font)}
+.shelf-top{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:22px var(--gutter)}
+.shelf-top a{color:#efe6da;text-decoration:none;font-weight:600}
+.shelf-top a:hover{text-decoration:underline}
+.shelf-mock{margin:0;color:#c9a27a;font-size:14px}
+.shelf-room{max-width:1200px;margin:0 auto;padding:12px var(--gutter) 64px}
+.shelf-room h1{font:800 clamp(40px,6vw,76px)/1 var(--font);letter-spacing:-.03em;margin:0 0 12px}
+.shelf-lede{max-width:56ch;margin:0 0 40px;color:#cbbfb0}
+.shelf{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;padding:0 24px 28px;margin:0 0 44px;border-bottom:16px solid #7a4e2c;box-shadow:0 22px 26px -14px rgba(0,0,0,.6)}
+.item .model{display:grid;place-items:center;aspect-ratio:4/3;margin:0 0 14px;border:2px dashed #6b5a4a;color:#a89784;font-size:13px}
+.item h2{font:700 19px/1.2 var(--font);margin:0 0 4px}
+.item p{margin:0 0 6px;font-size:15px;color:#cbbfb0}
+.item a{color:#f0b77c;font-size:15px}
+.shelf-page footer{border-top-color:#3a2f27;color:#a89784}
+@media (max-width:760px){.shelf{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.shelf{grid-template-columns:1fr}}
+
+/* ===== MOCK Other work page (other-work.html): blueprint sheet. A placeholder until the real page is built ===== */
+html:has(.print-page),.print-page{background:#123a5c;color:#e6f0f8}
+.print-page{font:400 17px/1.55 var(--font-name);background-image:linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.07) 1px,transparent 1px);background-size:24px 24px}
+.print-top{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:22px var(--gutter)}
+.print-top a{color:#fff;text-decoration:none}
+.print-top a:hover{text-decoration:underline}
+.print-mock{margin:0;color:#9cc3e4;font-size:14px}
+.print-sheet{max-width:1100px;margin:0 auto;padding:12px var(--gutter) 64px}
+.print-sheet h1{font:700 clamp(36px,5vw,64px)/1.05 var(--font-name);margin:0 0 12px;text-transform:uppercase;letter-spacing:.02em}
+.print-sheet h2{font:700 18px var(--font-name);text-transform:uppercase;letter-spacing:.08em;margin:44px 0 16px;padding-bottom:8px;border-bottom:1px solid #9cc3e4}
+.print-lede{max-width:58ch;color:#cfe0ee}
+.plates{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px}
+.plate{margin:0;border:1px solid #9cc3e4;padding:10px}
+.ph-box{display:grid;place-items:center;aspect-ratio:4/3;border:1px dashed #6f9cc2;color:#9cc3e4;font-size:13px}
+.plate figcaption{margin-top:8px;font-size:14px;color:#cfe0ee}
+.print-btn{display:inline-block;margin-top:8px;padding:12px 18px;border:2px solid #fff;color:#fff;text-decoration:none}
+.print-btn:hover{background:#fff;color:#123a5c}
+.print-page footer{border-top-color:#2f5a80;color:#9cc3e4}

@@ -4,57 +4,170 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Brayden Paterson</title>
-<meta name="description" content="Brayden Paterson: Computing student at Queen's University, looking for a technical sales or infrastructure co-op from May 2027.">
-<meta name="theme-color" content="#f4ead6">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400..800&family=IBM+Plex+Mono:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<meta name="description" content="Brayden Paterson: Computing student at Queen's University, looking for a 4-month technical sales or infrastructure co-op from May 2027.">
+<meta name="theme-color" content="#000000">
+<link rel="preload" href="assets/fonts/bedstead.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="styles.css?v=17">
+<script>document.documentElement.classList.add('js')</script>
 </head>
-<body>
+<body class="tt">
 
-<!-- The name in the middle, the five photo links around it: one each side, three underneath. -->
+<!-- The home page is a teletext service: every page has a three-digit number. Under the title card a TV shows one page
+     at a time as a channel (its preview drawn in teletext blocks); type a number or change channel, then open it. -->
+
+<!-- The top row of every teletext page: the page you asked for, the service name, the page on screen, the clock -->
+<header class="tt-head" aria-label="Page header">
+  <span class="tt-asked">P<span id="asked">100</span></span>
+  <span class="tt-name">BPTEXT</span>
+  <span class="tt-count" id="count" aria-hidden="true">100</span>
+  <span class="tt-clock" id="clock" aria-hidden="true"></span>
+</header>
+
 <main class="tiles">
-  <header class="title">
-    <h1><span><span>Brayden</span></span><span><span>Paterson</span></span></h1>
-    <p class="tagline">Computing Student @ Queen's University</p>
-    <p class="socials">
-      <a href="https://github.com/Braydenp006" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
-      <a href="https://www.linkedin.com/in/braydenpaterson/" aria-label="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
-    </p>
-  </header>
 
-  <!-- ===== EDIT HERE: the five photo links. The first two sit either side of the name, the other three underneath. ===== -->
-  <!-- --tint: the panel colour behind the photo.
-       --to: the background colour of the page it opens (default: cream), so the opening window matches it. -->
-  <!-- To add a real photo, replace the <span class="ph">…</span> with: <img src="img/your-photo.jpg" alt="" loading="lazy"> -->
-  <a class="tile" href="projects.html" style="--tint:var(--slate)">
-    <span class="frame"><span class="ph">[PHOTO: a project on the bench]</span></span>
-    <b>Projects</b>
-  </a>
-  <a class="tile" href="resume.html" style="--tint:var(--sage);--to:#050706">
-    <span class="frame matted"><img src="assets/Pictures/funnyres.webp" alt="" loading="lazy"></span>
-    <b>Resume</b>
-  </a>
-  <a class="tile" href="how-it-runs.html" style="--tint:var(--ink);--to:#4148d8">
-    <span class="frame"><span class="ph">[PHOTO: Z420 server]</span></span>
-    <b>How this site runs</b>
-  </a>
-  <a class="tile" href="about.html" style="--tint:var(--rose)">
-    <span class="frame"><span class="ph">[PHOTO: portrait]</span></span>
-    <b>About me</b>
-  </a>
-  <a class="tile" href="other-work.html" style="--tint:var(--ochre)">
-    <span class="frame"><span class="ph">[PHOTO: a PC build]</span></span>
-    <b>Other work</b>
-  </a>
+  <!-- ===== P100: the index (first screen) ===== -->
+  <section class="tt-page tt-index" id="p100" data-page="100" aria-labelledby="name">
+    <div class="tt-hero">
+      <h1 id="name" class="tt-name-big"><span>BRAYDEN</span> <span>PATERSON</span></h1>
+      <!-- ===== EDIT HERE: who I am and what I'm looking for ===== -->
+      <p class="tt-lede">Computing student at Queen's University (Cybersecurity, Math minor). Two summers on IT service desks. I run my own server, and you're reading this off it.</p>
+      <dl class="tt-offer">
+        <div><dt>LOOKING FOR</dt><dd>A 4-month co-op from May 2027</dd></div>
+        <div><dt>IN</dt><dd>Technical sales / pre-sales, or servers and infrastructure</dd></div>
+        <div><dt>WHERE</dt><dd>Toronto, York Region or Kingston</dd></div>
+      </dl>
+      <p class="tt-actions">
+        <a class="tile tt-btn tt-btn-main" href="resume.html" data-open="draw" style="--to:#050706"><span class="frame">GET MY RESUME <span class="tt-pg">200</span></span></a>
+        <a class="tt-btn" href="mailto:braydenp006@gmail.com">EMAIL ME</a>
+        <a class="tt-link" href="https://github.com/Braydenp006">GITHUB</a>
+        <a class="tt-link" href="https://www.linkedin.com/in/braydenpaterson/">LINKEDIN</a>
+      </p>
+    </div>
+
+    <aside class="tt-side" aria-label="The server and the page index">
+      <div class="tt-rig">
+        <svg class="tt-z420" id="z420" role="img" aria-label="Block drawing of the HP Z420 workstation this site runs on"></svg>
+        <div class="tt-rig-text">
+          <p class="tt-rig-title">HP Z420 · FREEBSD</p>
+          <p>Serving this page right now, from my house.</p>
+          <dl class="tt-live" id="live" aria-live="off">
+            <div><dt>UPTIME</dt><dd data-k="uptime">--</dd></div>
+            <div><dt>VISITORS TODAY</dt><dd data-k="visitors">--</dd></div>
+            <div><dt>CPU TEMP</dt><dd data-k="temp">--</dd></div>
+          </dl>
+          <p class="tt-state" id="live-state"></p>
+        </div>
+      </div>
+      <nav class="tt-contents" aria-label="Pages">
+        <p class="tt-contents-title">PAGES</p>
+        <ol>
+          <li><a href="#tv" data-ch="200"><span class="tt-pg">200</span> Resume</a></li>
+          <li><a href="#tv" data-ch="300"><span class="tt-pg">300</span> How this site runs</a></li>
+          <li><a href="#tv" data-ch="400"><span class="tt-pg">400</span> About me</a></li>
+          <li><a href="#tv" data-ch="500"><span class="tt-pg">500</span> Projects</a></li>
+          <li><a href="#tv" data-ch="600"><span class="tt-pg">600</span> Other work</a></li>
+        </ol>
+      </nav>
+    </aside>
+  </section>
+
+  <!-- ===== The TV: one page at a time, as a channel. Change channel with the buttons, the list, the coloured keys or by
+       typing a number; Enter or a click on the screen opens that page.
+       EDIT HERE: one .tt-ch per channel. data-href: the page, data-to: its background colour (so the opening matches it),
+       data-src: its preview (assets/previews; remake them with: node make-home-previews.mjs while the site runs on port 3000),
+       data-band: the channel's colour. ===== -->
+  <section class="tt-tv" id="tv" aria-label="Channels">
+    <div class="tt-set">
+      <a class="tile tt-screen" id="screen" href="resume.html" style="--to:#050706">
+        <span class="frame">
+          <canvas id="screen-pic" aria-hidden="true" width="160" height="100"></canvas>
+          <canvas id="screen-snow" aria-hidden="true" width="80" height="50"></canvas>
+          <span class="tt-osd" id="osd" aria-hidden="true">CH 200</span>
+        </span>
+      </a>
+      <p class="tt-screen-cap">PRESS ENTER OR CLICK THE SCREEN TO WATCH</p>
+    </div>
+
+    <div class="tt-guide">
+      <div class="tt-tuner">
+        <button type="button" id="ch-prev" aria-label="Previous channel">&lt;&lt; CH-</button>
+        <span class="tt-ch-num" id="ch-num" aria-live="polite">200</span>
+        <button type="button" id="ch-next" aria-label="Next channel">CH+ &gt;&gt;</button>
+      </div>
+
+      <div class="tt-ch" data-ch="200" data-href="resume.html" data-to="#050706" data-src="assets/previews/resume.webp" data-band="var(--tt-green)">
+        <h2 class="tt-band"><span>RESUME</span></h2>
+        <p>Three questions on a green CRT terminal, then it hands you the version of my resume that fits the role: <span class="tt-c">technical sales</span>, <span class="tt-c">IT and infrastructure</span> or <span class="tt-c">cybersecurity</span>.</p>
+        <dl class="tt-facts" id="variants" aria-label="Resume versions"></dl>
+        <p>In a hurry? <a class="tt-link" id="quick-pdf" href="assets/Resumes/BraydenPatersonIT.pdf" download>Download the general one</a>.</p>
+      </div>
+      <div class="tt-ch" data-ch="300" data-href="how-it-runs.html" data-to="#4148d8" data-src="assets/previews/how-it-runs.webp" data-band="var(--tt-blue)" data-band-ink="#fff">
+        <h2 class="tt-band"><span>HOW THIS SITE RUNS</span></h2>
+        <p>No cloud host. This site is served from an HP Z420 workstation in my house, running FreeBSD with one jail per service.</p>
+        <dl class="tt-facts">
+          <div><dt>MACHINE</dt><dd>HP Z420 workstation</dd></div>
+          <div><dt>SYSTEM</dt><dd>FreeBSD, one jail per service</dd></div>
+          <div><dt>ALSO RUNS</dt><dd>My own Git server, email, game servers for friends, and willbot</dd></div>
+          <div><dt>ADMIN</dt><dd>Only over my own VPN</dd></div>
+        </dl>
+        <p>The page has the live numbers, the path your visit took to get here, and a 3D model of the machine you can take the side panel off.</p>
+      </div>
+      <div class="tt-ch" data-ch="400" data-href="about.html" data-to="#dcdcdc" data-src="assets/previews/about.webp" data-band="var(--tt-white)">
+        <h2 class="tt-band"><span>ABOUT ME</span></h2>
+        <p>Where I've worked, what I work with, and what I do off the clock, on one screen with a map.</p>
+        <!-- filled from PLACES in about-data.js -->
+        <table class="tt-table">
+          <caption>WHERE I'VE WORKED</caption>
+          <thead><tr><th scope="col">WHEN</th><th scope="col">ROLE</th><th scope="col">WHERE</th></tr></thead>
+          <tbody id="work"></tbody>
+        </table>
+      </div>
+      <div class="tt-ch" data-ch="500" data-href="projects.html" data-to="#1c1714" data-src="assets/previews/projects.webp" data-band="var(--tt-yellow)">
+        <h2 class="tt-band"><span>PROJECTS</span></h2>
+        <dl class="tt-facts">
+          <div><dt>WILLBOT</dt><dd>Local voice assistant with a lip-syncing 3D head</dd></div>
+          <div><dt>PHISHER</dt><dd>Phishing simulation sent to 200+ employees</dd></div>
+          <div><dt>HOME SERVER</dt><dd>FreeBSD jails on the Z420 serving this site</dd></div>
+          <div><dt>METEOR SHOWER</dt><dd>Pygame arcade game, playable here later</dd></div>
+          <div><dt>WILLIAM MOD</dt><dd>Minecraft mod with a tameable custom mob</dd></div>
+          <div><dt>LIGHT CAR</dt><dd>Arduino car you steer with a flashlight</dd></div>
+        </dl>
+        <p class="tt-g">The full page, with a 3D model on each shelf, is in production.</p>
+      </div>
+      <div class="tt-ch" data-ch="600" data-href="other-work.html" data-to="#123a5c" data-src="assets/previews/other-work.webp" data-band="var(--tt-magenta)">
+        <h2 class="tt-band"><span>OTHER WORK</span></h2>
+        <p>I build <span class="tt-m">custom PCs</span> and <span class="tt-m">websites</span> for people. I've built and sold 5 custom gaming PCs to local customers.</p>
+        <p><a class="tt-link" href="mailto:braydenp006@gmail.com?subject=Build%20enquiry">Ask about a build</a></p>
+      </div>
+
+      <ol class="tt-chlist" aria-label="Channels">
+        <li><button type="button" data-ch="200"><span class="tt-pg">200</span> Resume</button></li>
+        <li><button type="button" data-ch="300"><span class="tt-pg">300</span> How this site runs</button></li>
+        <li><button type="button" data-ch="400"><span class="tt-pg">400</span> About me</button></li>
+        <li><button type="button" data-ch="500"><span class="tt-pg">500</span> Projects</button></li>
+        <li><button type="button" data-ch="600"><span class="tt-pg">600</span> Other work</button></li>
+      </ol>
+    </div>
+  </section>
+
 </main>
 
-<footer>
+<footer class="tt-foot">
   <span>Served from an HP Z420 running FreeBSD.</span>
   <span>© 2026 Brayden Paterson</span>
 </footer>
 
-<script type="module" src="home.js"></script>
+<!-- Fastext: the four coloured shortcuts along the bottom of a teletext screen, plus a box to type a page number into -->
+<nav class="tt-fast" aria-label="Shortcuts">
+  <a href="#tv" data-ch="200" class="r">RESUME</a>
+  <a href="#tv" data-ch="300" class="g">SERVER</a>
+  <a href="#tv" data-ch="400" class="y">ABOUT</a>
+  <a href="#tv" data-ch="500" class="c">PROJECTS</a>
+  <label class="tt-key">P<input id="key" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off" aria-label="Go to channel number (200 to 600, or 100 for the top)" placeholder="___"></label>
+  <span class="sr-only" id="key-status" role="status"></span>
+</nav>
+
+<script type="module" src="home.js?v=8"></script>
+<script type="module" src="home-teletext.js?v=8"></script>
 </body>
 </html>

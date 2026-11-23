@@ -13,10 +13,11 @@
 </head>
 <body class="runs-page">
 
-<!-- the terminal's top bar: home link, a few function keys, a clock (how-it-runs.js) -->
+<!-- the terminal's top bar: home link, function keys to the other pages, a clock (how-it-runs.js) -->
 <header class="term-bar">
   <a href="index.html">Brayden Paterson</a>
-  <span class="keys" aria-hidden="true"><b>HOME</b><b>SRV</b><b>Z420</b><b>FREEBSD</b><b>&lt;GO&gt;</b></span>
+  <!-- the function keys: the site's other pages, which slide in from the top (slide.js) -->
+  <nav class="keys" aria-label="Pages" data-slide><a href="index.html">Home</a><a href="about.html">About me</a><a href="resume.html">Resume</a><a href="projects.html">Projects</a><a href="other-work.html">Other work</a></nav>
   <time class="clock" id="clock"></time>
 </header>
 
@@ -64,6 +65,7 @@
       <h2 id="rig-h">HP Z420 · live view</h2>
       <div class="rig" id="rig">
         <button class="rig-btn" id="panel-toggle" type="button" >Open the side panel</button>
+        <button class="rig-reset" id="rig-reset" type="button">Reset</button>
         <p class="rig-hint" aria-hidden="true">Drag to turn · scroll to zoom · right-drag to move · hover a part</p>
         <div class="rig-tip" id="rig-tip" hidden></div>
         <!-- ===== EDIT HERE: the hover labels. data-part matches the pieces in server3d.js ===== -->
@@ -114,6 +116,7 @@
 
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
 <script type="module" src="how-it-runs.js?v=8"></script>
-<script type="module" src="server3d.js?v=16"></script>   <!-- bump ?v= after editing it, so browsers fetch the new copy -->
+<script type="module" src="server3d.js?v=17"></script>
+<script type="module" src="slide.js?v=1"></script>   <!-- bump ?v= after editing it, so browsers fetch the new copy -->
 </body>
 </html>

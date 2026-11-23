@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Projects · Brayden Paterson</title>
+<meta name="description" content="Brayden Paterson's projects: a voice assistant, a phishing simulation, a home server, games, mods and hardware.">
+<meta name="theme-color" content="#1c1714">
+<link rel="stylesheet" href="styles.css?v=15">
+</head>
+<body class="shelf-page">
+
+<!-- MOCK PAGE: a placeholder for the real Projects page (shelves of 3D models, one per project, driven by projects.json).
+     It exists so the home page's TV has something to show. Replace it when the real page is built. -->
+<header class="shelf-top">
+  <a href="index.html">◂ Home</a>
+  <p class="shelf-mock">Mock page · the real one, with a 3D model on each shelf, is in production</p>
+</header>
+
+<main class="shelf-room">
+  <h1>Projects</h1>
+  <p class="shelf-lede">Things I've built: software, hardware, and a few games. Each one will sit on a shelf as a 3D model you can open.</p>
+
+  <!-- ===== EDIT HERE: one .shelf per row, one .item per project ===== -->
+  <section class="shelf" aria-label="Software">
+    <div class="item"><span class="model">[3D: willbot head]</span><h2>willbot</h2><p>A talking-head voice assistant: faster-whisper, a local LLM, Chatterbox voice and a three.js head that lip-syncs.</p><a href="https://github.com/Braydenp006/willbot">Source</a></div>
+    <div class="item"><span class="model">[3D: fishing hook]</span><h2>Phisher</h2><p>A phishing-awareness simulation with tracking links and a results report. Sent to 200+ employees.</p><a href="https://github.com/Braydenp006/Phisher">Source</a></div>
+    <div class="item"><span class="model">[3D: HP Z420]</span><h2>Home server</h2><p>FreeBSD on an HP Z420, one jail per service. It serves this site.</p><a href="how-it-runs.html">How it runs</a></div>
+  </section>
+  <section class="shelf" aria-label="Games and mods">
+    <div class="item"><span class="model">[3D: arcade machine]</span><h2>Meteor Shower</h2><p>A Pygame arcade game with power-ups, sound and a saved high score. Playable here later.</p><a href="https://github.com/Braydenp006/AstroidClone">Source</a></div>
+    <div class="item"><span class="model">[3D: William]</span><h2>William mod</h2><p>A Minecraft Forge mod adding a tameable custom mob with its own model, sounds and AI.</p><a href="https://github.com/Braydenp006/williammod">Source</a></div>
+    <div class="item"><span class="model">[3D: redstone]</span><h2>11-bit encoder</h2><p>A binary encoder built from redstone logic gates in Minecraft. [TODO: gate count, what was hard]</p></div>
+  </section>
+  <section class="shelf" aria-label="Hardware">
+    <div class="item"><span class="model">[3D: RC car]</span><h2>Light-following car</h2><p>An Arduino car you steer with a flashlight, using four light sensors.</p><a href="https://github.com/Braydenp006/LightControlledCar">Source</a></div>
+    <div class="item"><span class="model">[3D: tube radio]</span><h2>Tube radio mod</h2><p>Adding Bluetooth to an old tube radio. In progress. [TODO: a line about it]</p></div>
+    <div class="item"><span class="model">[3D: laptop]</span><h2>Linux setup</h2><p>Arch / CachyOS with niri and Quickshell. [TODO: dotfiles link]</p></div>
+  </section>
+</main>
+
+<footer>
+  <span>Served from an HP Z420 running FreeBSD.</span>
+  <span>© 2026 Brayden Paterson</span>
+</footer>
+</body>
+</html>
