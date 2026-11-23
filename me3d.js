@@ -1,5 +1,5 @@
 // The 3D figure on the About page: me (assets/models/me.glb, made with Meshy AI), turned a little towards the stats.
-// It can't be dragged. The model has no skeleton, so it can't play animations: it just breathes and sways a little
+// Drag it (or focus it and use the arrow keys) to spin it round. The model has no skeleton, so it can't play animations: it just breathes and sways a little
 // (scripted below). If it gets rigged later (e.g. in Blender), put its animation names in IDLE and GESTURES and the
 // idle / nod code takes over. (placeholder-me.glb, three.js's "Xbot" mannequin, is the old stand-in, unused.)
 // No WebGL: the card shows its lit floor only. Reduced motion: it holds still in its idle pose.
@@ -49,6 +49,22 @@ if(gl && stage) new GLTFLoader().load(MODEL, ({ scene: model, animations }) => {
   };
   stage.append(gl.domElement);
   fit();
+
+  // spin: dragging sideways turns me round; arrow keys do the same once the model is focused
+  const el = gl.domElement;
+  let spin = 0, dragX = null;
+  el.tabIndex = 0;
+  el.setAttribute('role', 'img');
+  el.setAttribute('aria-label', '3D model of me. Drag, or use the left and right arrow keys, to turn it round.');
+  const turn = by => { spin += by; if(reduceMotion){ model.rotation.y = -.35 + spin; gl.render(scene, camera); } };
+  el.addEventListener('pointerdown', e => { dragX = e.clientX; el.setPointerCapture(e.pointerId); });
+  el.addEventListener('pointermove', e => { if(dragX === null) return; turn((e.clientX - dragX) * .012); dragX = e.clientX; });
+  el.addEventListener('pointerup', () => dragX = null);
+  el.addEventListener('pointercancel', () => dragX = null);
+  el.addEventListener('keydown', e => {
+    const by = { ArrowLeft: -.3, ArrowRight: .3 }[e.key];
+    if(by){ e.preventDefault(); turn(by); }
+  });
   new ResizeObserver(fit).observe(stage);
 
   const gestures = Object.fromEntries(GESTURES.map(name => {
@@ -76,8 +92,8 @@ if(gl && stage) new GLTFLoader().load(MODEL, ({ scene: model, animations }) => {
       if(!idle){   // no animations in the model: breathe (a slight rise and fall) and sway (a slow small turn)
         t += dt;
         model.position.y = rest.y + Math.sin(t * 1.7) * size.y * .003;
-        model.rotation.y = rest.turn + Math.sin(t * .45) * .06;
-      }
+        model.rotation.y = rest.turn + spin + Math.sin(t * .45) * .06;
+      } else model.rotation.y = rest.turn + spin;
       gl.render(scene, camera);
     } : null);
     clock.getDelta();   // don't count the paused time

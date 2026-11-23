@@ -4,7 +4,7 @@
 import { chromium } from '/usr/lib/node_modules/playwright/index.mjs';
 import { execFileSync } from 'node:child_process';
 
-const PAGES = ['resume', 'how-it-runs', 'about', 'projects', 'other-work'];   // the pages with a preview on the home page
+const PAGES = ['index', 'resume', 'how-it-runs', 'about', 'projects', 'other-work'];   // the home page's previews, plus index for the Resume page's CRT (crt-channel.js)
 const browser = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });   // so the 3D models draw
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 for (const name of PAGES) {

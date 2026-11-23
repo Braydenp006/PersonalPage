@@ -1,6 +1,7 @@
 // The homepage: one screen. Every word comes from about-data.js; this file only
 // shows it. The 3D figure is me3d.js.
 import { ME, LIVE, PLACES, EQUIPMENT, JOURNAL } from './about-data.js';
+import { cover, uncover } from './pixel-wipe.js';
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
@@ -127,7 +128,8 @@ function buildMap(){
   if(!ml){ $('map-hole').remove(); return; }   // Expand still opens the timeline
   const map = new ml.Map({
     container: mapEl,
-    style: 'assets/map/lab-style.json',   // the page's greys, blue and orange (assets/map/make-style.py)
+    style: 'assets/map/lab-style.json',   // the page's white, blue and orange (assets/map/make-style.py)
+    pixelRatio: .5,   // drawn at half resolution: 2 CSS px per map pixel, blown up blocky (styles.css)
     bounds: allPins = places.reduce((b, p) => b.extend([p.at[1], p.at[0]]), new ml.LngLatBounds()),   // MapLibre wants [lng, lat]
     fitBoundsOptions: { padding: 50 },
     maxBounds: [[-82.5, 41.5], [-73.5, 46.6]],   // southern Ontario, Toronto to Kingston, with room for a tall phone-width map to zoom out
@@ -166,10 +168,49 @@ function buildMap(){
     });
   };
   map.on('zoom', spread);
+  // dither: water and parks filled with an ordered-dither pattern (drawn by the map on the GPU, so panning stays smooth)
+  map.on('style.load', () => {
+    const dither = (ink, paper, amount) => {   // 4x4 Bayer: a cell takes the ink colour if its threshold is under the amount
+      const hex = c => [1, 3, 5].map(i => parseInt(c.slice(i, i + 2), 16)), data = new Uint8Array(64);
+      BAYER.forEach((v, i) => data.set([...hex(v / 16 < amount ? ink : paper), 255], i * 4));
+      return { width: 4, height: 4, data };
+    };
+    map.addImage('dither-water', dither('#6fb4e6', '#fbfaf7', .5));
+    map.addImage('dither-park', dither('#f9c27f', '#fbfaf7', .25));
+    const fill = (id, pattern) => map.getLayer(id) && map.setPaintProperty(id, 'fill-pattern', pattern);
+    fill('water', 'dither-water');
+    ['park', 'landcover_wood', 'landuse_residential'].forEach(id => fill(id, 'dither-park'));
+  });
   map.once('load', () => { map.fitBounds(allPins, { padding: 40, duration: 0 }); spread(); });   // fit again once laid out: on a phone the box isn't its final size when the map is made
   mapEl.insertAdjacentHTML('beforeend', '<div class="map-legend"><span><i class="job-pin work"></i>Work</span><span><i class="job-pin school"></i>School</span></div>');
   return map;
 }
+
+// the backdrop: a low-res picture, mostly white, with orange glows top right and bottom middle and blue ones in the other corners,
+// ordered-dithered into a few flat colours and blown up blocky (styles.css --pixels). Redrawn when the window's shape changes.
+const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5];
+const SHADES = { blue: ['#f7f7f5', '#dcecf8', '#b6d8f1', '#7fbbe6'], orange: ['#f7f7f5', '#fdebd5', '#fcd3a3', '#f9b265'] };
+const GLOWS = [['orange', .95, 0, .42], ['blue', 0, 1, .45], ['blue', 1, 1, .3], ['orange', .45, 1.05, .22], ['blue', .02, .02, .22]];   // colour, x, y, size
+function pixelBackdrop(){
+  const W = 420, H = Math.max(1, Math.round(W * innerHeight / innerWidth)), c = document.createElement('canvas');
+  c.width = W; c.height = H;
+  const g = c.getContext('2d'), img = g.createImageData(W, H), rgb = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+  const RGB = Object.fromEntries(Object.entries(SHADES).map(([k, v]) => [k, v.map(rgb)]));
+  for(let y = 0; y < H; y++) for(let x = 0; x < W; x++){
+    let best = 0, hue = 'blue';
+    for(const [h, gx, gy, r] of GLOWS){
+      const d = Math.hypot(x / W - gx, (y / H - gy) * H / W) / r, v = Math.max(0, 1 - d * d);
+      if(v > best){ best = v; hue = h; }
+    }
+    const level = Math.min(3, Math.floor(best * 2.6 + BAYER[(y % 4) * 4 + x % 4] / 16));   // the dither: a threshold per pixel
+    img.data.set([...RGB[hue][level], 255], (y * W + x) * 4);
+  }
+  g.putImageData(img, 0, 0);
+  document.body.style.setProperty('--pixels', `url(${c.toDataURL()})`);
+}
+pixelBackdrop();
+let shapeTimer;
+addEventListener('resize', () => { clearTimeout(shapeTimer); shapeTimer = setTimeout(pixelBackdrop, 200); });
 
 let map, allPins;
 map = buildMap();
@@ -244,21 +285,14 @@ shrink.addEventListener('click', () => expand(false));
 addEventListener('keydown', e => { if(e.key === 'Escape' && open && !win.open) expand(false); });
 
 
-// Leaving for GitHub, LinkedIn or Home: a panel in the colour of where the link goes (data-to) grows out of the link to
-// fill the screen, then that page loads behind it, so it opens instead of cutting straight over. (The page cards open
-// like the homepage's photos instead, the real page growing out of the picture: home.js, which handles them first.) Links that open a
-// new tab, email, new-tab clicks and reduced motion are left alone. Inside the homepage's window (home.js), Home is
-// left to it too: it shrinks the window back into its photo.
+// Leaving for GitHub, LinkedIn or Home: the pixel wipe (pixel-wipe.js) spreads out from the link to cover the screen,
+// then that page loads, so it doesn't cut straight over. (The page cards are handled first by home.js, with the same
+// wipe and the real page underneath.) Links that open a new tab, email, new-tab clicks and reduced motion are left
+// alone. Back to here from the browser's cache clears the pixels the same way.
 document.addEventListener('click', e => {
   const a = e.target.closest('a[href]');
   if(!a || reduceMotion || e.defaultPrevented || a.target || a.protocol === 'mailto:' || e.button || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
-  if(window !== top && /\/(index\.html)?$/.test(a.pathname) && a.origin === location.origin) return;
   e.preventDefault();
-  const r = a.getBoundingClientRect(), cover = document.createElement('div');
-  cover.className = 'page-cover';
-  cover.style.background = a.dataset.to ?? 'var(--bg)';
-  document.body.append(cover);
-  cover.animate({ clipPath: [`inset(${r.top}px ${innerWidth - r.right}px ${innerHeight - r.bottom}px ${r.left}px)`, 'inset(0)'] },
-    { duration: 560, easing: 'cubic-bezier(.75,0,.2,1)', fill: 'forwards' }).finished.then(() => { top.location.href = a.href; });
+  cover(a.getBoundingClientRect()).then(() => { top.location.href = a.href; });   // top: the whole tab, never a frame
 });
-addEventListener('pageshow', e => { if(e.persisted) document.querySelectorAll('.page-cover').forEach(c => c.remove()); });   // Back to here: lift it
+addEventListener('pageshow', e => { if(e.persisted) document.querySelectorAll('.pixel-cover').forEach(c => uncover(c)); });   // Back to here: clear the pixels

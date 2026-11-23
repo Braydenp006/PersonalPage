@@ -10,9 +10,9 @@ here = os.path.dirname(os.path.abspath(__file__))
 PALETTES = {
   'rdr-style.json': dict(name='Parchment', PAPER='#d8c39a', PAPER_DARK='#cbb386', WATER='#9d9a86', WATER_EDGE='#7f7c6a',
                          INK='#3b2f22', INK_SOFT='#6a5a44', ROAD='#6f5c42', WATER_TEXT='#4d4a3c', serif=True),
-  # the About page's map, in its greys
-  'lab-style.json': dict(name='Lab', PAPER='#e6e6e6', PAPER_DARK='#d8d8d8', WATER='#b9c6ce', WATER_EDGE='#97a7b1',
-                         INK='#262626', INK_SOFT='#7a7a7a', ROAD='#8c8c8c', WATER_TEXT='#5e6b74', serif=False),
+  # the About page's map, in its colours: white land, blue water, orange roads, navy text (dithered on the page)
+  'lab-style.json': dict(name='Lab', PAPER='#fbfaf7', PAPER_DARK='#fde2c2', WATER='#a7d2f2', WATER_EDGE='#2f8fd0',
+                         INK='#16304a', INK_SOFT='#5f7d96', ROAD='#f7931e', WATER_TEXT='#0a5a8e', serif=False),
 }
 def build(out, name, PAPER, PAPER_DARK, WATER, WATER_EDGE, INK, INK_SOFT, ROAD, WATER_TEXT, serif):
   s = json.load(open(os.path.join(here, 'positron-original.json')))

@@ -283,11 +283,11 @@ document.querySelector('.tt-actions').addEventListener('click', async e => {
   cover.className = 'ext-cover';
   cover.style.background = bg;
   document.body.append(cover);
-  location.href = a.href;
+  top.location.href = a.href;
 });
 // Back from the site: put the laptop back as it was
 addEventListener('pageshow', e => {
-  if(!e.persisted) return;
+  if(!e.persisted || !leaving) return;   // only after leaving for GitHub / LinkedIn (home.js handles coming back from a page)
   document.querySelectorAll('.ext-cover').forEach(c => c.remove());
   $('screen-ext').hidden = true;
   window.lt?.zoom(0, 1);

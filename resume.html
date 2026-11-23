@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#050706">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400..800&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400..800&family=IBM+Plex+Mono:wght@400;500;700&display=block" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <!-- hide the CSS monitor while the 3D one loads, so it doesn't flash first; crt3d.js shows it again if the model can't load -->
 <script>document.documentElement.classList.add('crt-loading'); setTimeout(() => document.documentElement.classList.remove('crt-loading'), 10000);</script>
@@ -18,8 +18,8 @@
 <!-- A dark room lit only by a green CRT. -->
 <div class="dark-room">
   <header class="topbar"><a href="index.html">Brayden Paterson</a>
-    <!-- the other pages; they slide in from the top (slide.js) -->
-    <nav class="res-nav" aria-label="Pages" data-slide><a href="index.html">Home</a><a href="about.html">About me</a><a href="how-it-runs.html">How this site runs</a><a href="projects.html">Projects</a><a href="other-work.html">Other work</a></nav>
+    <!-- the other pages; each one comes up on the CRT first, with a "Go here" that zooms into it (crt-channel.js) -->
+    <nav class="res-nav" aria-label="Pages"><a href="index.html">Home</a><a href="about.html">About me</a><a href="how-it-runs.html">How this site runs</a><a href="projects.html">Projects</a><a href="other-work.html">Other work</a></nav>
   </header>
 
   <main class="resume">
@@ -68,7 +68,7 @@
 <!-- three.js for the CRT model (crt3d.js); the page works without it -->
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
 <script type="module" src="resume.js"></script>
-<script type="module" src="slide.js"></script>
+<script type="module" src="crt-channel.js?v=4"></script>
 <script type="module" src="crt3d.js?v=2" onerror="document.documentElement.classList.remove('crt-loading')"></script>
 </body>
 </html>

@@ -231,7 +231,6 @@ button.tt-scroll-hint{font:inherit;border:0;cursor:pointer}
 /* the window that opens out of a photo and fills the screen when it's clicked (home.js): a full-screen frame holding the
    real page, cut down to the photo's shape. Fully cut away (invisible) while it waits. */
 .tile-window{position:fixed;inset:0;z-index:100;clip-path:inset(50% 50%);pointer-events:none}
-.tile-window.open{pointer-events:auto}   /* filled the screen: it is the page now */
 .tile-window iframe{display:block;width:100%;height:100%;border:0;opacity:0;transition:opacity .3s}
 .tune-static{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;pointer-events:none;opacity:0}   /* the home page's TV static (home.js) */
 /* the next page sliding down in from the top (slide.js): a full-screen frame holding the real page, out of sight while it waits */
@@ -319,6 +318,14 @@ html:has(.resume-page),.resume-page{background:#050706}
 .viewer .pages img{display:block;width:100%;height:auto}
 .viewer .pages img + img{border-top:2px solid #cfc9b8}
 .viewer .opts{margin:0;justify-content:center}
+/* another page on the CRT (crt-channel.js): a picture of it at the window's size, shrunk into the glass, under channel-change static */
+.on-channel > :is(.term,.viewer:not(.channel-view)){visibility:hidden}
+.channel-view .tv{position:relative;flex:1;min-height:0;overflow:hidden;border-radius:6px;background:#04120a}
+.channel-view .tv img{position:absolute;left:0;top:0;display:block;max-width:none;max-height:none;object-fit:cover;object-position:top;transform-origin:0 0}
+.channel-static{position:absolute;inset:0;z-index:2;width:100%;height:100%;image-rendering:pixelated}
+.crt-screen.zooming{border-radius:0;transition:border-radius .6s}   /* "Go here": the glass gets out of the way as the page zooms in */
+.zooming::before,.zooming::after,.zooming .glass{opacity:0;transition:opacity .5s}
+.zooming .channel-view .tv{border-radius:0}
 /* the case's sides, top and bottom: each is hinged on an edge of the front and swung back 90°, trimmed to a trapezoid */
 .m-left,.m-right{top:0;width:var(--d);height:var(--h);transform-origin:0 50%;clip-path:polygon(0 0,100% 15%,100% 85%,0 100%)}
 .m-left{left:0;transform:rotateY(90deg);background:linear-gradient(90deg,#1b1d1b,#090a09)}
@@ -500,21 +507,21 @@ html:has(.runs-page),.runs-page{--blue:#4148d8;--deep:#2d33b8;--text:#fff;--dim:
   .ticker dd{font-size:30px}
 }
 
-/* ===== About me: a test chamber. A faint dot field on light grey; the chamber sign (enamel white, black type, a dark foot)
-   down the left; me on a plate in the middle; panels that push out of the wall, each with a dark header strip in
-   orange; the two portal colours as meaning, not decoration: blue = picked / work, orange = pointed at / school. ===== */
+/* ===== About me: a retro test chamber. A dithered pixel backdrop (mostly white, with orange and blue glowing through it,
+   drawn by about.js); see-through frosted panels with no shading; no black anywhere: text is deep navy, the solid bits
+   blue or orange. The two portal colours as meaning: blue = picked / work, orange = pointed at / school. ===== */
 .about-page{
-  --bg:#dcdcdc;                      /* the world behind everything */
-  --ink:#1d1d1d;--ink-dim:#4a4a4a;   /* text straight on the backdrop */
-  --panel:linear-gradient(#e9e9e9,#d6d6d6);--panel-solid:#dedede;   /* panels: light brushed grey */
-  --well:rgba(255,255,255,.55);      /* sunken: slots, bars */
-  --line:rgba(0,0,0,.16);            /* hairlines, slot edges */
+  --bg:#f7f7f5;                      /* the world behind everything (under the pixel backdrop) */
+  --ink:#16304a;--ink-dim:#3f5568;   /* text straight on the backdrop: deep navy, not black */
+  --panel:rgba(255,255,255,.42);--panel-solid:#f3f6f9;   /* panels: frosted glass (blurred below), no gradient */
+  --well:rgba(255,255,255,.6);       /* sunken: slots, bars */
+  --line:rgba(22,48,74,.16);         /* hairlines, slot edges */
   --blue:#2f8fd0;--orange:#f7931e;   /* the accents (fills, rings) */
   --blue-ink:#0a5a8e;                /* blue as text on the light panels (AA) */
-  --dark:#262626;                    /* header strips, the sign's foot */
-  --enamel:#f4f4f1;                  /* the sign */
+  --dark:#1f6fa8;                    /* the solid bits that used to be black: icon tiles, plates, frames */
+  --enamel:rgba(255,255,255,.5);     /* the sign: the same frosted glass, a touch whiter */
   --glow:var(--blue);                /* what's picked, focus; work pins */
-  --text:#1b1b1b;--dim:#474747;      /* text in panels */
+  --text:#16304a;--dim:#3f5568;      /* text in panels */
   --value:var(--blue-ink);           /* numbers */
   --accent:var(--orange);            /* school pins */
   --halo:rgba(255,255,255,.95);      /* the light behind me */
@@ -522,17 +529,18 @@ html:has(.runs-page),.runs-page{--blue:#4148d8;--deep:#2d33b8;--text:#fff;--dim:
   --head:600 15px var(--caps);       /* headings */
   --sans:'Barlow',system-ui,sans-serif;--caps:'Barlow Condensed','Barlow',sans-serif;
   display:flex;flex-direction:column;min-height:100svh;color:var(--ink);font:400 17px/1.4 var(--sans);
-  background:radial-gradient(circle,rgba(0,0,0,.2) 1.1px,transparent 1.7px) 0 0/24px 24px,   /* a faint dot field, like a measuring board */
-    radial-gradient(ellipse 70% 70% at 35% 45%,rgba(255,255,255,.55),transparent 70%),linear-gradient(#e2e2e2,#c9c9c9);background-attachment:fixed}
-html:has(.about-page){background:#c9c9c9}
-.about-page ::selection{background:var(--orange);color:#000}
+  background:var(--bg) var(--pixels,none) center/100% 100% no-repeat fixed;image-rendering:pixelated}   /* --pixels: the dithered backdrop (about.js) */
+.about-page *{image-rendering:auto}   /* only the backdrop is drawn blocky */
+html:has(.about-page){background:var(--bg,#f7f7f5)}
+.about-page ::selection{background:var(--orange);color:var(--ink)}
 .about-page :focus-visible{outline:2px solid var(--glow);outline-offset:2px}
 .about-page footer{border-top-color:var(--line);color:var(--ink-dim);padding-block:14px}
-.box,.cards .tile,.map-big,.place{position:relative;background:var(--panel);border:1px solid var(--line);color:var(--text)}
+.box,.cards .tile,.map-big,.place{position:relative;background:var(--panel);border:1px solid rgba(255,255,255,.75);color:var(--text);
+  -webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3)}
 .box{padding:0 16px 14px;overflow:hidden}
-/* panel headings: a dark strip across the top of the panel, orange caps on it (6:1) */
-.label{display:flex;align-items:center;margin:0 -16px 12px;padding:6px 16px;background:var(--dark);font:var(--head);letter-spacing:.16em;text-transform:uppercase;color:var(--orange)}
-.menu{flex:1;display:flex;width:100%;max-width:1600px;margin:0 auto;padding:clamp(14px,2.4vh,28px) var(--gutter)}
+/* panel headings: blue caps on the glass, an orange rule under them */
+.label{display:flex;align-items:center;margin:0 -16px 12px;padding:8px 16px 6px;border-bottom:3px solid var(--orange);font:var(--head);letter-spacing:.16em;text-transform:uppercase;color:var(--blue-ink)}
+.menu{flex:1;display:flex;width:100%;margin:0 auto;padding:clamp(14px,2.4vh,28px) clamp(14px,2vw,32px)}
 /* label / value rows */
 .rows > div{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:4px 0;border-bottom:1px solid var(--line)}
 .rows > div:last-child{border-bottom:0}
@@ -546,21 +554,24 @@ html:has(.about-page){background:#c9c9c9}
 .items{grid-area:gear}.counters{grid-area:stats}.cards{grid-area:cards}
 
 /* the sign: enamel white, black type, a heavy rule, lit symbols, my details; a dark foot with my availability and links */
-.sign{display:flex;flex-direction:column;background:var(--enamel);color:#111;border:1px solid rgba(0,0,0,.12);box-shadow:0 2px 0 #fff inset,0 10px 24px rgba(0,0,0,.16)}
+.sign{display:flex;flex-direction:column;background:var(--enamel);color:var(--ink);border:1px solid rgba(255,255,255,.8);
+  -webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3)}
 .sign > :not(.sign-foot){margin-inline:22px}
 .menu-home{align-self:flex-start;display:inline-flex;align-items:center;min-height:40px;margin-top:6px;font:600 15px var(--caps);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-dim);text-decoration:none}
-.menu-home:hover{color:#000}
-.char-name{margin:4px 0 0;font:600 clamp(36px,3.3vw,50px)/.92 var(--caps);letter-spacing:.01em;text-transform:uppercase;color:#111;text-wrap:balance}
-.char-role{margin:10px 0 0;padding-bottom:16px;border-bottom:5px solid #111;font-weight:500;color:#333}
-.marks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 14px;margin:16px 0 0;padding:0;list-style:none;font:600 12.5px/1.15 var(--caps);letter-spacing:.05em;text-transform:uppercase;color:#222}
+.menu-home:hover{color:var(--blue-ink)}
+.char-name{margin:4px 0 0;font:600 clamp(36px,3.3vw,50px)/.92 var(--caps);letter-spacing:.01em;text-transform:uppercase;color:var(--ink);text-wrap:balance}
+.char-role{margin:10px 0 0;padding-bottom:16px;border-bottom:5px solid var(--orange);font-weight:500;color:var(--ink-dim)}
+.marks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 14px;margin:16px 0 0;padding:0;list-style:none;font:600 12.5px/1.15 var(--caps);letter-spacing:.05em;text-transform:uppercase;color:var(--ink)}
 .marks li{display:flex;align-items:center;gap:10px}
-.mark{flex:none;display:grid;place-items:center;width:40px;height:40px;background:#111}
-.mark .icon{width:24px;height:24px;background:var(--enamel)}
+.mark{flex:none;display:grid;place-items:center;width:40px;height:40px;background:var(--dark)}
+.mark .icon{width:24px;height:24px;background:#fff}
+.marks li:nth-child(4n+2) .mark,.marks li:nth-child(4n+3) .mark{background:var(--orange)}   /* blue and orange, checkered */
+.marks li:nth-child(4n+2) .mark .icon,.marks li:nth-child(4n+3) .mark .icon{background:var(--ink)}
 .facts{margin:16px 0 18px}
-.facts > div{display:grid;grid-template-columns:6em 1fr;gap:10px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.12)}
-.facts dt{color:#555}
-.facts dd{margin:0;font:600 18px/1.2 var(--caps);letter-spacing:.04em;color:#111}
-.sign-foot{margin-top:auto;padding:14px 22px 18px;background:var(--dark);color:#fff}
+.facts > div{display:grid;grid-template-columns:6em 1fr;gap:10px;padding:5px 0;border-bottom:1px solid var(--line)}
+.facts dt{color:var(--ink-dim)}
+.facts dd{margin:0;font:600 18px/1.2 var(--caps);letter-spacing:.04em;color:var(--blue-ink)}
+.sign-foot{margin-top:auto;padding:14px 22px 18px;border-top:3px solid var(--blue);color:var(--ink)}
 .char-status{display:flex;align-items:center;gap:10px;margin:0 0 12px;font:600 16px var(--caps);letter-spacing:.12em;text-transform:uppercase}
 .char-status .dot{width:10px;height:10px;border-radius:50%;background:var(--orange);box-shadow:0 0 0 3px rgba(247,147,30,.25)}
 
@@ -568,9 +579,10 @@ html:has(.about-page){background:#c9c9c9}
 .char-stage{position:relative;min-height:300px;
   background:radial-gradient(ellipse 46% 42% at 50% 44%,var(--halo),rgba(47,143,208,.12) 62%,transparent 76%)}
 .char-stage::before{content:"";position:absolute;left:14%;right:14%;bottom:4%;height:7%;border-radius:50%;
-  background:radial-gradient(closest-side,#9a9a9a,#b9b9b9 70%,#cfcfcf);box-shadow:0 0 0 3px rgba(47,143,208,.55),0 10px 18px rgba(0,0,0,.25)}   /* the plate */
-.char-stage canvas{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;z-index:1}   /* drawn small and blown up */
-.char-stage::after{content:"";position:absolute;inset:2% 4%;border:2px solid #1d1d1d;pointer-events:none;
+  background:rgba(255,255,255,.7);box-shadow:0 0 0 3px var(--blue),0 0 0 7px rgba(247,147,30,.55)}   /* the plate: a blue ring, an orange glow */
+.about-page .char-stage canvas{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;z-index:1;cursor:grab;touch-action:pan-y}   /* drawn small and blown up; drag to turn me */
+.char-stage canvas:active{cursor:grabbing}
+.char-stage::after{content:"";position:absolute;inset:2% 4%;border:2px solid var(--blue);pointer-events:none;
   --c:conic-gradient(#000 0 0);-webkit-mask:var(--c) top left/22px 22px no-repeat,var(--c) top right/22px 22px no-repeat,var(--c) bottom left/22px 22px no-repeat,var(--c) bottom right/22px 22px no-repeat;
   mask:var(--c) top left/22px 22px no-repeat,var(--c) top right/22px 22px no-repeat,var(--c) bottom left/22px 22px no-repeat,var(--c) bottom right/22px 22px no-repeat}
 
@@ -580,7 +592,7 @@ html:has(.about-page){background:#c9c9c9}
   font:600 15px var(--caps);letter-spacing:.12em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:background-color .2s,transform .2s cubic-bezier(.16,1,.3,1)}
 .contact-links a:hover{background:#2a82c2;transform:translateY(-1px)}
 .contact-links a:active,.map-grow:active{transform:translateY(1px)}
-.contact-links li:first-child a{--btn:var(--orange);color:#000}   /* Resume: the one to press */
+.contact-links li:first-child a{--btn:var(--orange);color:var(--ink)}   /* Resume: the one to press */
 .contact-links li:first-child a:hover{background:#ffa53c}
 .contact-links svg{width:17px;height:17px;fill:currentColor}
 .contact-links li:last-child:nth-child(odd){grid-column:1/-1}   /* an odd one out spans the row */
@@ -620,22 +632,21 @@ html:has(.about-page){background:#c9c9c9}
 /* the map: an observation window, a heavy dark frame with a little glare on the glass. Expand moves the map into the
    big panel over the page, uncovered from the small map's spot (about.js) */
 .map-box{display:flex;flex-direction:column;height:100%;padding-bottom:16px}
-.map-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 -16px 12px;padding:0 0 0 0;background:var(--dark)}
-.map-top .label{flex:1;margin:0}
-.map-grow{--btn:var(--orange);min-height:0;align-self:stretch;color:#000;border:0}
+.map-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 -16px 12px;border-bottom:3px solid var(--orange)}
+.map-top .label{flex:1;margin:0;border:0}
+.map-grow{--btn:var(--orange);min-height:0;align-self:stretch;color:var(--ink);border:0}
 .map-grow:hover{background:#ffa53c}
-.map-hole{position:relative;flex:1;min-height:150px;overflow:hidden;background:var(--panel-solid);border:7px solid var(--dark);box-shadow:inset 0 0 0 1px rgba(255,255,255,.2)}
-.map-hole::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,.22),transparent 30%)}   /* glare on the glass */
+.map-hole{position:relative;flex:1;min-height:150px;overflow:hidden;background:var(--panel-solid);border:4px solid var(--blue)}
 .map-hole > .work-map,.map-spot > .work-map{position:absolute;inset:0;height:auto}
 .work-map.quiet :is(.maplibregl-control-container,.map-legend){opacity:0}   /* the map's buttons and key fade out while it moves */
 .work-map :is(.maplibregl-control-container,.map-legend){transition:opacity .25s}
 .map-hole .maplibregl-ctrl-top-left{display:none}   /* zoom buttons only on the big map */
-.map-big{position:fixed;z-index:50;inset:clamp(12px,3vw,40px);display:flex;flex-direction:column;padding:0 16px 16px;background:var(--panel-solid);box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.map-big{position:fixed;z-index:50;inset:clamp(12px,3vw,40px);display:flex;flex-direction:column;padding:0 16px 16px;--panel:rgba(255,255,255,.6)}
 .map-big[hidden]{display:none}
 .map-big .map-body{flex:1;display:grid;grid-template-columns:minmax(0,1fr) min(340px,30vw);gap:16px;min-height:0}
-.map-spot{position:relative;overflow:hidden;border:7px solid var(--dark)}
+.map-spot{position:relative;overflow:hidden;border:4px solid var(--blue)}
 .map-big .quests{overflow:auto}
-.map-dim{position:fixed;inset:0;z-index:49;background:rgba(255,255,255,.5);opacity:0;pointer-events:none;transition:opacity .56s}
+.map-dim{position:fixed;inset:0;z-index:49;background:rgba(255,255,255,.35);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .56s}
 .map-dim.on{opacity:1;pointer-events:auto}
 /* the timeline, beside the big map */
 .quest-head{margin:4px 0 8px;font:600 14px var(--caps);letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
@@ -656,19 +667,16 @@ button.quest:hover{border-color:var(--orange)}
 .cards .ph{align-items:flex-start;font-size:13px;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.6)}
 .cards .tile b{position:absolute;left:12px;bottom:12px;z-index:1;margin:0;padding:3px 9px;background:var(--dark);font:600 15px var(--caps);letter-spacing:.12em;text-transform:uppercase;color:#fff}
 .cards .tile:hover{border-color:var(--orange)}
-.cards .tile:hover b{text-decoration:none;color:var(--orange)}
+.cards .tile:hover b{text-decoration:none;background:var(--orange);color:var(--ink)}
 .cards .net{display:grid;place-items:center}
 .cards .net svg{position:static;width:46px;height:46px;fill:none;stroke:#fff;stroke-width:1.5}
-/* leaving: the next page's colour growing out of the link that was clicked (about.js) */
-.page-cover{position:fixed;inset:0;z-index:100;clip-path:inset(50%)}
-.about-page .box,.about-page .cards .tile{box-shadow:0 2px 0 rgba(255,255,255,.7) inset,0 8px 18px rgba(0,0,0,.16)}
 /* arriving: the panels push out of the wall one after another, the way the chamber's panels move (not with reduced motion) */
 @media (prefers-reduced-motion:no-preference){
-  .about-page :is(.sign,.box,.cards .tile){animation:panel-out .7s cubic-bezier(.16,1,.3,1) backwards;animation-delay:calc(var(--n,0) * 70ms)}
+  :root:not(.arrived) .about-page :is(.sign,.box,.cards .tile){animation:panel-out .7s cubic-bezier(.16,1,.3,1) backwards;animation-delay:calc(var(--n,0) * 70ms)}
   .about-page .sign{--n:0}.about-page .map-box{--n:1}.about-page .items{--n:2}.about-page .counters{--n:3}
   .about-page .cards .tile:nth-child(1){--n:4}.about-page .cards .tile:nth-child(2){--n:5}.about-page .cards .tile:nth-child(3){--n:6}.about-page .cards .tile:nth-child(4){--n:7}
 }
-@keyframes panel-out{from{transform:perspective(900px) translateZ(-40px);box-shadow:0 0 0 rgba(0,0,0,0);filter:brightness(.92)}}
+@keyframes panel-out{from{transform:perspective(900px) translateZ(-40px);opacity:0}}
 
 @media (max-width:1000px){
   .me{grid-template-columns:1fr;grid-template-rows:none;grid-template-areas:"sign" "stage" "map" "gear" "stats" "cards"}
@@ -679,8 +687,8 @@ button.quest:hover{border-color:var(--orange)}
 }
 /* the map fills the section; clicking a numbered marker opens that job's popup */
 .work-map{position:relative;height:min(72svh,680px);background:var(--panel-solid);overflow:hidden}
-/* darker edges over the map (clicks pass through) */
-.work-map::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at center,transparent 60%,rgba(0,0,0,.3))}
+/* the map's picture drawn at half resolution (about.js) and blown up blocky; its water and parks are dither patterns */
+.work-map canvas{image-rendering:pixelated}
 .job-when,.job-where{font-size:15px;color:var(--dim)}
 .job-when{display:flex;align-items:center;gap:10px;font-family:var(--caps);letter-spacing:.06em}
 .job-num,.job-pin{display:grid;place-items:center;width:26px;height:26px;padding:0;border-radius:50%;background:var(--ink);color:var(--paper);font:700 13px var(--font-name)}
@@ -706,8 +714,8 @@ button.quest:hover{border-color:var(--orange)}
 .work-map .maplibregl-ctrl-group button + button{border-top-color:var(--line)}
 .work-map .maplibregl-ctrl-attrib,.work-map .maplibregl-ctrl-attrib a{color:var(--dim)}
 /* the window a pin opens: photo on the left, details on the right (stacked on phones) */
-.place{margin:auto;width:min(940px,92vw);max-height:88svh;padding:0;background:linear-gradient(rgba(220,220,220,.52),rgba(175,175,175,.52));-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);color:var(--text);box-shadow:0 30px 80px rgba(0,0,0,.6);overflow:auto}
-.place::backdrop{background:rgba(0,0,0,.3)}   /* light, so the map shows through the see-through window */
+.place{margin:auto;width:min(940px,92vw);max-height:88svh;padding:0;--panel:rgba(255,255,255,.55);color:var(--text);overflow:auto}
+.place::backdrop{background:rgba(22,48,74,.18)}   /* light, so the map shows through the see-through window */
 .place-body{display:grid;grid-template-columns:1.2fr 1fr}
 .place.no-photo .place-body{grid-template-columns:1fr}
 .place.no-photo{width:min(560px,92vw)}

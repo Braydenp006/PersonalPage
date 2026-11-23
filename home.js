@@ -1,21 +1,23 @@
 // Opening a photo link: a window opens inside the photo showing the real page and grows to fill the screen.
 // The page is loaded into a hidden full-screen frame when the pointer first comes over (or focuses) a photo, and the
-// window is just a cut-out of that frame, so what you see is the page itself. Once it fills the screen it simply stays
-// as the page (the address bar changes to it), so nothing reloads or flickers. Back shrinks it into its photo again;
-// reloading or sharing the address opens the real page directly.
+// window is just a cut-out of that frame, so what you see is the page itself. Once it fills the screen, the browser
+// goes to that page for real (it's already loaded, so the swap is instant; @view-transition in styles.css smooths it).
+// Back comes back here from the browser's cache with the window still full, and it shrinks into its photo again.
 // Until the frame has loaded, the window shows the page's background colour (--to on the link in index.html).
 // New-tab clicks (ctrl / cmd / shift / middle) and reduced motion just follow the link.
 // On the home page (the teletext one) there are two other ways in, instead of the window:
 // - the TV screen: static zooms out of the screen to fill the page, then breaks up while the page comes into focus;
 // - a link marked data-open="draw" (GET MY RESUME): the page arrives row by row from the top, like a teletext page.
-// The About page keeps the plain window.
+// On the About page, the cards go through a pixel wipe instead (pixel-wipe.js): blue blocks spread out from the card to
+// cover the screen, the page goes in underneath, and the blocks clear; Back does the same in reverse.
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const tiles = document.querySelector('.tiles, .cards');   // the homepage's photos, or the About page's page cards
-const homeTitle = document.title, home = location.href.replace(/index\.html$/, '');
 const windows = new Map();   // link href -> { layer, frame, ready }
-let busy = false, open = null, opening = null;   // open: { w, link, how } while a page is in (or opening into) its window; opening: that animation
+let busy = false, open = null;   // open: { w, link, way } once a window has filled the screen and the browser has gone to its page
 const TUNE = tiles.matches('.tiles');   // the home page
-const how = link => TUNE && link.matches('.tt-screen') ? 'tune' : link.dataset.open === 'draw' ? 'draw' : 'window';
+const how = link => TUNE && link.matches('.tt-screen') ? 'tune' : link.dataset.open === 'draw' ? 'draw' : TUNE ? 'window' : 'pixels';
+const wipe = TUNE ? null : await import('./pixel-wipe.js');
+const FULL = { clipPath: ['inset(0 0 0 0)', 'inset(0 0 0 0)'] };   // the window held open, under the pixels
 
 function prepare(link){
   if(windows.has(link.href)) return windows.get(link.href);
@@ -27,7 +29,6 @@ function prepare(link){
   frame.setAttribute('aria-hidden', 'true');
   const ready = new Promise(done => { frame.addEventListener('load', done, { once: true }); setTimeout(done, 2500); })   // shortcut: a slow page gets 2.5s, then the colour fills in for it
     .then(() => { frame.style.opacity = 1; });
-  frame.addEventListener('load', () => frame.contentDocument?.addEventListener('click', leave));   // every load, not just the first: a reload would drop it
   layer.append(frame);
   let snow = null;
   if(TUNE){ snow = document.createElement('canvas'); snow.className = 'tune-static'; snow.width = 160; snow.height = 100; layer.append(snow); }
@@ -123,15 +124,15 @@ tiles.addEventListener('click', async e => {
   e.preventDefault();   // even while busy: an extra click mid-animation must not load the page plainly
   if(busy) return;
   busy = true;
-  const w = prepare(link), s = shapes(link, w.layer);
-  // the address changes now, not at the end, so Back during the opening shrinks it instead of leaving the site
-  history.pushState({ tile: link.href }, '', link.href);
-  const way = how(link);
-  open = { w, link, way };
-  let done;
-  opening = new Promise(r => { done = r; });
+  const w = prepare(link), s = shapes(link, w.layer), way = how(link);
   if(way === 'tune') await tuneIn(w, s);
   else if(way === 'draw') await drawIn(w);
+  else if(way === 'pixels'){
+    const c = await wipe.cover(link.getBoundingClientRect());
+    await w.ready;
+    w.layer.animate(FULL, { duration: 0, fill: 'forwards' });
+    await wipe.uncover(c);
+  }
   else {
     // 1. the window opens out from the middle of the photo
     await w.layer.animate({ clipPath: [s.dot, s.card] }, { duration: 320, easing: OPEN, fill: 'forwards' }).finished;
@@ -139,34 +140,25 @@ tiles.addEventListener('click', async e => {
     // 2. then grows to fill the screen
     await w.layer.animate({ clipPath: [s.card, s.full] }, { duration: 620, easing: GROW, fill: 'forwards' }).finished;
   }
-  opening = null;
-  done();
-  if(open?.w !== w) return;   // Back was pressed during the opening: the popstate handler takes it from here
-  // 3. and becomes the page
-  document.title = w.frame.contentDocument?.title || homeTitle;
-  document.documentElement.style.overflow = 'hidden';   // the page in the window scrolls, not the one behind it
-  w.layer.classList.add('open');
-  w.frame.removeAttribute('aria-hidden');
-  w.frame.tabIndex = 0;
-  w.frame.contentWindow.focus();
+  // 3. and the browser goes to the page itself, already loaded underneath
+  open = { w, link, way };
+  top.location.href = link.href;   // top: even if this page ended up inside another one, the whole tab goes
 });
 
-// Back: shrink the window into its photo again
-addEventListener('popstate', async e => {
-  if(e.state?.tile){ location.reload(); return; }   // Forward into a window: just load that page for real
-  if(!open) return;
+// Back to here from the browser's cache: the window is still filling the screen, so shrink it into its photo again
+addEventListener('pageshow', async e => {
+  if(!e.persisted || !open) return;
   const { w, link, way } = open;
   open = null;
-  if(opening) await opening;   // Back mid-opening: let it finish growing, then shrink it straight back
-  document.title = homeTitle;
-  document.documentElement.style.overflow = '';
-  w.layer.classList.remove('open');
-  w.frame.setAttribute('aria-hidden', 'true');
-  w.frame.tabIndex = -1;
   link.focus({ preventScroll: true });
   const s = shapes(link, w.layer);
   if(way === 'tune') await tuneOut(w, s);
   else if(way === 'draw') await drawOut(w);
+  else if(way === 'pixels'){
+    const c = await wipe.cover(link.getBoundingClientRect());
+    w.layer.getAnimations().forEach(a => a.cancel());   // the window shut, under the pixels
+    await wipe.uncover(c);
+  }
   else {
     await w.layer.animate({ clipPath: [s.full, s.card] }, { duration: 520, easing: GROW, fill: 'forwards' }).finished;
     await w.layer.animate({ clipPath: [s.card, s.dot] }, { duration: 260, easing: OPEN, fill: 'forwards' }).finished;
@@ -175,13 +167,3 @@ addEventListener('popstate', async e => {
   w.layer.getAnimations({ subtree: true }).forEach(a => a.cancel());
   busy = false;
 });
-
-// A link clicked inside the window: home goes Back (the shrink), anything else loads normally.
-// New-tab clicks, target="_blank" and downloads are left to the browser.
-function leave(e){
-  const a = e.target.closest('a[href]');
-  if(!open || !a || e.defaultPrevented || a.target || a.hasAttribute('download') || e.button || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
-  e.preventDefault();
-  if(a.href.replace(/index\.html$/, '') === home) history.back();
-  else location.href = a.href;
-}
