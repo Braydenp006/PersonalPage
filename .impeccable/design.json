@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-23T00:00:00Z",
+  "generatedAt": "2026-11-23",
   "title": "Design System: BPTEXT (Brayden Paterson home)",
   "extensions": {
     "colorMeta": {
@@ -257,44 +257,29 @@
       "name": "Fastext Bar",
       "kind": "nav",
       "refersTo": "fastext-key",
-      "description": "Four coloured shortcut keys and the page-number box along the bottom.",
+      "description": "Coloured keys (ME, RESUME, SERVER, ABOUT, PROJECTS, OTHER WORK) under the intro in the first screen, under a yellow \"CLICK HERE TO SEE OTHER SITE PREVIEWS\" line, plus the P___ input. They change the page on the laptop screen. Not fixed.",
       "html": "<nav class=\"ds-fast\"><a class=\"r\" href=\"#\">RESUME</a><a class=\"g\" href=\"#\">SERVER</a><a class=\"y\" href=\"#\">ABOUT</a><a class=\"c\" href=\"#\">PROJECTS</a><label class=\"ds-key\">P<input placeholder=\"___\" maxlength=\"3\"></label></nav>",
       "css": ":host{--tt-black:#000;--tt-white:#fff;--tt-yellow:#ffeb1a;--tt-cyan:#2ee0f0;--tt-green:#38e05a;--tt-red:#ff4433;--tt-magenta:#ff4df2;--tt-blue:#1f33ff} .ds-fast{display:flex;gap:16px;align-items:center;padding:10px 24px 12px;background:#000;border-top:2px solid var(--tt-blue);font:400 18px/1.35 Bedstead,ui-monospace,monospace;font-variant-ligatures:none;-webkit-font-smoothing:none;white-space:nowrap} .ds-fast a{padding:.5em 1.4ch;color:#000;background:var(--key);text-decoration:none} .ds-fast a:hover{background:#fff} .ds-fast a:focus-visible{outline:2px solid var(--tt-yellow);outline-offset:3px} .r{--key:var(--tt-red)} .g{--key:var(--tt-green)} .y{--key:var(--tt-yellow)} .c{--key:var(--tt-cyan)} .ds-key{margin-left:auto;color:#fff} .ds-key input{width:4.2ch;margin-left:.3ch;font:inherit;color:var(--tt-yellow);caret-color:var(--tt-yellow);background:#000;border:2px solid #fff;padding:.1em .4ch;border-radius:0} .ds-key input::placeholder{color:#fff} .ds-key input:focus{outline:none;border-color:var(--tt-yellow)}"
     },
     {
       "name": "Contents List",
       "kind": "nav",
-      "description": "PAGES index: yellow numbers, blue hairlines, cyan fill on hover.",
+      "description": "\"JUMP STRAIGHT TO THE REAL PAGE\": rows that open the real pages with the row-by-row draw.",
       "html": "<nav class=\"ds-contents\"><p>PAGES</p><ol><li><a href=\"#\"><span class=\"ds-pg\">200</span> Resume</a></li><li><a href=\"#\"><span class=\"ds-pg\">300</span> How this site runs</a></li><li><a href=\"#\"><span class=\"ds-pg\">500</span> Projects <span class=\"ds-g\">(SOON)</span></a></li></ol></nav>",
       "css": ":host{--tt-black:#000;--tt-white:#fff;--tt-yellow:#ffeb1a;--tt-cyan:#2ee0f0;--tt-green:#38e05a;--tt-red:#ff4433;--tt-magenta:#ff4df2;--tt-blue:#1f33ff} .ds-contents{font:400 18px/1.35 Bedstead,ui-monospace,monospace;font-variant-ligatures:none;-webkit-font-smoothing:none;background:#000;color:#fff} .ds-contents p{color:var(--tt-cyan);margin:0 0 .4em} .ds-contents ol{list-style:none;padding:0;margin:0;border-top:2px solid var(--tt-cyan)} .ds-contents a{display:flex;gap:2ch;padding:.45em 0;border-bottom:1px solid var(--tt-blue);color:inherit;text-decoration:none} .ds-contents a:hover{background:var(--tt-cyan);color:#000} .ds-contents a:hover span{color:#000} .ds-contents a:focus-visible{outline:2px solid var(--tt-yellow);outline-offset:3px} .ds-pg{color:var(--tt-yellow)} .ds-g{color:var(--tt-green)}"
     },
     {
-      "name": "Reveal Quiz",
-      "kind": "button",
-      "refersTo": "reveal-button",
-      "description": "Red-boxed quiz whose answer waits behind REVEAL.",
-      "html": "<div class=\"ds-quiz\"><p><span class=\"ds-r\">QUIZ</span> What else does the Z420 run?</p><button class=\"ds-reveal\" type=\"button\">REVEAL</button></div>",
-      "css": ":host{--tt-black:#000;--tt-white:#fff;--tt-yellow:#ffeb1a;--tt-cyan:#2ee0f0;--tt-green:#38e05a;--tt-red:#ff4433;--tt-magenta:#ff4df2;--tt-blue:#1f33ff} .ds-quiz{font:400 18px/1.35 Bedstead,ui-monospace,monospace;font-variant-ligatures:none;-webkit-font-smoothing:none;color:#fff;background:#000;padding:1em 1.5ch;border:2px solid var(--tt-red)} .ds-quiz p{margin:0 0 .6em} .ds-r{color:var(--tt-red)} .ds-reveal{font:inherit;color:var(--tt-red);background:none;border:2px solid var(--tt-red);border-radius:0;padding:.3em 1ch;cursor:pointer} .ds-reveal:hover,.ds-reveal[aria-expanded=\"true\"]{background:var(--tt-red);color:#000} .ds-reveal:focus-visible{outline:2px solid var(--tt-yellow);outline-offset:3px}"
+      "name": "Laptop",
+      "description": "CC0 low-poly laptop drawn with three.js (laptop3d.js), lid hinged in code, the real #screen link on its glass via CSS3DRenderer. Page 100 shows me as rotating ASCII (head-ascii.js); other pages show their screenshot as 8-colour block mosaic. Scrolling flies it (shut, one spin, cyan/magenta ghosts) onto the ASCII table, where the guide draws in."
     },
     {
-      "name": "Preview Frame",
-      "kind": "card",
-      "description": "16:10 frame in the band colour; the 8-colour mosaic resolves to the real screenshot on hover or focus.",
-      "html": "<a class=\"ds-preview\" href=\"#\"><span class=\"ds-frame\"><span class=\"ds-mosaic\"></span></span><span class=\"ds-cap\">P200 · POINT AT IT TO TUNE IN</span></a>",
-      "css": ":host{--tt-black:#000;--tt-white:#fff;--tt-yellow:#ffeb1a;--tt-cyan:#2ee0f0;--tt-green:#38e05a;--tt-red:#ff4433;--tt-magenta:#ff4df2;--tt-blue:#1f33ff} .ds-preview{display:block;width:320px;font:400 18px/1.35 Bedstead,ui-monospace,monospace;font-variant-ligatures:none;-webkit-font-smoothing:none;text-decoration:none;--band:var(--tt-green)} .ds-frame{position:relative;display:block;aspect-ratio:16/10;border:2px solid var(--band);background:#000;overflow:hidden} .ds-mosaic{position:absolute;inset:0;background:repeating-conic-gradient(var(--tt-green) 0 25%,#000 0 50%) 0 0/8px 8px;image-rendering:pixelated} .ds-preview:is(:hover,:focus-visible) .ds-mosaic{background:#0a2213} .ds-preview:focus-visible{outline:2px solid var(--tt-yellow);outline-offset:3px} .ds-cap{display:block;margin-top:.5em;color:var(--band);font-size:.85em} .ds-preview:hover .ds-cap{color:#fff}"
-    },
-    {
-      "name": "Feature Panel",
-      "kind": "card",
-      "refersTo": "feature-panel",
-      "description": "Solid magenta block with black text and an inverted primary button.",
-      "html": "<div class=\"ds-feature\"><p>I build custom PCs and websites for people.</p><a class=\"ds-fbtn\" href=\"#\">ASK ABOUT A BUILD</a></div>",
-      "css": ":host{--tt-black:#000;--tt-white:#fff;--tt-yellow:#ffeb1a;--tt-cyan:#2ee0f0;--tt-green:#38e05a;--tt-red:#ff4433;--tt-magenta:#ff4df2;--tt-blue:#1f33ff} .ds-feature{max-width:80ch;padding:1.4em 2ch;background:var(--tt-magenta);color:#000;font:400 18px/1.35 Bedstead,ui-monospace,monospace;font-variant-ligatures:none;-webkit-font-smoothing:none;} .ds-feature p{margin:0 0 1em} .ds-fbtn{display:inline-block;padding:.55em 1.4ch;border:2px solid #000;color:#000;text-decoration:none;line-height:1.1} .ds-fbtn:hover{background:#000;color:var(--tt-magenta)} .ds-fbtn:focus-visible{outline:2px solid #000;outline-offset:3px}"
+      "name": "Scroll Hint",
+      "description": "Fixed bottom-right red block \"▼ SCROLL DOWN ▼\", flashing red/yellow, arrows hopping; hidden once you scroll."
     }
   ],
   "narrative": {
     "northStar": "The Teletext Service",
-    "overview": "The home page (`index.html`) is a broadcast teletext service called BPTEXT. Everything sits on flat black glass in the eight broadcast colours, set in one blocky character-cell face (Bedstead, the public-domain SAA5050 lookalike). Every section is a numbered page (P100 to P600): a blue header row counts through page numbers as you scroll or key three digits, each page draws in row by row, and a Fastext bar of coloured keys sits along the bottom. Previews of the other pages arrive as 8-colour block mosaic and resolve to the real screenshot when pointed at; opening one zooms a field of TV static to full screen that clears as the page comes into focus.\n\nDensity is high, the way a teletext page is: short uppercase labels, cyan figures, white body, everything aligned to character widths (`ch`) rather than a pixel grid. Nothing is soft. There are no radii, no shadows, no gradient fills, no fades on hover; state changes are instant inversions (a box fills with its own colour and the text turns black). The one texture is a faint scan-line overlay across the whole screen.\n\nThis system covers the home page only. The site deliberately gives every page its own world (PRODUCT.md, principle 5), so nothing here is a site-wide rule.",
+    "overview": "The home page (`index.html`) is a broadcast teletext service called BPTEXT. Everything sits on flat black glass in the eight broadcast colours, set in one blocky character-cell face (Bedstead, the public-domain SAA5050 lookalike). Every page of the site has a three-digit number (100 me, 200 Resume, 300 How this site runs, 400 About, 500 Projects, 600 Other work). The centrepiece is a chunky 3D laptop beside the name: its screen shows me as rotating ASCII (page 100) or another page's screenshot redrawn as 8-colour block mosaic, the coloured Fastext keys change what's on it, and clicking the screen opens that page through TV static that clears into focus. Scrolling down, the laptop shuts, spins once and lands on an ASCII-drawn table, where a guide to the page on its screen draws in beside it.",
     "keyCharacteristics": [
       "Black ground, the broadcast eight only, each colour with one job.",
       "One face, one weight (Bedstead 400); hierarchy by colour and double height, never by weight.",

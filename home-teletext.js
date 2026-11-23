@@ -1,5 +1,6 @@
 // The home page's teletext behaviour. Opening a page (the static, or the row-by-row draw) is home.js; this file is the rest:
-// the header's page counter and clock, typing a number, the TV and its channels, the drawn Z420 and its live numbers.
+// the header's page counter and clock, typing a number, the laptop's screen and its pages (the 3D laptop itself is
+// laptop3d.js, the ASCII me on page 100 is head-ascii.js), the guide on the desk, the drawn Z420 and its live numbers.
 import { watchStats } from './stats.js';
 import { VARIANTS, GENERAL } from './resume-data.js';
 import { PLACES } from './about-data.js';
@@ -36,8 +37,8 @@ const tick = () => {
 };
 tick(); setInterval(tick, 1000);
 
-// ===== The TV: channels, the screen, and the guide beside it =====
-const tv = $('tv'), screen = $('screen'), pic = $('screen-pic'), snow = $('screen-snow'), osd = $('osd'), num = $('ch-num');
+// ===== The laptop's screen and its pages (the code still calls them channels), and the guide on the desk =====
+const tv = $('tv'), screen = $('screen'), head = $('screen-head'), pic = $('screen-pic'), snow = $('screen-snow'), osd = $('osd'), num = $('ch-num');
 const chans = [...document.querySelectorAll('.tt-ch')];
 const byCh = new Map(chans.map(c => [c.dataset.ch, c]));
 const listButtons = [...document.querySelectorAll('.tt-chlist button')];
@@ -100,18 +101,27 @@ async function tune(n, { quiet = false } = {}){
   now = c;
   chans.forEach(x => x.classList.toggle('on', x === c));
   listButtons.forEach(b => b.setAttribute('aria-pressed', b.dataset.ch === c.dataset.ch));
+  document.querySelectorAll('.tt-fast a[data-ch]').forEach(a => a.setAttribute('aria-current', a.dataset.ch === c.dataset.ch));
   tv.style.setProperty('--band', c.dataset.band);
   c.dataset.bandInk ? tv.style.setProperty('--band-ink', c.dataset.bandInk) : tv.style.removeProperty('--band-ink');
   // the screen opens whatever channel is on: home.js reads its href and --to when it's clicked
-  screen.href = c.dataset.href;
+  // page 100 (me) has no page of its own: the screen isn't a link then, and "go to full page" hides (keeps its room)
+  const to = c.dataset.href;
+  if(to){ screen.href = to; screen.setAttribute('aria-label', `Open ${c.querySelector('h2').textContent.toLowerCase()} (page ${c.dataset.ch})`); }
+  else { screen.removeAttribute('href'); screen.removeAttribute('aria-label'); }
   screen.style.setProperty('--to', c.dataset.to);
-  screen.setAttribute('aria-label', `Watch ${c.querySelector('h2').textContent.toLowerCase()} (channel ${c.dataset.ch})`);
+  $('open-full').parentElement.style.visibility = to ? '' : 'hidden';
   num.textContent = c.dataset.ch;
-  osd.textContent = `CH ${c.dataset.ch}`;
+  osd.textContent = `P${c.dataset.ch}`;
+  // page 100 is me in ASCII (head-ascii.js listens for this); the others are previews
+  const isMe = !c.dataset.src;
+  head.hidden = !isMe; pic.hidden = isMe;
+  dispatchEvent(new CustomEvent('tt-page', { detail: c.dataset.ch }));
   osd.classList.add('on');
   clearTimeout(osdTimer); osdTimer = setTimeout(() => osd.classList.remove('on'), 2500);
   if(!quiet) roll(+c.dataset.ch);
-  const [px] = await Promise.all([mosaic(c.dataset.src), quiet ? null : burst(260)]);
+  const [px] = await Promise.all([isMe ? null : mosaic(c.dataset.src), quiet ? null : burst(260)]);
+  if(isMe) return;
   if(now !== c) return;   // flicked on again while this one was loading
   const g = pic.getContext('2d');
   px ? g.putImageData(px, 0, 0) : g.clearRect(0, 0, pic.width, pic.height);
@@ -120,36 +130,36 @@ const step = by => tune(chans[(chans.indexOf(now) + by + chans.length) % chans.l
 $('ch-prev').addEventListener('click', () => step(-1));
 $('ch-next').addEventListener('click', () => step(1));
 listButtons.forEach(b => b.addEventListener('click', () => tune(b.dataset.ch)));
-// left / right change channel while you're on the TV (Enter on the screen opens it, as a link does)
-tv.addEventListener('keydown', e => {
-  if(e.key === 'ArrowLeft' || e.key === 'ArrowRight'){ e.preventDefault(); step(e.key === 'ArrowLeft' ? -1 : 1); }
+// left / right change page while you're on the screen, the keys or the guide (Enter on the screen opens it, as a link does)
+addEventListener('keydown', e => {
+  if((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && e.target.closest?.('#screen, .tt-fast, .tt-contents, .tt-guide')){
+    e.preventDefault(); step(e.key === 'ArrowLeft' ? -1 : 1);
+  }
 });
-// links to #tv with a channel (the PAGES list, the Fastext keys) tune the TV and bring it on screen
+// the page list and the coloured keys along the bottom change the laptop's page
 document.addEventListener('click', e => {
   const a = e.target.closest('a[href="#tv"][data-ch]');
   if(!a) return;
   e.preventDefault();
   tune(a.dataset.ch);
-  tv.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
-  screen.focus({ preventScroll: true });
 });
-tune(200, { quiet: true });
+// "go to full page" in the guide: the same as clicking the laptop's screen (home.js opens it from there)
+$('open-full').addEventListener('click', () => screen.click());
+tune(100, { quiet: true });
 // start drawing every channel's blocks early, so changing channel never waits
-setTimeout(() => chans.forEach(c => mosaic(c.dataset.src)), 1500);
+setTimeout(() => chans.forEach(c => c.dataset.src && mosaic(c.dataset.src)), 1500);
 
 // ===== Typing a number: the P___ box, or digits typed anywhere on the page =====
 const key = $('key'), status = $('key-status');
 function go(n){
-  if(n === '100'){ roll(100); scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' }); return true; }
   if(!byCh.has(n)){
     clearInterval(rolling); rolling = null;
     asked.textContent = count.textContent = n; count.classList.add('missing');
-    status.textContent = `There's no page ${n}. Channels go from 200 to 600.`;
+    status.textContent = `There's no page ${n}. Pages go from 100 to 600.`;
     return false;
   }
-  status.textContent = `Channel ${n}`;
+  status.textContent = `Page ${n}`;
   tune(n);
-  tv.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
   return true;
 }
 key.addEventListener('input', () => {
@@ -164,11 +174,6 @@ addEventListener('keydown', e => {
   key.value = (key.value + e.key).slice(-3);
   key.dispatchEvent(new Event('input'));
 });
-// back at the top, the header shows page 100 again; down at the TV, the channel that's on
-new IntersectionObserver(([e]) => {
-  if(e.isIntersecting && shown !== 100) roll(100);
-  else if(!e.isIntersecting && now && shown !== +now.dataset.ch) roll(+now.dataset.ch);
-}, { rootMargin: '-50% 0px -50% 0px' }).observe($('p100'));
 
 // ===== The Z420, drawn in blocks. Edit the picture here: W white, C cyan, Y yellow, G the blinking power light, . empty =====
 const Z420 = [
@@ -239,3 +244,16 @@ $('work').append(...PLACES.filter(p => p.kind === 'work').map(p => {
   for(const t of [p.dates.replace(/ – /, '–'), p.role, p.place]){ const td = document.createElement('td'); td.textContent = t; tr.append(td); }
   return tr;
 }));
+
+// the scroll hint scrolls down for you, to where the laptop lands on the table
+// (by hand, not smooth scrolling: the browser's is too quick to watch the laptop's flight)
+$('scroll-hint').addEventListener('click', () => {
+  const r = $('desk-slot').getBoundingClientRect(), from = scrollY, to = from + r.top + r.height / 2 - innerHeight / 2;
+  if(reduceMotion){ scrollTo(0, to); return; }
+  const t0 = performance.now(), MS = 3500;
+  (function step(t){
+    const k = Math.min(1, (t - t0) / MS);
+    scrollTo(0, from + (to - from) * (k < .5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2));   // slow, quick, slow
+    if(k < 1) requestAnimationFrame(step);
+  })(t0);
+});

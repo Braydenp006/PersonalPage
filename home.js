@@ -37,7 +37,7 @@ function prepare(link){
   return w;
 }
 if(!reduceMotion){
-  const warm = e => { const link = e.target.closest('a.tile'); if(link) prepare(link); };
+  const warm = e => { const link = e.target.closest('a.tile[href]'); if(link) prepare(link); };
   tiles.addEventListener('pointerover', warm);
   tiles.addEventListener('focusin', warm);
 }
@@ -85,10 +85,18 @@ const fadeStatic = (ctl, from, to, ms) => new Promise(done => {
   })(t0);
 });
 // home page opening: static fills the preview and zooms out to the whole screen, then breaks up while the page sharpens into focus
+// with the 3D laptop (laptop3d.js), the camera flies into its screen instead, the static clipped to the glass all the way
+async function follow(w, zooming){
+  let on = true;
+  zooming.then(() => { on = false; });
+  (function frame(){ if(on){ w.layer.style.clipPath = lt.poly; requestAnimationFrame(frame); } })();
+  await zooming;
+}
 async function tuneIn(w, s){
   const ctl = hiss(w);
   w.snow.style.opacity = 1;
-  await w.layer.animate({ clipPath: [s.card, s.full] }, { duration: 620, easing: GROW, fill: 'forwards' }).finished;
+  if(window.lt){ lt.poly = s.card; await follow(w, lt.zoom(1, 900)); w.layer.style.clipPath = s.full; }
+  else await w.layer.animate({ clipPath: [s.card, s.full] }, { duration: 620, easing: GROW, fill: 'forwards' }).finished;
   await w.ready;
   await Promise.all([
     fadeStatic(ctl, 1, 0, 1800),
@@ -103,13 +111,14 @@ async function tuneOut(w, s){
   ctl.level = 0;
   w.snow.style.opacity = 1;
   await fadeStatic(ctl, 0, 1, 350);
-  await w.layer.animate({ clipPath: [s.full, s.card] }, { duration: 480, easing: GROW, fill: 'forwards' }).finished;
+  if(window.lt){ await follow(w, lt.zoom(0, 700)); w.layer.style.clipPath = ''; }
+  else await w.layer.animate({ clipPath: [s.full, s.card] }, { duration: 480, easing: GROW, fill: 'forwards' }).finished;
   ctl.on = false;
   w.snow.style.opacity = 0;
 }
 
 tiles.addEventListener('click', async e => {
-  const link = e.target.closest('a.tile');
+  const link = e.target.closest('a.tile[href]');   // page 100's screen has no href: it leads nowhere
   if(!link || reduceMotion || e.button || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
   e.preventDefault();   // even while busy: an extra click mid-animation must not load the page plainly
   if(busy) return;

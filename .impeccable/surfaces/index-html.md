@@ -2,27 +2,27 @@
 version: 1
 slug: "index-html"
 primary_target: "index.html"
-related_targets: ["home.js","home-teletext.js"]
+related_targets: ["home.js","home-teletext.js","laptop3d.js","head-ascii.js"]
 ---
 
 # Home (index.html)
 
 Mode: Persuade. Audience: recruiters and technical hiring managers equally (PRODUCT.md).
-Job: in five seconds, who Brayden is, what he wants (4-month co-op, May 2027), a working way to get his resume or email him; then a scroll through live previews of every other page, each expandable with the window animation (home.js, kept).
-Must keep: the window animation that grows a page out of its preview. Must avoid: a corporate look.
-User changes after the first build (2026-11-23): Projects and Other work sit side by side on wide screens; previews finer (160x100 blocks) for readability; on the home page a preview opens as TV static that zooms to full screen and clears while the page comes into focus (About keeps the plain window); the PAGES list on P100 opens the real pages (Projects and Other work stay in-page until those pages exist). GITHUB and LINKEDIN stay in the hero: PRODUCT.md lists them as contact routes and technical visitors want the source.
-Undecided: real photos (Brayden will shoot them); Projects and Other work pages do not exist yet.
+Job: in five seconds, who Brayden is, what he wants (4-month co-op, May 2027), and a working way to get his resume or email him; then a laptop that previews every other page and opens any of them.
+Must avoid: a corporate look. Layout is the user's: name across the top; details, buttons and coloured keys on the left; laptop beside them; Z420 + live stats + jump list on the right (as in commit d912442, plus the laptop).
+User decisions (2026-11-23): laptop (CC0 While Fun Games model) instead of a TV; page 100 is the user's head as rotating ASCII from me.glb; coloured keys change the laptop's page; the jump list opens real pages directly (row-by-row draw, not static); scrolling flies the laptop (lid shut, one slow spin, cyan/magenta ghosts, counter flicker) onto an ASCII table where it lands bigger and opens, and the guide (constant size) draws in beside it; a loud flashing scroll hint. GITHUB and LINKEDIN stay in the hero: PRODUCT.md lists them as contact routes.
+Undecided: real photos; real Projects and Other work pages (current ones are throwaway mocks); a lighter head model if me.glb (6 MB) is too slow.
 
 ## Direction contract
 
-THESIS: The site as a teletext service. Every page has a three-digit number, the visitor keys or scrolls between them, and each page's preview arrives as block mosaic before resolving into the real screen. Refuses the student-portfolio default: a name over two buttons and a grid of project cards.
+THESIS: The site as a teletext service with one real object in it: a laptop that tunes between the site's numbered pages. Refuses the student-portfolio default: a name over two buttons and a grid of project cards.
 
-OWN-WORLD: Flat black ground, the broadcast eight only: yellow headlines, cyan live figures, white body, red for REVEAL and alerts, green status, magenta feature, blue as the navigation band. Bedstead (public-domain SAA5050 face) for everything; double-height rows for headers; sextant block-mosaic graphics; hard cell-aligned boxes, no radius, no gradients, no shadows.
+OWN-WORLD: Flat black ground, the broadcast eight only: yellow headlines, cyan live figures, white body, red for alerts and the scroll hint, green status, magenta feature, blue as the header band. Bedstead for everything; double-height rows for headers; block-mosaic graphics; hard square boxes, no radius or shadow. The laptop is the one shaded 3D object, flat-shaded with a crisp 128px texture and white edges.
 
-STORY: The visitor sees the name, the offer and the server it runs on, presses GET MY RESUME or EMAIL, or scrolls: P200 Resume, P300 How this site runs, P400 About me, P500 Projects, P600 Other work. Each page shows what is on it and opens with Watch.
+STORY: The visitor sees the name, the offer and the laptop showing his face in ASCII; presses GET MY RESUME or EMAIL, flips the laptop through pages with the coloured keys and opens one, or scrolls to watch the laptop fly onto the desk and read the guide.
 
-FIRST VIEWPORT: Header row across the top (P100 · BPTEXT · page counter · live clock). Left two-thirds: BRAYDEN PATERSON in double-height yellow/white display filling the width, one white line on who he is, a cyan offer row, then the primary action, a yellow-boxed GET MY RESUME P200, beside EMAIL ME. Right third: a block-mosaic HP Z420 tower with a blinking green LED, cyan live stats under it, then the page index 200–600. Fastext bar (red, green, yellow, cyan) fixed along the bottom with a page-number entry.
+FIRST VIEWPORT: Blue double-height header (P100 · BPTEXT · counter · clock). BRAYDEN PATERSON in one double-height row. Left: lede, cyan offer rows, yellow GET MY RESUME 200 beside EMAIL ME, then "CLICK HERE TO SEE OTHER SITE PREVIEWS" over the coloured keys. Centre: the laptop with the ASCII head and "CLICK THE SCREEN TO GO TO THE FULL PAGE". Right: block-drawn Z420, live stats, "JUMP STRAIGHT TO THE REAL PAGE". Flashing "▼ SCROLL DOWN ▼" bottom-right.
 
-FORM: Teletext service (catalog challenger, chosen by the user over the assigned Channel Lineup). seed:47ebb320e44c1b54. Signature interaction: keying three digits (or scrolling) counts the header's page number up to the target like a teletext search, then the page draws row by row; a preview opens through TV static that clears into focus; previews render as 8-colour mosaic and resolve to the real page on hover/focus. Motion grammar: stepped, no easing, row-by-row draw, blink; the one exception is the user-approved open, where grey static fades and the page eases from blur into focus (1.1s); all held still under reduced motion (opening becomes a plain link).
+FORM: Teletext service (catalog challenger, chosen by the user over the assigned Channel Lineup), extended by the user with the laptop. seed:47ebb320e44c1b54. Signature interaction: the scroll flight (lid shuts, pops out, one full spin trailed by cyan/magenta ghosts while the header counter searches, hovers while the ASCII table rises to meet it, opens) and page changes on the laptop screen (static burst, block-mosaic preview). Motion grammar: stepped (row-by-row draws, counter roll, blink), except the user-approved flight and the static opening that breaks up into the page's focus; all held still under reduced motion.
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
