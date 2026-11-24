@@ -919,7 +919,7 @@ html:not(.ow-3d) .ow-screen{width:min(900px,90vw);height:auto;aspect-ratio:1280/
 .ow-specs dd{margin:0}
 /* the rest of the page in the landing's style (overrides the mock pages' print look, on this page only) */
 .ow-page .plate{border-color:rgba(255,255,255,.14);border-radius:6px}
-.ow-page .ph-box{border-color:#3f3f46;color:#71717a;border-radius:4px}
+.ow-page .ph-box{border-color:#3f3f46;color:#a1a1aa;border-radius:4px}
 .ow-page .plate figcaption{color:#a1a1aa}
 .ow-page .print-sheet{padding-top:80px;padding-bottom:96px}
 .ow-page .print-sheet h2{font:500 clamp(32px,3.4vw,56px)/1.1 var(--font-name);text-transform:none;letter-spacing:-.03em;border:0;margin:0 0 14px;padding:0}
@@ -927,5 +927,5 @@ html:not(.ow-3d) .ow-screen{width:min(900px,90vw);height:auto;aspect-ratio:1280/
 .ow-page .print-btn{display:inline-flex;align-items:center;gap:12px;padding:5px 5px 5px 14px;border:0;border-radius:9px;background:#fff;color:#09090b;font:500 14px var(--font-name);transition:transform .2s}
 .ow-page .print-btn::after{content:"↗";display:grid;place-items:center;width:28px;height:28px;border-radius:6px;background:#09090b;color:#fff}
 .ow-page .print-btn:hover{background:#fff;color:#09090b;transform:translateY(-1px)}
-.ow-page footer{border-top-color:rgba(255,255,255,.1);color:#71717a}
+.ow-page footer{border-top-color:rgba(255,255,255,.1);color:#a1a1aa}
 @media (max-width:900px){.ow-foot{grid-template-columns:1fr}.ow-social{justify-content:flex-start}.ow-stage{flex-direction:column}.ow-feature{width:auto;left:var(--gutter)!important;right:var(--gutter)!important;top:auto;bottom:6vh;transform:translateY(var(--dx))}.ow-copy{max-width:none}}
