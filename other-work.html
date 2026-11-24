@@ -6,7 +6,10 @@
 <title>Other work · Brayden Paterson</title>
 <meta name="description" content="Custom PCs and websites built by Brayden Paterson. Ask about a build.">
 <meta name="theme-color" content="#123a5c">
-<link rel="stylesheet" href="css/styles.css?v=16">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css?v=28">
 </head>
 <body class="print-page ow-page">
 
@@ -30,7 +33,7 @@
   </div>
   <div class="ow-foot">
     <p class="ow-blurb">I build websites and custom PCs for people. Pick one to see what I've made.</p>
-    <div class="ow-mid"><h2 class="ow-chosen" aria-live="polite"></h2><p class="ow-hint">Pick one above</p><button class="ow-cta ow-go" type="button" hidden>Check it out <span aria-hidden="true">↓</span></button></div>
+    <div class="ow-mid"><h2 class="ow-chosen" aria-live="polite"></h2><button class="ow-cta ow-go" type="button" hidden>Check it out <span aria-hidden="true">↓</span></button><p class="ow-hint">Pick one above</p></div>
     <nav class="ow-social" aria-label="Elsewhere"><a href="https://www.linkedin.com/in/braydenpaterson/">LinkedIn</a><a href="https://github.com/Braydenp006">GitHub</a></nav>
   </div>
 </section>
@@ -48,7 +51,9 @@
        data-page    which page of their site to show (default index.html)
        data-at      the part of that page to scroll to (a CSS selector inside it)
        data-drift   how far (px) their page scrolls on while this highlight is up; data-drift-in names a sideways
-                    scroller to move instead (like the gallery's photo carousel)
+                    scroller to move instead (like the gallery's photo carousel); data-drift-to ends that sideways drift with the
+                    photo it names in the middle
+       data-enlarge on a callout: its photo can be clicked to enlarge, lifting out of the laptop like their lightbox
        data-point   on a callout: the part of their site its arrow points at (a CSS selector) -->
 <section class="ow-site" id="ow-site" hidden>
   <div class="ow-stage">
@@ -75,12 +80,12 @@
       <p class="ow-did"><b>What I did</b>[TODO: what you did for them, e.g. design, build, photos, hosting]</p>
       <a class="ow-visit" href="https://www.bikeandhammer.com/">Visit the site <span aria-hidden="true">↗</span></a><!-- TODO: check this is the new site once it's live -->
     </article>
-    <article class="ow-feature" data-side="left" data-y="0.05" data-move="spin" data-page="gallery.html" data-at="main" data-drift="1400" data-drift-in=".carousel">
+    <article class="ow-feature" data-side="left" data-y="0.05" data-move="spin" data-page="gallery.html" data-at="main" data-drift-in=".carousel" data-drift-to='.carousel img[src$="live-9.jpg"]'>
       <p class="ow-kicker">Bandits Custom Tables</p>
       <h2>A gallery that turns like a drum</h2>
       <p>[TODO: why the gallery page is one big turning row of every photo instead of a grid]</p>
       <ul class="ow-callouts">
-        <li data-point=".carousel .item.active">[TODO: the photo in the middle, the one you'd click to enlarge]</li>
+        <li data-point='.carousel img[src$="live-9.jpg"]' data-enlarge>[TODO: the photo in the middle, the one you'd click to enlarge]</li>
         <li data-point=".car-block .scrub">[TODO: the scrubber for moving through the photos]</li>
       </ul>
       <p class="ow-did"><b>What I did</b>[TODO: what you did for them, e.g. design, build, photos, hosting]</p>
@@ -116,14 +121,19 @@
      PC, the photo soaks in over it, then the gallery of my other builds rises in. Clicking a build (or the photo) opens
      its details (other-work.js).
      ===== EDIT HERE =====
-       The featured build: its photo goes in .ow-hero-shot; data-model is its 3D model (.glb). data-fill is how much of the
+       The featured build: its photo goes in .ow-hero-shot; its 3D model is js/my-pc.js. data-fill is how much of the
        frame's height the model fills and data-yaw / data-pitch turn it (radians), so it can be lined up with the photo.
        Other builds: one <li> each in .ow-gallery. The card shows a photo, a name and one line; the hidden .ow-detail
        under it is what opens. Leave out any spec row (a <dt> and its <dd>) you don't have. -->
 <section class="ow-pc" id="ow-pc" hidden>
   <div class="ow-stage">
+    <!-- while the PC rests whole in the middle, before it opens (other-work.js HOLD) -->
+    <div class="ow-pc-intro">
+      <button class="ow-cta ow-pc-open" type="button">Open it up <span aria-hidden="true">↗</span></button>
+      <button class="ow-pc-top ow-pc-skip" type="button">See other builds <span aria-hidden="true">↓</span></button>
+    </div>
     <div class="ow-featured">
-      <button class="ow-hero-shot ow-land" type="button" data-model="assets/models/gaming-pc/gaming-pc.glb" data-fill="0.72" data-yaw="0.55" data-pitch="0.12">
+      <button class="ow-hero-shot ow-land" type="button" data-fill="0.72" data-yaw="0.55" data-pitch="0.12">
         <span class="ph-box">[PHOTO: the PC the 3D model is of]</span>
       </button>
       <div class="ow-detail" hidden>
@@ -142,17 +152,21 @@
           </div>
       <p class="ow-kicker">My build</p>
       <h2>[TODO: name of the featured build]</h2>
+      <div class="ow-pc-nav">
+        <button class="ow-cta ow-pc-ask" type="button">Ask about a build <span aria-hidden="true">↓</span></button>
+        <button class="ow-pc-top" type="button">Back to top <span aria-hidden="true">↑</span></button>
+      </div>
     </div>
     <div class="ow-others">
       <h2>Builds for other people</h2>
       <p>[TODO: a line about building PCs for people]</p>
       <ul class="ow-gallery">
       <li>
-        <button class="ow-card" type="button"><span class="ow-card-shot"><img src="assets/Pictures/PCs/thomas/thomas-1.jpg" alt="Thomas's white PC glowing red" loading="lazy"></span><span class="ow-card-name">Thomas's PC</span><span class="ow-card-line">White glass case with an RTX card and red lighting</span></button>
+        <button class="ow-card" type="button"><span class="ow-card-shot"><img src="assets/Pictures/PCs/thomas/thomas-1.webp" alt="Thomas's white PC glowing red" loading="lazy"></span><span class="ow-card-name">Thomas's PC</span><span class="ow-card-line">White glass case with an RTX card and red lighting</span></button>
         <div class="ow-detail" hidden>
             <div class="ow-detail-shots">
-              <img src="assets/Pictures/PCs/thomas/thomas-2.jpg" alt="Thomas's PC from the front, showing the RTX card and fans" loading="lazy">
-              <img src="assets/Pictures/PCs/thomas/thomas-3.jpg" alt="Thomas's PC from the side with the lights on" loading="lazy">
+              <img src="assets/Pictures/PCs/thomas/thomas-2.webp" alt="Thomas's PC from the front, showing the RTX card and fans" loading="lazy">
+              <img src="assets/Pictures/PCs/thomas/thomas-3.webp" alt="Thomas's PC from the side with the lights on" loading="lazy">
             </div>
             <div class="ow-detail-text">
               <p class="ow-kicker">[TODO: month year] · Thomas</p>
@@ -269,10 +283,10 @@
 </div>
 </main>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
-<script type="module" src="js/other-work.js"></script>
+<script type="module" src="js/other-work.js?v=35"></script>
 
 <footer>
-  <span>Served from an HP Z420 running FreeBSD. Gaming PC model: <a href="https://poly.pizza/m/5cN7W4ufoII">"Gaming Computer" by Alex Safayan</a>, <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</span>
+  <span>Served from an HP Z420 running FreeBSD.</span>
   <span>© 2026 Brayden Paterson</span>
 </footer>
 </body>
