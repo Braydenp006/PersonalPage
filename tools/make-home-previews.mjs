@@ -6,7 +6,7 @@ import { execFileSync } from 'node:child_process';
 
 process.chdir(new URL('..', import.meta.url).pathname);   // the repo root, so assets/previews/ is found from anywhere
 
-const PAGES = ['index', 'resume', 'how-it-runs', 'about', 'projects', 'other-work'];   // the home page's previews, plus index for the Resume page's CRT (crt-channel.js)
+const PAGES = process.argv.length > 2 ? process.argv.slice(2) : ['index', 'resume', 'how-it-runs', 'about', 'projects', 'other-work'];   // the home page's previews, plus index for the Resume page's CRT (crt-channel.js); or name pages: node tools/make-home-previews.mjs other-work
 const browser = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });   // so the 3D models draw
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 for (const name of PAGES) {
