@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#1e1813">
+<title>Privacy Policy · Bandits Custom Tables</title>
+<link rel="icon" href="info/Icon.jpg">
+<link rel="apple-touch-icon" href="info/Icon.jpg">
+<!-- page cover: here (not in style.css) so it's in place from the very first frame; site.js lifts it -->
+<style>html{background:#1e1813}body::after{content:"";position:fixed;inset:0;z-index:999;background:#1e1813;pointer-events:none;opacity:1;transition:opacity .75s ease}html.ready body::after{opacity:0}html.leaving body::after{opacity:1;transition:opacity .4s ease}html.gone body::after{display:none}</style>
+<script>setTimeout(() => { const h = document.documentElement; h.classList.add('ready'); setTimeout(() => h.classList.contains('leaving') || h.classList.add('gone'), 800) }, 4000) // safety: never leave the page covered</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..500;1,6..72,300..500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="page">
+
+<nav id="nav">
+  <div class="wrap">
+    <a href="index.html" class="logo"><img src="info/Icon.jpg" alt="">Bandits Custom Tables</a>
+    <div class="links" id="links">
+      <a href="milling.html">Milling</a>
+      <a href="live-edge.html">Live Edge</a>
+      <a href="tables.html">Tables</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+    <button class="menu-btn" aria-label="Menu" onclick="toggleMenu()">☰</button>
+  </div>
+</nav>
+
+<!-- EDIT HERE: update the date whenever this page changes. Add the business email once there's a real one. -->
+<main class="legal wrap">
+  <span class="eyebrow">Last updated November 19, 2026</span>
+  <h1>Privacy Policy</h1>
+  <p>Bandits Custom Tables ("we") respects your privacy. This page explains what personal information this website collects, why, and what we do with it.</p>
+
+  <h2>What we collect</h2>
+  <p>We only collect what you choose to send us through the contact form: your name, your email address, the service you're interested in, and your message. We don't ask for anything else.</p>
+
+  <h2>Why we collect it</h2>
+  <p>We use it only to reply to you about your enquiry: answering questions, discussing timing and pricing, and arranging your project. We don't sell, rent or trade your information, and we won't add you to a mailing list without asking first.</p>
+
+  <h2>Who handles it</h2>
+  <p>Messages from the contact form are delivered to us by <a href="https://formspree.io/legal/privacy-policy" target="_blank" rel="noopener">Formspree</a>, a form service, which may store them on servers outside Canada. Apart from that, your information stays with us.</p>
+
+  <h2>Cookies and tracking</h2>
+  <p>This site doesn't use cookies, analytics or advertising trackers. The site's fonts are loaded from <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Fonts</a>, which means Google receives your device's IP address when you visit, as is standard for any website using them.</p>
+
+  <h2>How long we keep it</h2>
+  <p>We keep your enquiry only as long as we need it to deal with your request and any project that follows, then delete it.</p>
+
+  <h2>Your choices</h2>
+  <p>You can ask to see the information we hold about you, have it corrected, or have it deleted at any time. Just get in touch using the details below.</p>
+
+  <h2>Contact</h2>
+  <p>Bandits Custom Tables<br>19985 Yonge St, Holland Landing, ON L9N 1N2<br><a href="tel:+19058686845">(905) 868-6845</a></p>
+</main>
+
+<footer data-edge="top"><div class="wrap">
+  <b class="f-brand"><img src="info/Icon.jpg" alt="">Bandits Custom Tables</b>
+  <span>19985 Yonge St, Holland Landing, ON · <a href="tel:+19058686845">(905) 868-6845</a> · <a href="https://www.instagram.com/bandits_custom_tables/" target="_blank" rel="noopener">Instagram</a> · <a href="privacy.html">Privacy</a></span>
+</div></footer>
+
+<div class="lb" id="lb" onclick="closeLb()"><img alt=""><p class="caps lb-cap"></p></div>
+
+<script src="site.js"></script>
+</body>
+</html>

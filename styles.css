@@ -21,6 +21,9 @@ a{color:inherit}
 
 /* ===== Home: a teletext service. Black screen, the eight broadcast colours, one blocky face, every page a number =====
    Colours are tokens on .tt below. Text sizes come from --fs; one character is .6 of it wide. */
+@font-face{font-family:'Satoshi';src:url('assets/fonts/satoshi-400.woff2') format('woff2');font-weight:400;font-display:swap}   /* Satoshi, by Indian Type Foundry (Fontshare free licence); Other work only */
+@font-face{font-family:'Satoshi';src:url('assets/fonts/satoshi-500.woff2') format('woff2');font-weight:500;font-display:swap}
+@font-face{font-family:'Satoshi';src:url('assets/fonts/satoshi-700.woff2') format('woff2');font-weight:700;font-display:swap}
 @font-face{font-family:'Bedstead';src:url('assets/fonts/bedstead.woff2') format('woff2');font-display:block}   /* public domain (CC0), by bjh21: the classic teletext character set */
 html:has(.tt){background:#000;scrollbar-color:#fff #000;scroll-padding-top:var(--head,76px)}
 .tt{--tt-black:#000;--tt-white:#fff;--tt-yellow:#ffeb1a;--tt-cyan:#2ee0f0;--tt-green:#38e05a;--tt-red:#ff4433;--tt-magenta:#ff4df2;--tt-blue:#1f33ff;
@@ -783,3 +786,135 @@ html:has(.print-page),.print-page{background:#123a5c;color:#e6f0f8}
 .print-btn{display:inline-block;margin-top:8px;padding:12px 18px;border:2px solid #fff;color:#fff;text-decoration:none}
 .print-btn:hover{background:#fff;color:#123a5c}
 .print-page footer{border-top-color:#2f5a80;color:#9cc3e4}
+/* Other work. other-work.js draws the laptop and the PC in one fixed 3D layer (.ow-3d-layer) over the .ow-slot boxes */
+.ow-3d-layer,.ow-3d-layer>*{position:fixed;inset:0;pointer-events:none;z-index:5}
+.ow-3d-layer *{pointer-events:none}
+/* the landing, laid out like a product hero: headline and button top left, the two picks in the middle, a footer row.
+   The room is dark; a front light (.ow-light, a low-res canvas drawn by other-work.js and scaled up in chunky pixels)
+   throws a pool on the back wall behind the lit model and another on the floor. */
+html:has(.ow-page),.ow-page{background:#09090b;background-image:none}
+.ow-page{--font-name:Satoshi,"Helvetica Neue",Arial,system-ui,sans-serif;--ow-sans:var(--font-name);font-family:var(--font-name)}
+.ow-page .print-top{position:absolute;top:0;left:0;right:0;z-index:2}   /* over the landing, so the landing fills the window */
+.ow-hero{position:relative;min-height:100vh;display:grid;grid-template-rows:auto 1fr auto;gap:12px;padding:76px var(--gutter) 28px;color:#fafafa;background:#09090b}
+.ow-hero>*{position:relative;z-index:1}
+.ow-light{position:absolute;inset:0;z-index:0;width:100%;height:100%;image-rendering:pixelated;pointer-events:none;opacity:0;animation:ow-light-on 1.6s ease .5s forwards}
+@keyframes ow-light-on{to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.ow-light{animation:none;opacity:1}}
+.ow-head{display:flex;flex-direction:column;align-items:flex-start;gap:22px}
+.ow-hero h1{font:500 clamp(36px,min(5.2vw,8vh),84px)/1.04 var(--ow-sans);letter-spacing:-.035em;margin:0}
+.ow-cta{display:inline-flex;align-items:center;gap:12px;padding:5px 5px 5px 14px;border-radius:9px;background:#fff;color:#09090b;font:500 14px var(--ow-sans);text-decoration:none;transition:transform .2s}
+.ow-cta:hover{transform:translateY(-1px)}
+.ow-cta span{display:grid;place-items:center;width:28px;height:28px;border-radius:6px;background:#09090b;color:#fff;font-size:14px}
+.ow-cta:focus-visible,.ow-foot a:focus-visible{outline:2px solid #ffc46e;outline-offset:3px}
+.ow-foot{display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:24px;font:400 16px/1.6 var(--ow-sans)}
+.ow-blurb{margin:0;max-width:42ch;color:#e4e4e7}
+.ow-mid{text-align:center}
+.ow-hint{margin:0;color:#a1a1aa;font-size:14px;transition:color .4s}
+.ow-hero[data-pick] .ow-hint{color:#fafafa}
+.ow-social{display:flex;justify-content:flex-end;gap:40px}
+.ow-social a{color:#fafafa;text-decoration:none}
+.ow-social a:hover{text-decoration:underline}
+/* page thirds: the two picks are centred on the 1/3 and 2/3 lines of the window */
+.ow-picks{display:grid;grid-template-columns:repeat(6,1fr);align-self:center;margin-inline:calc(-1 * var(--gutter))}
+.ow-picks>*{grid-row:1;justify-self:center;justify-content:space-between}   /* labels level along the top, models on one floor */
+.ow-picks>:first-child{grid-column:1/5}   /* centred on 1/3 */
+.ow-picks>:last-child{grid-column:3/7}    /* centred on 2/3 */
+.ow-slot-laptop{aspect-ratio:1.3}
+.ow-slot-pc{aspect-ratio:.8}
+.ow-hero .ow-slot-laptop{height:min(46vh,28vw)}
+.ow-hero .ow-slot-pc{height:min(37vh,22.5vw)}   /* shorter box: the boxy case reads bigger than the laptop at the same height */
+.ow-pick{background:none;border:0;padding:8px;color:#fafafa;font:500 15px var(--ow-sans);letter-spacing:.01em;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:14px}
+.ow-pick:focus-visible{outline:2px solid #9cc3e4;outline-offset:4px}
+.ow-pick-label{transition:opacity .6s}
+.ow-nav{display:flex;flex-wrap:wrap;gap:6px 22px}
+.ow-nav [aria-current]{color:#ffc46e}
+.ow-hero[data-pick] .ow-pick[aria-pressed=false] .ow-pick-label{opacity:.35}
+.ow-slot{display:block}
+.ow-chosen{font:500 clamp(24px,2.6vw,38px) var(--ow-sans);letter-spacing:-.02em;text-align:center;margin:0 0 6px;min-height:1.2em;opacity:0;transform:translateY(8px);transition:opacity .6s,transform .6s}
+.ow-hero[data-pick] .ow-chosen{opacity:1;transform:none}
+
+.ow-stage{position:sticky;top:0;height:100vh;display:flex;align-items:center;justify-content:center;gap:clamp(24px,4vw,64px);padding:0 var(--gutter)}
+.ow-copy{max-width:340px}
+.ow-copy h2,.ow-feature h2{font:500 clamp(28px,2.6vw,44px)/1.1 var(--font-name);letter-spacing:-.025em;margin:0 0 14px}
+.ow-copy p,.ow-feature p{color:#d4d4d8;line-height:1.6}
+/* websites: --ow-bg/--ow-fg are set from the colour on the laptop's screen */
+.ow-site{height:450vh;background:var(--ow-bg,#09090b);color:var(--ow-fg,#fafafa);transition:background-color .8s ease,color .8s ease}
+.ow-screen{width:1280px;height:890px;background:#000;backface-visibility:hidden}   /* the glass's shape (2.418 x 1.682), at a desktop width; hidden from behind while the laptop spins */
+.ow-screen{position:relative}
+.ow-screen iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;pointer-events:none}
+html:not(.ow-3d) .ow-screen{width:min(900px,90vw);height:auto;aspect-ratio:1280/890;margin:-100vh auto 0;position:relative}   /* no WebGL: flat, in the section */
+/* the highlights: the text sits on the side the laptop isn't, and slides in from that edge */
+.ow-feature{position:absolute;top:50%;width:min(460px,36vw);opacity:0;transform:translate(var(--dx),-50%);transition:opacity .5s ease,transform .7s cubic-bezier(.2,.7,.2,1);pointer-events:none}
+.ow-feature[data-side=left]{right:7vw;--dx:80px}
+.ow-feature[data-side=right]{left:7vw;--dx:-80px}
+.ow-feature.is-on{opacity:1;--dx:0px;pointer-events:auto}
+.ow-kicker{margin:0 0 14px;font-size:13px;letter-spacing:.04em;color:#a1a1aa !important}
+.ow-callouts{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:12px;counter-reset:c}
+.ow-callouts li{counter-increment:c;display:flex;gap:12px;align-items:baseline;color:#e4e4e7}
+.ow-callouts li::before{content:counter(c);flex:none;display:grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1px solid #ffc46e;color:#ffc46e;font-size:12px;transform:translateY(-2px)}
+.ow-feature blockquote{margin:26px 0 0;padding:4px 0 4px 18px;border-left:2px solid #ffc46e;font-size:18px;line-height:1.5}
+.ow-feature cite{display:block;margin-top:8px;font-style:normal;font-size:14px;color:#a1a1aa}
+.ow-arrows{position:fixed;inset:0;width:100%;height:100%;overflow:visible}
+.ow-arrows path{fill:none;stroke:#ffc46e;stroke-width:1.6;stroke-linecap:round}
+.ow-arrows circle{fill:#ffc46e}
+/* PC builds: --seep (the photo soaking in over the model) and --show (the gallery rising in), 0 to 1, set from the scroll */
+.ow-pc{height:250vh;background:#09090b;color:#fafafa}
+.ow-pc .ow-stage{justify-content:space-between;gap:clamp(32px,5vw,96px);padding:0 clamp(32px,6vw,120px)}
+.ow-featured{flex:none;width:min(36vw,62vh)}
+.ow-hero-shot{display:block;width:100%;aspect-ratio:4/5;padding:0;border:0;border-radius:14px;overflow:hidden;background:#141417;cursor:pointer;
+  /* soaks in from the middle out, like ink, and comes into focus */
+  -webkit-mask:radial-gradient(circle at 50% 55%,#000 calc(var(--seep,0) * 120% - 20%),transparent calc(var(--seep,0) * 120% + 10%));
+  mask:radial-gradient(circle at 50% 55%,#000 calc(var(--seep,0) * 120% - 20%),transparent calc(var(--seep,0) * 120% + 10%));
+  filter:blur(calc((1 - var(--seep,0)) * 8px))}
+.ow-hero-shot>*{width:100%;height:100%;object-fit:cover;display:grid}
+.ow-hero-shot .ph-box{aspect-ratio:auto;border-radius:14px}
+.ow-featured .ow-kicker{margin:22px 0 6px}
+.ow-featured h2,.ow-others h2{font:500 clamp(28px,2.6vw,44px)/1.1 var(--font-name);letter-spacing:-.025em;margin:0}
+.ow-featured>.ow-kicker,.ow-featured>h2{opacity:var(--seep,0);transform:translateY(calc((1 - var(--seep,0)) * 12px))}
+.ow-others{flex:1;max-width:900px;opacity:var(--show,0);transform:translateY(calc((1 - var(--show,0)) * 24px));pointer-events:none}
+.ow-pc.is-shown .ow-others{pointer-events:auto}
+.ow-others>p{color:#d4d4d8;margin:12px 0 28px}
+.ow-gallery{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.ow-gallery>li{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .8s cubic-bezier(.2,.7,.2,1);transition-delay:calc(var(--i,0) * 70ms)}
+.ow-pc.is-shown .ow-gallery>li{opacity:1;transform:none}
+.ow-card{display:flex;flex-direction:column;gap:6px;width:100%;padding:0;border:0;background:none;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.ow-card-shot{display:block;aspect-ratio:4/3;border-radius:10px;overflow:hidden;background:#141417;transition:transform .4s cubic-bezier(.2,.7,.2,1)}
+.ow-card-shot>*{width:100%;height:100%;object-fit:cover;display:grid}
+.ow-card-shot .ph-box{aspect-ratio:auto;border-radius:10px}
+.ow-card:hover .ow-card-shot{transform:translateY(-3px)}
+.ow-card-name{margin-top:6px;font-weight:500}
+.ow-card-line{font-size:14px;color:#a1a1aa}
+.ow-card:focus-visible,.ow-hero-shot:focus-visible,.ow-close:focus-visible{outline:2px solid #ffc46e;outline-offset:4px}
+/* a build's details, in a dialog that eases up out of the page */
+.ow-dialog{width:min(1100px,88vw);max-height:86vh;margin:auto;padding:0;border:1px solid rgba(255,255,255,.1);border-radius:16px;background:#111114;color:#fafafa;
+  opacity:0;transform:translateY(16px) scale(.98);transition:opacity .35s ease,transform .45s cubic-bezier(.2,.7,.2,1),overlay .45s allow-discrete,display .45s allow-discrete}
+.ow-dialog[open]{opacity:1;transform:none}
+@starting-style{.ow-dialog[open]{opacity:0;transform:translateY(16px) scale(.98)}}
+.ow-dialog::backdrop{background:rgba(0,0,0,0);backdrop-filter:blur(0);transition:background .35s ease,backdrop-filter .35s ease,overlay .35s allow-discrete,display .35s allow-discrete}
+.ow-dialog[open]::backdrop{background:rgba(0,0,0,.6);backdrop-filter:blur(6px)}
+@starting-style{.ow-dialog[open]::backdrop{background:rgba(0,0,0,0);backdrop-filter:blur(0)}}
+.ow-close{position:absolute;top:14px;right:14px;z-index:1;width:36px;height:36px;border:0;border-radius:50%;background:rgba(255,255,255,.08);color:#fafafa;font-size:15px;cursor:pointer}
+.ow-close:hover{background:rgba(255,255,255,.16)}
+.ow-detail{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(24px,3vw,48px);padding:clamp(24px,3vw,44px)}
+.ow-detail[hidden]{display:none}
+.ow-detail-shots{display:grid;gap:12px;align-content:start}
+.ow-detail-shots>*{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px;display:grid}
+.ow-detail-shots .ph-box{aspect-ratio:4/3;border-radius:10px}
+.ow-detail-text h2{font:500 clamp(26px,2.2vw,38px)/1.1 var(--font-name);letter-spacing:-.025em;margin:0 0 6px}
+.ow-detail-text h3{font:500 18px var(--font-name);margin:26px 0 6px;color:#ffc46e}
+.ow-detail-text p{color:#d4d4d8;line-height:1.6;margin:0 0 10px}
+.ow-specs{display:grid;grid-template-columns:auto 1fr;gap:8px 20px;margin:18px 0 0;padding:16px 0 0;border-top:1px solid rgba(255,255,255,.1)}
+.ow-specs dt{color:#a1a1aa}
+.ow-specs dd{margin:0}
+/* the rest of the page in the landing's style (overrides the mock pages' print look, on this page only) */
+.ow-page .plate{border-color:rgba(255,255,255,.14);border-radius:6px}
+.ow-page .ph-box{border-color:#3f3f46;color:#71717a;border-radius:4px}
+.ow-page .plate figcaption{color:#a1a1aa}
+.ow-page .print-sheet{padding-top:80px;padding-bottom:96px}
+.ow-page .print-sheet h2{font:500 clamp(32px,3.4vw,56px)/1.1 var(--font-name);text-transform:none;letter-spacing:-.03em;border:0;margin:0 0 14px;padding:0}
+.ow-page .print-lede{color:#d4d4d8;font-size:18px;margin:0 0 28px}
+.ow-page .print-btn{display:inline-flex;align-items:center;gap:12px;padding:5px 5px 5px 14px;border:0;border-radius:9px;background:#fff;color:#09090b;font:500 14px var(--font-name);transition:transform .2s}
+.ow-page .print-btn::after{content:"↗";display:grid;place-items:center;width:28px;height:28px;border-radius:6px;background:#09090b;color:#fff}
+.ow-page .print-btn:hover{background:#fff;color:#09090b;transform:translateY(-1px)}
+.ow-page footer{border-top-color:rgba(255,255,255,.1);color:#71717a}
+@media (max-width:900px){.ow-foot{grid-template-columns:1fr}.ow-social{justify-content:flex-start}.ow-stage{flex-direction:column}.ow-feature{width:auto;left:var(--gutter)!important;right:var(--gutter)!important;top:auto;bottom:6vh;transform:translateY(var(--dx))}.ow-copy{max-width:none}}

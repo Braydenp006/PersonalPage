@@ -6,44 +6,257 @@
 <title>Other work · Brayden Paterson</title>
 <meta name="description" content="Custom PCs and websites built by Brayden Paterson. Ask about a build.">
 <meta name="theme-color" content="#123a5c">
-<link rel="stylesheet" href="styles.css?v=15">
+<link rel="stylesheet" href="styles.css?v=16">
 </head>
-<body class="print-page">
+<body class="print-page ow-page">
 
 <!-- MOCK PAGE: a placeholder for the real Other work page (the PCs and websites I've built, and an enquiry form).
      It exists so the home page's TV has something to show. Replace it when the real page is built. -->
 <header class="print-top">
-  <a href="index.html">◂ Home</a>
-  <p class="print-mock">Mock page · photos and build details coming</p>
+  <nav class="ow-nav" aria-label="Pages"><a href="index.html">◂ Home</a><a href="about.html">About me</a><a href="resume.html">Resume</a><a href="projects.html">Projects</a><a href="other-work.html" aria-current="page">Other work</a></nav>
 </header>
 
-<main class="print-sheet">
-  <h1>Other work</h1>
-  <p class="print-lede">I build custom PCs and websites for people. I've built and sold 5 custom gaming PCs to local customers.</p>
-
-  <h2>PC builds</h2>
-  <!-- ===== EDIT HERE: one .plate per build ===== -->
-  <div class="plates">
-    <figure class="plate"><span class="ph-box">[PHOTO: build 1]</span><figcaption>Build 1 · [TODO: specs]</figcaption></figure>
-    <figure class="plate"><span class="ph-box">[PHOTO: build 2]</span><figcaption>Build 2 · [TODO: specs]</figcaption></figure>
-    <figure class="plate"><span class="ph-box">[PHOTO: build 3]</span><figcaption>Build 3 · [TODO: specs]</figcaption></figure>
-    <figure class="plate"><span class="ph-box">[PHOTO: build 4]</span><figcaption>Build 4 · [TODO: specs]</figcaption></figure>
-    <figure class="plate"><span class="ph-box">[PHOTO: build 5]</span><figcaption>Build 5 · [TODO: specs]</figcaption></figure>
+<main>
+<!-- Landing: the laptop and the PC float side by side (other-work.js draws them in 3D over these buttons). Picking one
+     lights it up, shows its title and opens its section below; scrolling then flies that model into the section. -->
+<section class="ow-hero" id="ow-hero">
+  <canvas class="ow-light" aria-hidden="true"></canvas>
+  <div class="ow-head">
+    <h1>Other work<br>I've done.</h1>
+    <a class="ow-cta" href="#ask">Ask about a build <span aria-hidden="true">↗</span></a>
   </div>
-
-  <h2>Websites</h2>
-  <div class="plates">
-    <figure class="plate"><span class="ph-box">[SCREENSHOT: this site]</span><figcaption>This site · hand-written HTML, CSS and JS, self-hosted</figcaption></figure>
-    <figure class="plate"><span class="ph-box">[SCREENSHOT: another site]</span><figcaption>[TODO: another site I've made]</figcaption></figure>
+  <div class="ow-picks">
+    <button class="ow-pick" data-path="site" aria-controls="ow-site"><span class="ow-pick-label">Websites</span><span class="ow-slot ow-slot-laptop"></span></button>
+    <button class="ow-pick" data-path="pc" aria-controls="ow-pc"><span class="ow-pick-label">Custom PCs</span><span class="ow-slot ow-slot-pc"></span></button>
   </div>
+  <div class="ow-foot">
+    <p class="ow-blurb">I build websites and custom PCs for people. Pick one to see what I've made.</p>
+    <div class="ow-mid"><h2 class="ow-chosen" aria-live="polite"></h2><p class="ow-hint">Pick one above</p></div>
+    <nav class="ow-social" aria-label="Elsewhere"><a href="https://www.linkedin.com/in/braydenpaterson/">LinkedIn</a><a href="https://github.com/Braydenp006">GitHub</a></nav>
+  </div>
+</section>
 
+<!-- Websites: a showcase of highlights from each client site, shown live on the laptop (other-work.js). Each
+     .ow-feature is one highlight; scrolling moves from one to the next: the laptop spins across when it changes side,
+     the site on its screen scrolls to the highlight, and each callout draws an arrow to the part of the site it's about.
+     ===== EDIT HERE: one <article> per highlight =====
+       data-side    which side the laptop sits on (the text takes the other side)
+       data-y       how far below the middle the laptop sits, as a fraction of the window (0.1 = a little lower)
+       data-move    how the laptop gets here from the last one: spin (a full 360), quarter (turns a quarter and back)
+                    or slide (default). Use spin when the page changes: the swap happens while the screen faces away
+       data-page    which page of their site to show (default index.html)
+       data-at      the part of that page to scroll to (a CSS selector inside it)
+       data-drift   how far (px) their page scrolls on while this highlight is up; data-drift-in names a sideways
+                    scroller to move instead (like the gallery's photo carousel)
+       data-point   on a callout: the part of their site its arrow points at (a CSS selector) -->
+<section class="ow-site" id="ow-site" hidden>
+  <div class="ow-stage">
+    <article class="ow-feature" data-side="left" data-y="0" data-at="#top">
+      <p class="ow-kicker">Bandits Custom Tables · 01</p>
+      <h2>Lead with the wood</h2>
+      <p>[TODO: why the first screen is one big photo of a slab and a short line, and what you were going for]</p>
+      <ul class="ow-callouts">
+        <li data-point=".hero h1">[TODO: why this headline]</li>
+        <li data-point=".hero .btn">[TODO: why "Start a project" is the first button]</li>
+      </ul>
+    </article>
+    <article class="ow-feature" data-side="right" data-y="0" data-at=".process" data-move="slide">
+      <p class="ow-kicker">Bandits Custom Tables · 02</p>
+      <h2>Tree to table in four steps</h2>
+      <p>[TODO: why the process is laid out as four steps with photos]</p>
+      <ul class="ow-callouts">
+        <li data-point=".steps .step:first-child b">[TODO: the numbered steps]</li>
+        <li data-point=".steps .step:last-child .ph">[TODO: ending on a finished piece]</li>
+      </ul>
+    </article>
+    <article class="ow-feature" data-side="left" data-y="0.05" data-move="spin" data-page="gallery.html" data-at="main" data-drift="1400" data-drift-in=".carousel">
+      <p class="ow-kicker">Bandits Custom Tables · 03</p>
+      <h2>A gallery that turns like a drum</h2>
+      <p>[TODO: why the gallery page is one big turning row of every photo instead of a grid]</p>
+      <ul class="ow-callouts">
+        <li data-point=".carousel .item.active">[TODO: the photo in the middle, the one you'd click to enlarge]</li>
+        <li data-point=".car-block .scrub">[TODO: the scrubber for moving through the photos]</li>
+      </ul>
+    </article>
+    <article class="ow-feature" data-side="right" data-y="0.1" data-at=".woods" data-move="spin">
+      <p class="ow-kicker">Bandits Custom Tables · 04</p>
+      <h2>Every species, at a glance</h2>
+      <p>[TODO: why each wood gets its own colour ring and a one-line description]</p>
+      <ul class="ow-callouts">
+        <li data-point=".species .sp:first-child i">[TODO: the colour rings]</li>
+      </ul>
+    </article>
+    <article class="ow-feature" data-side="left" data-y="0" data-at="#contact" data-move="quarter">
+      <p class="ow-kicker">Bandits Custom Tables · 05</p>
+      <h2>An enquiry in four fields</h2>
+      <p>[TODO: why the contact form is this short]</p>
+      <ul class="ow-callouts">
+        <li data-point="#form select">[TODO: picking a service up front]</li>
+      </ul>
+      <blockquote>[TODO: what the client said about the site]<cite>[TODO: client name], Bandits Custom Tables</cite></blockquote>
+    </article>
+  </div>
+  <!-- the client's site, laid on the laptop's glass by other-work.js (shown flat here without WebGL) -->
+  <div class="ow-screen" data-base="work/bandits/"><iframe src="work/bandits/index.html" title="Bandits Custom Tables website" tabindex="-1" aria-hidden="true"></iframe></div>
+</section>
+
+<!-- PC builds: a 3D model of one of my builds glides down from the landing and lands lined up with a photo of the same
+     PC, the photo soaks in over it, then the gallery of my other builds rises in. Clicking a build (or the photo) opens
+     its details (other-work.js).
+     ===== EDIT HERE =====
+       The featured build: its photo goes in .ow-hero-shot; data-model is its 3D model (.glb). data-fill is how much of the
+       frame's height the model fills and data-yaw / data-pitch turn it (radians), so it can be lined up with the photo.
+       Other builds: one <li> each in .ow-gallery. The card shows a photo, a name and one line; the hidden .ow-detail
+       under it is what opens. Leave out any spec row (a <dt> and its <dd>) you don't have. -->
+<section class="ow-pc" id="ow-pc" hidden>
+  <div class="ow-stage">
+    <div class="ow-featured">
+      <button class="ow-hero-shot ow-land" type="button" data-model="assets/models/gaming-pc/gaming-pc.glb" data-fill="0.72" data-yaw="0.55" data-pitch="0.12">
+        <span class="ph-box">[PHOTO: the PC the 3D model is of]</span>
+      </button>
+      <div class="ow-detail" hidden>
+            <div class="ow-detail-shots"><span class="ph-box">[PHOTO: [TODO: name of the featured build]]</span></div>
+            <div class="ow-detail-text">
+              <p class="ow-kicker">[TODO: month year] · [TODO: who it was for]</p>
+              <h2>[TODO: name of the featured build]</h2>
+              <dl class="ow-specs">
+                <dt>CPU</dt><dd>[TODO]</dd><dt>GPU</dt><dd>[TODO]</dd><dt>RAM</dt><dd>[TODO]</dd>
+                <dt>Storage</dt><dd>[TODO]</dd><dt>Cooling</dt><dd>[TODO]</dd><dt>Case</dt><dd>[TODO]</dd>
+              </dl>
+              <h3>One thing I learnt</h3>
+              <p>[TODO: one cool thing you learnt or did on this build]</p>
+              <p>[TODO: anything else about it]</p>
+            </div>
+          </div>
+      <p class="ow-kicker">My build</p>
+      <h2>[TODO: name of the featured build]</h2>
+    </div>
+    <div class="ow-others">
+      <h2>Builds for other people</h2>
+      <p>[TODO: a line about building PCs for people]</p>
+      <ul class="ow-gallery">
+      <li>
+        <button class="ow-card" type="button"><span class="ow-card-shot"><span class="ph-box">[PHOTO]</span></span><span class="ow-card-name">[TODO: build 2 name]</span><span class="ow-card-line">[TODO: one line, e.g. the GPU or what it's for]</span></button>
+        <div class="ow-detail" hidden>
+            <div class="ow-detail-shots"><span class="ph-box">[PHOTO: [TODO: build 2 name]]</span></div>
+            <div class="ow-detail-text">
+              <p class="ow-kicker">[TODO: month year] · [TODO: who it was for]</p>
+              <h2>[TODO: build 2 name]</h2>
+              <dl class="ow-specs">
+                <dt>CPU</dt><dd>[TODO]</dd><dt>GPU</dt><dd>[TODO]</dd><dt>RAM</dt><dd>[TODO]</dd>
+                <dt>Storage</dt><dd>[TODO]</dd><dt>Cooling</dt><dd>[TODO]</dd><dt>Case</dt><dd>[TODO]</dd>
+              </dl>
+              <h3>One thing I learnt</h3>
+              <p>[TODO: one cool thing you learnt or did on this build]</p>
+              <p>[TODO: anything else about it]</p>
+            </div>
+          </div>
+      </li>
+      <li>
+        <button class="ow-card" type="button"><span class="ow-card-shot"><span class="ph-box">[PHOTO]</span></span><span class="ow-card-name">[TODO: build 3 name]</span><span class="ow-card-line">[TODO: one line, e.g. the GPU or what it's for]</span></button>
+        <div class="ow-detail" hidden>
+            <div class="ow-detail-shots"><span class="ph-box">[PHOTO: [TODO: build 3 name]]</span></div>
+            <div class="ow-detail-text">
+              <p class="ow-kicker">[TODO: month year] · [TODO: who it was for]</p>
+              <h2>[TODO: build 3 name]</h2>
+              <dl class="ow-specs">
+                <dt>CPU</dt><dd>[TODO]</dd><dt>GPU</dt><dd>[TODO]</dd><dt>RAM</dt><dd>[TODO]</dd>
+                <dt>Storage</dt><dd>[TODO]</dd><dt>Cooling</dt><dd>[TODO]</dd><dt>Case</dt><dd>[TODO]</dd>
+              </dl>
+              <h3>One thing I learnt</h3>
+              <p>[TODO: one cool thing you learnt or did on this build]</p>
+              <p>[TODO: anything else about it]</p>
+            </div>
+          </div>
+      </li>
+      <li>
+        <button class="ow-card" type="button"><span class="ow-card-shot"><span class="ph-box">[PHOTO]</span></span><span class="ow-card-name">[TODO: build 4 name]</span><span class="ow-card-line">[TODO: one line, e.g. the GPU or what it's for]</span></button>
+        <div class="ow-detail" hidden>
+            <div class="ow-detail-shots"><span class="ph-box">[PHOTO: [TODO: build 4 name]]</span></div>
+            <div class="ow-detail-text">
+              <p class="ow-kicker">[TODO: month year] · [TODO: who it was for]</p>
+              <h2>[TODO: build 4 name]</h2>
+              <dl class="ow-specs">
+                <dt>CPU</dt><dd>[TODO]</dd><dt>GPU</dt><dd>[TODO]</dd><dt>RAM</dt><dd>[TODO]</dd>
+                <dt>Storage</dt><dd>[TODO]</dd><dt>Cooling</dt><dd>[TODO]</dd><dt>Case</dt><dd>[TODO]</dd>
+              </dl>
+              <h3>One thing I learnt</h3>
+              <p>[TODO: one cool thing you learnt or did on this build]</p>
+              <p>[TODO: anything else about it]</p>
+            </div>
+          </div>
+      </li>
+      <li>
+        <button class="ow-card" type="button"><span class="ow-card-shot"><span class="ph-box">[PHOTO]</span></span><span class="ow-card-name">[TODO: build 5 name]</span><span class="ow-card-line">[TODO: one line, e.g. the GPU or what it's for]</span></button>
+        <div class="ow-detail" hidden>
+            <div class="ow-detail-shots"><span class="ph-box">[PHOTO: [TODO: build 5 name]]</span></div>
+            <div class="ow-detail-text">
+              <p class="ow-kicker">[TODO: month year] · [TODO: who it was for]</p>
+              <h2>[TODO: build 5 name]</h2>
+              <dl class="ow-specs">
+                <dt>CPU</dt><dd>[TODO]</dd><dt>GPU</dt><dd>[TODO]</dd><dt>RAM</dt><dd>[TODO]</dd>
+                <dt>Storage</dt><dd>[TODO]</dd><dt>Cooling</dt><dd>[TODO]</dd><dt>Case</dt><dd>[TODO]</dd>
+              </dl>
+              <h3>One thing I learnt</h3>
+              <p>[TODO: one cool thing you learnt or did on this build]</p>
+              <p>[TODO: anything else about it]</p>
+            </div>
+          </div>
+      </li>
+      <li>
+        <button class="ow-card" type="button"><span class="ow-card-shot"><span class="ph-box">[PHOTO]</span></span><span class="ow-card-name">[TODO: build 6 name]</span><span class="ow-card-line">[TODO: one line, e.g. the GPU or what it's for]</span></button>
+        <div class="ow-detail" hidden>
+            <div class="ow-detail-shots"><span class="ph-box">[PHOTO: [TODO: build 6 name]]</span></div>
+            <div class="ow-detail-text">
+              <p class="ow-kicker">[TODO: month year] · [TODO: who it was for]</p>
+              <h2>[TODO: build 6 name]</h2>
+              <dl class="ow-specs">
+                <dt>CPU</dt><dd>[TODO]</dd><dt>GPU</dt><dd>[TODO]</dd><dt>RAM</dt><dd>[TODO]</dd>
+                <dt>Storage</dt><dd>[TODO]</dd><dt>Cooling</dt><dd>[TODO]</dd><dt>Case</dt><dd>[TODO]</dd>
+              </dl>
+              <h3>One thing I learnt</h3>
+              <p>[TODO: one cool thing you learnt or did on this build]</p>
+              <p>[TODO: anything else about it]</p>
+            </div>
+          </div>
+      </li>
+      <li>
+        <button class="ow-card" type="button"><span class="ow-card-shot"><span class="ph-box">[PHOTO]</span></span><span class="ow-card-name">[TODO: build 7 name]</span><span class="ow-card-line">[TODO: one line, e.g. the GPU or what it's for]</span></button>
+        <div class="ow-detail" hidden>
+            <div class="ow-detail-shots"><span class="ph-box">[PHOTO: [TODO: build 7 name]]</span></div>
+            <div class="ow-detail-text">
+              <p class="ow-kicker">[TODO: month year] · [TODO: who it was for]</p>
+              <h2>[TODO: build 7 name]</h2>
+              <dl class="ow-specs">
+                <dt>CPU</dt><dd>[TODO]</dd><dt>GPU</dt><dd>[TODO]</dd><dt>RAM</dt><dd>[TODO]</dd>
+                <dt>Storage</dt><dd>[TODO]</dd><dt>Cooling</dt><dd>[TODO]</dd><dt>Case</dt><dd>[TODO]</dd>
+              </dl>
+              <h3>One thing I learnt</h3>
+              <p>[TODO: one cool thing you learnt or did on this build]</p>
+              <p>[TODO: anything else about it]</p>
+            </div>
+          </div>
+      </li>
+      </ul>
+    </div>
+  </div>
+  <dialog class="ow-dialog" aria-label="Build details">
+    <button class="ow-close" type="button" aria-label="Close">✕</button>
+    <div class="ow-dialog-body"></div>
+  </dialog>
+</section>
+
+<div class="print-sheet" id="ask">
   <h2>Ask about a build</h2>
   <p class="print-lede">Tell me what it's for and your budget, and I'll get back to you.</p>
   <a class="print-btn" href="mailto:braydenp006@gmail.com?subject=Build%20enquiry">Email me about a build</a>
+</div>
 </main>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
+<script type="module" src="other-work.js"></script>
 
 <footer>
-  <span>Served from an HP Z420 running FreeBSD.</span>
+  <span>Served from an HP Z420 running FreeBSD. Gaming PC model: <a href="https://poly.pizza/m/5cN7W4ufoII">"Gaming Computer" by Alex Safayan</a>, <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</span>
   <span>© 2026 Brayden Paterson</span>
 </footer>
 </body>

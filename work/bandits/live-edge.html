@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#1e1813">
+<title>Live Edge · Bandits Custom Tables</title>
+<link rel="icon" href="info/Icon.jpg">
+<link rel="apple-touch-icon" href="info/Icon.jpg">
+<!-- page cover: here (not in style.css) so it's in place from the very first frame; site.js lifts it -->
+<style>html{background:#1e1813}body::after{content:"";position:fixed;inset:0;z-index:999;background:#1e1813;pointer-events:none;opacity:1;transition:opacity .75s ease}html.ready body::after{opacity:0}html.leaving body::after{opacity:1;transition:opacity .4s ease}html.gone body::after{display:none}</style>
+<script>setTimeout(() => { const h = document.documentElement; h.classList.add('ready'); setTimeout(() => h.classList.contains('leaving') || h.classList.add('gone'), 800) }, 4000) // safety: never leave the page covered</script>
+<link rel="preload" as="image" href="img/backsplash/outside4.jpg" fetchpriority="high">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..500;1,6..72,300..500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="page">
+
+<nav id="nav">
+  <div class="wrap">
+    <a href="index.html" class="logo"><img src="info/Icon.jpg" alt="">Bandits Custom Tables</a>
+    <div class="links" id="links">
+      <a href="milling.html">Milling</a>
+      <a href="live-edge.html">Live Edge</a>
+      <a href="tables.html">Tables</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+    <button class="menu-btn" aria-label="Menu" onclick="toggleMenu()">☰</button>
+  </div>
+</nav>
+
+<header class="hero sub" id="top" data-edge="bottom" data-dark>
+  <div class="hero-bg"><img fetchpriority="high" src="img/backsplash/outside4.jpg" alt="Walnut slabs with their natural live edges"></div>
+  <div class="wrap">
+    <span class="eyebrow">Live edge</span>
+    <h1>Shaped by <em>the tree itself.</em></h1>
+    <p>Slabs and pieces that keep the natural outline of the log: every curve, knot and crack left where the tree put it.</p>
+    <a href="#live-edge" class="tlink">Explore the work</a>
+  </div>
+</header>
+
+<section class="feature flip" id="live-edge">
+  <div class="wrap grid">
+    <div class="text">
+      <span class="eyebrow">02 — Live Edge</span>
+      <h2>Let the edge of the tree stay the edge of the piece.</h2>
+      <p>Live edge work keeps the natural outline of the log. Every bend, knot and crack is part of the design. Walnut, maple, elm, ash: each one finished by hand.</p>
+      <ul>
+        <li>Desks, benches, shelves and side tables</li>
+        <li>Epoxy river inlays and butterfly keys</li>
+        <li>Raw slabs available for DIYers</li>
+      </ul>
+      <a href="index.html#contact" class="tlink">Start a live edge project</a>
+    </div>
+    <div class="collage"><img src="img/live-3.jpg" alt="Walnut live edge desk"><img src="img/live-6.jpg" alt="Raw walnut slab"></div>
+  </div>
+  <div class="wrap"><div class="stagger" data-strip="live"></div></div>
+</section>
+
+<section class="photo-band" data-edge="top" style="--band:url(img/backsplash/slab1.jpg)">
+  <div class="wrap">
+    <span class="eyebrow">All live edge photos</span>
+    <h2>Every curve, every slab</h2>
+    <div class="car-block" data-carousel="live">
+      <div class="carousel" tabindex="0" aria-label="All live edge photos"></div>
+      <div class="car-ctrl"><span class="car-count"></span><div class="scrub" role="slider" tabindex="0" aria-label="Move through the photos" aria-valuemin="1"><div class="scrub-fill"></div><div class="scrub-dot"></div></div></div>
+    </div>
+  </div>
+</section>
+
+<footer data-edge="top"><div class="wrap">
+  <b class="f-brand"><img src="info/Icon.jpg" alt="">Bandits Custom Tables</b>
+  <span>19985 Yonge St, Holland Landing, ON · <a href="tel:+19058686845">(905) 868-6845</a> · <a href="https://www.instagram.com/bandits_custom_tables/" target="_blank" rel="noopener">Instagram</a> · <a href="privacy.html">Privacy</a></span>
+</div></footer>
+
+<div class="lb" id="lb" onclick="closeLb()"><img alt=""><p class="caps lb-cap"></p></div>
+
+<script src="site.js"></script>
+</body>
+</html>

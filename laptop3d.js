@@ -5,69 +5,24 @@
 // Phones and reduced motion: no flight (reduced motion just swaps places halfway). No WebGL or a failed load: the flat
 // screen stays in #hero-slot and the guide shows as normal.
 import * as THREE from 'three';
-import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
-import { CSS3DRenderer, CSS3DObject } from 'three/addons/renderers/CSS3DRenderer.js';
+import { CSS3DRenderer } from 'three/addons/renderers/CSS3DRenderer.js';
+import { loadLaptop, onGlass, HINGE, LID_SHUT, MIDDLE, ACROSS } from './laptop-model.js';
 
 const slotA = document.getElementById('hero-slot'), slotB = document.getElementById('desk-slot');
 const desk = document.getElementById('tv'), screenEl = document.getElementById('screen');
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const small = matchMedia('(max-width: 900px)');
 
-// Measured from laptop.obj (its units): the lid hinges along z at HINGE; the glass is the inner face of the lid.
-const HINGE = new THREE.Vector3(-.919, .298, 0);
-const LID_SHUT = -1.889;   // radians about the hinge from the modelled (open) angle to lying flat on the keyboard
-const GLASS = { centre: new THREE.Vector3(-1.209, 1.1245, -.287), w: 2.418, h: 1.682, up: new THREE.Vector3(-.534, 1.595, 0) };
-const MIDDLE = new THREE.Vector3(-.29, 1, -.287);   // middle of the whole model, so it turns about its centre
-const ACROSS = 3.7;        // model units that should span the slot's width
 const SCREEN_PX = 640;     // the screen's own CSS width before it's scaled onto the glass
 const POSE = { yaw: -.38, pitch: .22 };   // a three-quarter view, a little from above, turned towards the text
 
 let gl;
 try { gl = new THREE.WebGLRenderer({ antialias: true, alpha: true }); } catch { /* no WebGL: the flat screen stays */ }
 
-if(gl) Promise.all([
-  new OBJLoader().loadAsync('assets/models/laptop/laptop.obj'),
-  new THREE.TextureLoader().loadAsync('assets/models/laptop/laptop.png'),
-]).then(([obj, tex]) => {
-  // its 128px texture shown crisp: chunky pixels suit the page
-  Object.assign(tex, { magFilter: THREE.NearestFilter, minFilter: THREE.NearestFilter, colorSpace: THREE.SRGBColorSpace });
-
-  // the model is one mesh; split the lid off (every triangle with a corner above the keyboard) so it can open and shut
-  const src = obj.children[0].geometry.toNonIndexed(), pos = src.attributes.position, uv = src.attributes.uv;
-  const parts = { base: { p: [], u: [] }, lid: { p: [], u: [] } };
-  for(let t = 0; t < pos.count; t += 3){
-    const isLid = [0, 1, 2].some(k => pos.getY(t + k) > .3);
-    for(let k = 0; k < 3; k++){
-      const part = parts[isLid ? 'lid' : 'base'];
-      part.p.push(pos.getX(t + k), pos.getY(t + k), pos.getZ(t + k));
-      part.u.push(uv.getX(t + k), uv.getY(t + k));
-    }
-  }
-  const mat = new THREE.MeshStandardMaterial({ map: tex, roughness: 1, metalness: 0, flatShading: true });
-  const edge = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: .55 });   // a white outline, like the page's block drawings
-  const mesh = part => {
-    const g = new THREE.BufferGeometry();
-    g.setAttribute('position', new THREE.Float32BufferAttribute(part.p, 3));
-    g.setAttribute('uv', new THREE.Float32BufferAttribute(part.u, 2));
-    g.computeVertexNormals();
-    const m = new THREE.Mesh(g, mat);
-    m.add(new THREE.LineSegments(new THREE.EdgesGeometry(g, 25), edge));
-    return m;
-  };
-  const base = mesh(parts.base), lidMesh = mesh(parts.lid);
-  const lid = new THREE.Group();   // turns about the hinge
-  lid.position.copy(HINGE);
-  lidMesh.position.copy(HINGE).negate();
-  lid.add(lidMesh);
-
+if(gl) loadLaptop().then(({ base, lid, lidMesh }) => {
   // the real screen, laid on the glass (inside the lid group, so it shuts with it)
   screenEl.style.width = `${SCREEN_PX}px`;
-  const glass = new CSS3DObject(screenEl);
-  const n = new THREE.Vector3(1.595, .534, 0).normalize(), up = GLASS.up.clone().normalize(), right = new THREE.Vector3().crossVectors(up, n);
-  glass.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(right, up, n));
-  glass.position.copy(GLASS.centre).addScaledVector(n, .012).sub(HINGE);
-  glass.scale.setScalar(GLASS.w / SCREEN_PX);
-  lid.add(glass);
+  const glass = onGlass(lid, screenEl, SCREEN_PX);
 
   const model = new THREE.Group(), rig = new THREE.Group(), scene = new THREE.Scene();
   model.add(base, lid);

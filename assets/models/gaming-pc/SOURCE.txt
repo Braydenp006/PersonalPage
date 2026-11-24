@@ -1,0 +1,4 @@
+"Gaming Computer" by Alex Safayan, from Poly Pizza: https://poly.pizza/m/5cN7W4ufoII
+Licence: CC-BY 3.0 (https://creativecommons.org/licenses/by/3.0/). Credit required: it's in the footer of other-work.html.
+Downloaded 2026-11-23. File unchanged.
+Used by other-work.js (the PC on Other work), in place of the hand-built Z420.
