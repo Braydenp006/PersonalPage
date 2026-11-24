@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=28">
+<link rel="stylesheet" href="css/styles.css?v=30">
 </head>
 <body class="print-page ow-page">
 
@@ -127,6 +127,8 @@
        under it is what opens. Leave out any spec row (a <dt> and its <dd>) you don't have. -->
 <section class="ow-pc" id="ow-pc" hidden>
   <div class="ow-stage">
+    <!-- while it's open: close it up and go on to the photo and the other builds (stays put while a part is zoomed in) -->
+    <button class="ow-pc-top ow-pc-gallery" type="button">Go to gallery <span aria-hidden="true">↓</span></button>
     <!-- while the PC rests whole in the middle, before it opens (other-work.js HOLD) -->
     <div class="ow-pc-intro">
       <button class="ow-cta ow-pc-open" type="button">Open it up <span aria-hidden="true">↗</span></button>
@@ -283,7 +285,7 @@
 </div>
 </main>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
-<script type="module" src="js/other-work.js?v=35"></script>
+<script type="module" src="js/other-work.js?v=43"></script>
 
 <footer>
   <span>Served from an HP Z420 running FreeBSD.</span>

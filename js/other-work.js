@@ -10,7 +10,7 @@
 import * as THREE from 'three';
 import { CSS3DRenderer } from 'three/addons/renderers/CSS3DRenderer.js';
 import { loadLaptop, onGlass, MIDDLE, ACROSS } from './laptop-model.js';
-import { buildMyPc } from './my-pc.js?v=26';   // bump with other-work.js: Firefox keeps old modules
+import { buildMyPc } from './my-pc.js?v=32';   // bump with other-work.js: Firefox keeps old modules
 
 const hero = document.getElementById('ow-hero'), chosen = hero.querySelector('.ow-chosen'), hint = hero.querySelector('.ow-hint');
 const goBtn = hero.querySelector('.ow-go');
@@ -220,13 +220,13 @@ function screenColours(){
 //    across (MOVE_SECS), then that highlight's site drifting (DRIFT_SECS), and it stops there
 //  - on the last highlight the next arrow turns down, to the enquiry at the bottom (DOWN_SECS), and "Back to top"
 //    flies the laptop back up to the landing (FLY_SECS), skipping the highlights on the way
-const FLY_SECS = 2.6, OPEN_SECS = 4.5, FOCUS_SECS = 1.6, MOVE_SECS = 3.2, DRIFT_SECS = 2.6, LEAVE_SECS = .35, DOWN_SECS = 1.3;
+const FLY_SECS = 2.6, CLOSE_SECS = 2.6, MERGE_SECS = 2.6, OPEN_SECS = 3, SOAK_SECS = 1.4, FOCUS_SECS = 1.6, MOVE_SECS = 3.2, DRIFT_SECS = 2.6, LEAVE_SECS = .35, DOWN_SECS = 1.3;
 let glide = 0, glideC = null;   // glideC: the chapter a glide is driving (null: none, follow the scroll)
 const stopGlide = () => {
   cancelAnimationFrame(glide);
   if(glideC !== null) smoothC = rawC();   // a cut-short glide picks up from wherever the page is
   glideC = null;
-  pcSkip = pcJump = false;
+  pcSkip = pcJump = pcUp = false;
 };
 ['wheel', 'touchstart', 'keydown'].forEach(ev => addEventListener(ev, stopGlide, { passive: true }));
 const absTop = el => el.getBoundingClientRect().top + scrollY;
@@ -248,7 +248,7 @@ function scrollGlide(to, secs, done, curve = easeCubic){
 goBtn.addEventListener('click', () => {
   stopGlide();
   if(pick === 'site') scrollGlide(absTop(site), FLY_SECS);
-  else scrollGlide(scrollOfP(0), FLY_SECS);   // to where it rests whole, its buttons under it
+  else scrollGlide(scrollOfP(0), FLY_SECS);   // to where it rests whole; eased in and out by the glide (the flight follows the scroll as is)
 });
 // back to the top: the laptop holds its pose (glideC) while the page slides back to where the last highlight pins,
 // jumps to where the first one pins (the stage looks the same at both, so it doesn't show), then flies up to the landing
@@ -315,33 +315,38 @@ pc.style.height = `${(PC_SPAN + 1) * 100}vh`;
 pc.querySelectorAll('.ow-gallery > li').forEach((li, n) => li.style.setProperty('--i', n));   // staggers their entrance
 const rawPcP = () => { const top = pc.getBoundingClientRect().top; return top > 0 ? clamp(scrollY / Math.max(1, scrollY + top)) - 1 : through(pc) * PC_SPAN; };
 let pcSeep = 0, smoothPcP = null;
-// pcSkip: on its way back to the top the PC skips the trip across: it flies straight from where it reassembles (the
-// left, PC_TRAVEL) to the landing (pcPose reads it)
-let pcSkip = false, pcJump = false, jumpFrom = 0;   // pcJump: See other builds, straight past the opening up
+// pcSkip: on its way back to the top the PC flies from the photo to the landing, following the glides (pcPose reads it);
+// pcUp for the whole way (no buttons show on the way past)
+let pcSkip = false, pcUp = false, pcJump = false, jumpFrom = 0, topFrom = 1;   // pcJump: See other builds, straight past the opening up
 const scrollOfP = P => { const top = absTop(pc); return P < 0 ? (P + 1) * top : top + P / PC_SPAN * (pc.offsetHeight - innerHeight); };
-// under the photo: on down to the enquiry, or back to the top: out of the photo to where it reassembled (scrolling back),
-// then a jump to where the stage pins (the PC sits in the same place at both while pcSkip is on), then up to the landing
+// under the photo: on down to the enquiry, or back to the top in two eased glides (pcSkip)
 pc.querySelector('.ow-pc-ask').addEventListener('click', () => { stopGlide(); scrollGlide(document.documentElement.scrollHeight - innerHeight, DOWN_SECS, null, easeSine); });
 pc.querySelector('.ow-pc-nav .ow-pc-top').addEventListener('click', () => {
   stopGlide();
-  scrollGlide(scrollOfP(PC_TRAVEL), FLY_SECS * .8, () => {
-    pcSkip = true;
-    scrollTo({ top: scrollOfP(0), behavior: 'instant' });
-    smoothPcP = 0;   // straight there, not smoothed through the trip across
-    scrollGlide(0, FLY_SECS, () => { pcSkip = false; });
-  });
+  pcSkip = pcUp = true; topFrom = scrollY;
+  scrollGlide(scrollOfP(0), FLY_SECS, () => {   // the spin (the stage stays pinned, so only the PC shows it)
+    pcSkip = false; smoothPcP = 0;   // rests in the middle: the same pose as the end of the spin (+ a full turn)
+    scrollGlide(0, FLY_SECS, () => { pcUp = false; });   // then the flight down, backwards, following the scroll (as the laptop does)
+  }, easeSine);
 });
 // under it while it rests whole: open it up, or skip on to the photo and the other builds (it stays shut on the way)
 pc.querySelector('.ow-pc-open').addEventListener('click', () => {
   stopGlide();
   if(rawPcP() < OPEN0) scrollTo({ top: scrollOfP(OPEN0), behavior: 'instant' });   // nothing moves while it rests, so start right where it opens
-  scrollGlide(scrollOfP(OPEN1 + .3), OPEN_SECS, null, easeSine);
+  scrollGlide(scrollOfP(OPEN1), OPEN_SECS, null, k => k);   // the parts ease themselves; the glide ends as the last one lands
 });
 pc.querySelector('.ow-pc-skip').addEventListener('click', () => {
   stopGlide();
   pcJump = true;
   jumpFrom = Math.max(0, smoothPcP ?? rawPcP());
-  scrollGlide(scrollOfP(PC_MERGE + .5), FLY_SECS * 1.3, () => { pcJump = false; }, easeSine);
+  // into the photo, easing in and out over exactly that move, then the photo soaks in
+  scrollGlide(scrollOfP(PC_MERGE), FLY_SECS * 1.1, () => scrollGlide(scrollOfP(PC_MERGE + .5), SOAK_SECS, null, easeSine), easeSine);
+});
+// while it's open: close it up where it is, then on into the photo (each part of the path eases itself, so steady glides)
+pc.querySelector('.ow-pc-gallery').addEventListener('click', () => {
+  stopGlide();
+  if(rawPcP() < CLOSE0) scrollTo({ top: scrollOfP(CLOSE0), behavior: 'instant' });   // it sits still until then
+  scrollGlide(scrollOfP(PC_TRAVEL), CLOSE_SECS, () => scrollGlide(scrollOfP(PC_MERGE), MERGE_SECS, () => scrollGlide(scrollOfP(PC_MERGE + .5), SOAK_SECS, null, easeSine), k => k), k => k);
 });
 function syncPc(){
   if(pc.hidden) return;
@@ -351,7 +356,8 @@ function syncPc(){
   pc.style.setProperty('--show', show);
   pc.classList.toggle('is-shown', show > .4);
   pc.classList.toggle('is-seeped', pcSeep > .6);
-  pc.classList.toggle('is-resting', u > -.05 && u < OPEN0 + .05);
+  pc.classList.toggle('is-resting', !pcUp && u > -.05 && u < OPEN0 + .05);
+  pc.classList.toggle('is-open', !pcUp && u > OPEN1 - .05 && u < CLOSE0);
 }
 // a build's details open in a dialog: a copy of the hidden .ow-detail beside its card (or beside the featured photo)
 const dialog = pc.querySelector('.ow-dialog'), dialogBody = dialog.querySelector('.ow-dialog-body');
@@ -496,7 +502,7 @@ if(gl) loadLaptop().then(({ base, lid }) => {
     return null;
   }
   addEventListener('click', e => {
-    if(!pcHold || e.target.closest('a, .ow-tag, dialog')) return;
+    if(!pcHold || e.target.closest('a, button, .ow-tag, dialog')) return;
     const name = partAt(e);
     if(name){ e.stopPropagation(); e.preventDefault(); focusOn(name === pcFocus.b ? null : name); }
     else if(pcFocus.b && !e.target.closest('button')){ focusOn(null); }
@@ -563,8 +569,10 @@ if(gl) loadLaptop().then(({ base, lid }) => {
       }` })));
   function drawChrome(now, lx, ly, yaw, alpha, edge){
     chrome.style.opacity = alpha;
-    // on the way in from the landing its top edge is still on screen: feathered, so it rises out of the black
-    chrome.style.maskImage = chrome.style.webkitMaskImage = edge > 0 ? `linear-gradient(transparent, #000 ${edge * 70}vh)` : '';
+    // on the way down from the landing it sits fixed behind the PC the whole flight (the stage is still pages below),
+    // rising out of the black just under the landing as that scrolls away (edge: the landing's bottom on screen)
+    chrome.style.position = rawPcP() < 0 ? 'fixed' : '';
+    chrome.style.maskImage = chrome.style.webkitMaskImage = edge > 0 ? `linear-gradient(transparent ${edge}px, #000 ${edge + H * .35}px)` : '';
     chromeU.open.value = pcOpen * (1 - pcZoom);   // the wall's mirror image only from the whole view: zoomed in it's just a smear
     if(alpha <= 0) return;
     const w = Math.ceil(W / 6), h = Math.ceil(H / 6);
@@ -651,13 +659,33 @@ if(gl) loadLaptop().then(({ base, lid }) => {
   // and on round to its glass (YAW_*, always turning the same way); then, pinned, it crosses to the left, opening up into
   // its parts and closing again (explode 0 to 1 to 0), and drops into the frame of its photo, turning to the photo's
   // angle (data-yaw / data-pitch on .ow-hero-shot). Soft in and out throughout; the drops overshoot a touch and settle.
-  const YAW_SOLID = -Math.PI / 2, YAW_GLASS = -1.5 * Math.PI + .45, TURN_ACROSS = -.5;
+  // the point `go` of the way along a cubic Bezier by distance (so a steady go is a steady speed)
+  // the point `go` of the way along a smooth curve through the points c (Catmull-Rom), by distance, so a steady go is a
+  // steady speed; with 4 points and bez, c is a cubic Bezier instead (end points plus two pulls)
+  function along(c, go, bez){
+    const n = c.length - 1, at = u => {
+      if(bez){ const v = 1 - u; return [0, 1].map(d => v ** 3 * c[0][d] + 3 * v * v * u * c[1][d] + 3 * v * u * u * c[2][d] + u ** 3 * c[3][d]); }
+      const s = Math.min(n - 1, Math.floor(u * n)), t = u * n - s, p0 = c[Math.max(0, s - 1)], p1 = c[s], p2 = c[s + 1], p3 = c[Math.min(n, s + 2)];
+      return [0, 1].map(d => .5 * (2 * p1[d] + (p2[d] - p0[d]) * t + (2 * p0[d] - 5 * p1[d] + 4 * p2[d] - p3[d]) * t * t + (3 * p1[d] - p0[d] - 3 * p2[d] + p3[d]) * t ** 3));
+    };
+    const N = 96, len = [0];
+    for(let i = 1, q = at(0); i <= N; i++){ const r = at(i / N); len.push(len[i - 1] + Math.hypot(r[0] - q[0], r[1] - q[1])); q = r; }
+    const want = go * len[N];
+    let i = 1;
+    while(i < N && len[i] < want) i++;
+    return at((i - 1 + (want - len[i - 1]) / Math.max(1e-6, len[i] - len[i - 1])) / N);
+  }
+  const YAW_GLASS = -1.5 * Math.PI + .45, TURN_ACROSS = -.5;
   function pcPose(a, P, sway){
     const fb = box(shot), across = H * .5, E = { x: W * .5, y: H * .45 }, L = { x: fb.x, y: H * .4 };   // E: where it rests, whole, in the middle (a touch high, for its buttons)
-    if(pcSkip && P < PC_TRAVEL){   // back to the top: from where it reassembled over to its side first, then up to the landing (so it doesn't pass through the laptop), turning back
-      const g = clamp(P + 1), go = easeCubic(g), over = easeCubic(clamp((g - .45) / .55)), up = easeCubic(clamp(g / .6));
-      return { x: mix(a.x, L.x, over), y: mix(a.y, L.y, up), h: mix(a.h * .78, across, go), yaw: mix(.55 + sway - 2 * Math.PI, YAW_GLASS + TURN_ACROSS, go), pitch: mix(.12, .1, go), explode: 0 };
+    if(pcSkip){   // back to the top, first leg: out of the photo, spinning along the floor, up to where it rests in the middle
+      // (then the flight down plays back as the page scrolls up, like the laptop's)
+      pcSkip = false; const B = pcPose(a, PC_MERGE, sway), Z = pcPose(a, 0, sway); pcSkip = true;
+      const k = clamp((topFrom - scrollY) / Math.max(1, topFrom - absTop(pc)));   // the glide's own eased progress
+      const [x, y] = along([[B.x, B.y], [B.x + W * .15, B.y + H * .3], [Z.x + W * .1, Z.y + H * .3], [Z.x, Z.y]], k, true);
+      return { x, y, h: mix(B.h, Z.h, k), yaw: mix(B.yaw, Z.yaw + 2 * Math.PI, k), pitch: mix(B.pitch, Z.pitch, k), explode: 0 };
     }
+    if(pcJump && P >= PC_MERGE) pcJump = false;   // arrived (the PC trails the scroll a little, so not when the glide ends)
     if(pcJump && P > jumpFrom && P < PC_MERGE){   // See other builds: one smooth move from where it rested straight into the photo
       pcJump = false;
       const A = pcPose(a, jumpFrom, sway), B = pcPose(a, PC_MERGE, sway), m = clamp((P - jumpFrom) / (PC_MERGE - jumpFrom));
@@ -665,9 +693,13 @@ if(gl) loadLaptop().then(({ base, lid }) => {
       return { x: mix(A.x, B.x, m), y: mix(A.y, B.y, m), h: mix(A.h, B.h, m), yaw: mix(A.yaw, B.yaw, m), pitch: mix(A.pitch, B.pitch, m), explode: 0 };
     }
     if(P < 0){   // the flight from the landing
-      const g = P + 1, go = easeCubic(g);
-      const yaw = g < .55 ? mix(.55 + sway, YAW_SOLID, easeCubic(g / .55)) : mix(YAW_SOLID, YAW_GLASS, easeCubic((g - .55) / .45));
-      return { x: mix(a.x, E.x, go) + Math.sin(Math.PI * go) * W * .1, y: mix(a.y, E.y, easeBack(g, .45)), h: mix(a.h * .78, across, go), yaw, pitch: mix(.12, .1, go), explode: 0 };
+      const go = P + 1, yaw = mix(.55 + sway, YAW_GLASS, go);   // one turn: solid side out on the right, glass by the bottom
+      // go follows the scroll 1:1 (no easing of its own), so the PC moves the moment the page does; the glide is the ease
+      const a0y = pick === 'pc' ? a.y + scrollY : a.y;   // where its slot sat before the page moved (the slot scrolls away under it); not picked, it stays in its slot
+      // Brayden's note: out to the right, round in a wide loop below where it rests, then up into the middle; one curve,
+      // travelled by distance, so the PC moves at the pace the page scrolls
+      const [fx, fy] = along([[a.x, a0y], [W * .74, H * .6], [W * .775, H * .69], [W * .71, H * .79], [W * .6, H * .7], [E.x, E.y]], go);   // kept in from the right edge: the PC is wide there
+      return { x: fx, y: fy, h: mix(a.h * .78, across, go), yaw, pitch: mix(.12, .1, go), explode: 0 };
     }
     if(P < PC_TRAVEL){   // across: open (a little smaller while open, so its parts fit) in the middle, then closing on its way left
       // explode runs steadily (the parts ease themselves); the move left and the shrink ease as a whole
@@ -943,7 +975,7 @@ if(gl) loadLaptop().then(({ base, lid }) => {
         rig.scale.setScalar(p.h / .445 * zoom);   // .445: the model's height
         rig.rotation.set(p.pitch, p.yaw, 0);
         explodePc(p.explode);
-        pcOpen = p.explode; window.__pcAt = [p.x, p.y];
+        pcOpen = p.explode;
         camera.updateMatrixWorld();
         if(wa * pull(fa) + wb * pull(fb) > 0){   // exact: the point under FOCUS at the part's own depth, and the model moved across by the difference
           rig.updateMatrixWorld(true);
@@ -957,7 +989,7 @@ if(gl) loadLaptop().then(({ base, lid }) => {
         }
         rig.updateMatrixWorld(true);
         drawTags(now, pick === 'pc' && !pcSkip && p.explode > 0, fa, wa, fb, wb);
-        chromeArgs = [now, rig.position.x + W / 2, H / 2 - rig.position.y, rig.rotation.y, pick === 'pc' && !pc.hidden ? clamp((P + .4) / .4) * (1 - .8 * pcSeep) : 0, clamp(-P / .5)];
+        chromeArgs = [now, rig.position.x + W / 2, H / 2 - rig.position.y, rig.rotation.y, pick === 'pc' && !pc.hidden ? clamp((P + 1) / .1) * (1 - .8 * pcSeep) : 0, Math.max(0, hero.getBoundingClientRect().bottom)];
         fadePc(pick === 'pc' ? clamp(pcSeep * 1.6 - .3) : 0);   // gone a little before the photo has fully soaked in
         pcMats.forEach(m => { if(m.userData.transparent) m.opacity *= 1 - .85 * p.explode; });   // the glass clears while it's open, so it doesn't hide the parts
         rgb.forEach(m => { m.emissiveIntensity = m.userData.glow * (.6 + .4 * go); });

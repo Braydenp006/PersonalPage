@@ -906,7 +906,7 @@ html:not(.ow-3d) .ow-screen{width:min(900px,90vw);height:auto;aspect-ratio:1280/
 .ow-tag-spec{font-size:13px;letter-spacing:.04em;color:#ffc46e}
 .ow-tag-what{margin:10px 0 0;font-size:14px;line-height:1.55;color:#d4d4d8}
 /* PC builds: --seep (the photo soaking in over the model) and --show (the gallery rising in), 0 to 1, set from the scroll */
-.ow-pc{height:250vh;background:#09090b;color:#fafafa}
+.ow-pc{margin-top:150vh;height:250vh;background:#09090b;color:#fafafa}
 .ow-pc .ow-stage{justify-content:space-between;gap:clamp(32px,5vw,96px);padding:0 clamp(32px,6vw,120px)}
 .ow-chrome{position:absolute;inset:0;z-index:-1;width:100%;height:100%;image-rendering:pixelated;pointer-events:none;opacity:0}
 .ow-featured{flex:none;width:min(36vw,54vh)}
@@ -914,6 +914,8 @@ html:not(.ow-3d) .ow-screen{width:min(900px,90vw);height:auto;aspect-ratio:1280/
 .ow-pc.is-seeped .ow-pc-nav{pointer-events:auto}
 .ow-pc-top{padding:9px 16px;border:1px solid #3f3f46;border-radius:999px;background:none;color:#d4d4d8;font:inherit;font-size:14px;cursor:pointer;transition:color .3s,border-color .3s}
 .ow-pc-intro{position:absolute;left:50%;bottom:12vh;z-index:6;display:flex;gap:12px;transform:translate(-50%,10px);opacity:0;pointer-events:none;transition:opacity .4s,transform .4s}
+.ow-pc-gallery{position:absolute;left:clamp(32px,4vw,64px);bottom:10vh;z-index:6;opacity:0;pointer-events:none;transition:opacity .4s,color .3s,border-color .3s}
+.ow-pc.is-open .ow-pc-gallery{opacity:1;pointer-events:auto}
 .ow-pc.is-resting .ow-pc-intro{opacity:1;transform:translate(-50%,0);pointer-events:auto}
 .ow-pc-top:hover{color:#fafafa;border-color:#a1a1aa}
 .ow-pc-top:focus-visible{outline:2px solid #ffc46e;outline-offset:3px}
