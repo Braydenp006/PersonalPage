@@ -15,6 +15,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 const hero = document.getElementById('ow-hero'), chosen = hero.querySelector('.ow-chosen'), hint = hero.querySelector('.ow-hint');
 const site = document.getElementById('ow-site'), pc = document.getElementById('ow-pc');
 const TITLES = { site: 'Websites', pc: "Custom PC's" };
+const ask = document.getElementById('ask'), askBtn = ask.querySelector('.print-btn');
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 // always open at the top: the picked path isn't remembered, so a restored scroll position lands somewhere meaningless
 history.scrollRestoration = 'manual';
@@ -33,6 +34,10 @@ picks.forEach(b => b.addEventListener('click', () => {
   site.hidden = pick !== 'site';
   pc.hidden = pick !== 'pc';
   picks.forEach(x => x.setAttribute('aria-pressed', x === b));
+  const word = pick === 'site' ? 'website' : 'build';   // the enquiry at the bottom matches the pick
+  ask.querySelector('h2').textContent = `Ask about a ${word}`;
+  askBtn.textContent = `Email me about a ${word}`;
+  askBtn.href = `mailto:braydenp006@gmail.com?subject=${pick === 'site' ? 'Website' : 'Build'}%20enquiry`;
   syncSite(); syncPc();
 }));
 picks.forEach(b => b.setAttribute('aria-pressed', false));
@@ -41,10 +46,11 @@ picks.forEach(b => b.setAttribute('aria-pressed', false));
 const through = el => clamp(-el.getBoundingClientRect().top / (el.offsetHeight - innerHeight));
 
 // ===== websites. The client's site is a local copy (work/<client>/) so its colours and layout can be read.
-// Each page the highlights use gets its own iframe on the laptop's screen, all loaded up front; only the current
-// highlight's page is shown (swapped mid-spin, while the screen faces away).
-const screenEl = site.querySelector('.ow-screen'), base = screenEl.dataset.base;
-const frames = { 'index.html': screenEl.querySelector('iframe') };
+// Each page the highlights use (a client's folder, data-site, plus a page in it, data-page) gets its own iframe on the
+// laptop's screen, all loaded up front; only the current highlight's page is shown (swapped mid-spin, while the screen
+// faces away).
+const screenEl = site.querySelector('.ow-screen'), firstFrame = screenEl.querySelector('iframe');
+const frames = { [firstFrame.getAttribute('src')]: firstFrame };
 // first non-transparent background at or above el, as [r,g,b]
 function bgOf(el, win){
   for(; el; el = el.parentElement){
@@ -57,12 +63,13 @@ function bgOf(el, win){
 // (e: 0 to 1), a full spin when the laptop changes side
 const features = [...site.querySelectorAll('.ow-feature')], N = features.length, STEP = 1.8;
 site.style.height = `${((N - .5) * STEP + 1) * 100}vh`;
-const pageOf = f => f.dataset.page || 'index.html';
+const pageOf = f => (f.dataset.site || screenEl.dataset.base) + (f.dataset.page || 'index.html');
 for(const f of features){
   const page = pageOf(f);
   if(frames[page]) continue;
-  const fr = frames['index.html'].cloneNode();
-  fr.src = base + page;
+  const fr = firstFrame.cloneNode();
+  fr.src = page;
+  fr.title = f.dataset.title || fr.title;
   screenEl.append(fr);
   frames[page] = fr;
 }
@@ -90,18 +97,24 @@ function placeSite(f, d){
   }
   return top + drift * d;
 }
-let lastBg = '', onNow = -1, onAt = 0, lastText = -1;
+let onNow = -1, onAt = 0, lastText = -1;
 const shownFrame = () => frames[pageOf(features[Math.max(0, onNow)])];
 function syncSite(){
   if(site.hidden) return;
   const ch = chapter(), A = features[ch.i], B = features[ch.j];
   // the text is off while the laptop crosses: the old leaves as the spin starts, the new arrives as it lands
-  const textOn = ch.e < .15 ? ch.i : ch.e > .85 ? ch.j : -1;
+  const textOn = site.getBoundingClientRect().top > 1 ? -1 : ch.e < .15 ? ch.i : ch.e > .85 ? ch.j : -1;   // none until the laptop has arrived
   features.forEach((f, n) => f.classList.toggle('is-on', n === textOn));
   if(textOn !== lastText){ lastText = textOn; onAt = performance.now(); }   // the arrows draw in after the text arrives
   if(ch.on !== onNow){
     onNow = ch.on;
-    for(const [page, fr] of Object.entries(frames)) fr.style.visibility = page === pageOf(features[onNow]) ? '' : 'hidden';
+  }
+  // which page is on the glass: a change of page swaps mid-spin (while the screen faces away), or else fades across
+  const fadeIn = pageOf(A) === pageOf(B) ? 0 : (B.dataset.move === 'spin' ? +(ch.e > .5) : clamp((ch.e - .3) / .4));
+  for(const [page, fr] of Object.entries(frames)){
+    const o = page === pageOf(A) ? 1 - fadeIn : page === pageOf(B) ? fadeIn : 0;
+    fr.style.visibility = o > 0 ? '' : 'hidden';
+    fr.style.opacity = o;
   }
   const scrollTo = (f, top) => frames[pageOf(f)].contentWindow?.scrollTo({ top, behavior: 'instant' });
   const samePage = pageOf(A) === pageOf(B);
@@ -109,14 +122,54 @@ function syncSite(){
   else if(samePage) scrollTo(A, mix(placeSite(A, 1), placeSite(B, 0), ch.e));  // moving on, same page: glide down to the next part
   else scrollTo(A, placeSite(A, 1));
   if(!samePage) scrollTo(B, placeSite(B, 0));                                  // the next page waits, ready for the swap
+}
+
+// the three main colours on the laptop's screen right now, for the backdrop: the photos in view (each shrunk to 24 x 24
+// and read pixel by pixel) and the background colours on a grid across the page, weighted by how much of the screen
+// they cover, grouped into buckets, and three distinct ones kept, favouring colourful ones.
+// Returns [base, A, B, C]: a near-black tint for the backdrop, then the three, darkest first, lifted to glow on dark.
+const sampler = document.createElement('canvas').getContext('2d', { willReadFrequently: true });
+sampler.canvas.width = sampler.canvas.height = 24;
+function screenColours(){
   const win = shownFrame().contentWindow, doc = win?.document;
-  if(!doc?.body) return;
-  const rgb = bgOf(doc.elementFromPoint(win.innerWidth / 2, win.innerHeight / 2), win);
-  if(!rgb || rgb.join() === lastBg) return;
-  lastBg = rgb.join();
-  const lum = (.2126 * rgb[0] + .7152 * rgb[1] + .0722 * rgb[2]) / 255;   // a light backdrop gets dark text
-  site.style.setProperty('--ow-bg', `rgb(${lastBg})`);
-  site.style.setProperty('--ow-fg', lum > .55 ? '#111' : '#fff');
+  if(!doc?.body) return null;
+  const W = win.innerWidth, H = win.innerHeight, buckets = new Map();
+  const add = (r, g, b, w) => {
+    const key = (r >> 5) << 6 | (g >> 5) << 3 | b >> 5, e = buckets.get(key) ?? { r: 0, g: 0, b: 0, w: 0 };
+    e.r += r * w; e.g += g * w; e.b += b * w; e.w += w;
+    buckets.set(key, e);
+  };
+  for(const img of doc.images){
+    const r = img.getBoundingClientRect(), seen = Math.max(0, Math.min(r.right, W) - Math.max(r.left, 0)) * Math.max(0, Math.min(r.bottom, H) - Math.max(r.top, 0));
+    if(!seen || !img.complete || !img.naturalWidth) continue;
+    try {
+      sampler.drawImage(img, 0, 0, 24, 24);
+      const px = sampler.getImageData(0, 0, 24, 24).data;
+      for(let i = 0; i < px.length; i += 4) add(px[i], px[i + 1], px[i + 2], seen / 576);
+    } catch { /* an image from another site can't be read: skip it */ }
+  }
+  for(let gy = 0; gy < 5; gy++) for(let gx = 0; gx < 8; gx++){
+    const rgb = bgOf(doc.elementFromPoint((gx + .5) * W / 8, (gy + .5) * H / 5), win);
+    if(rgb) add(...rgb, W * H / 40 * .6);
+  }
+  // area counts, but with diminishing returns (a square root), and colourfulness counts a lot, so a small orange
+  // button can beat a big white page; the three must differ in hue (or be far apart in how colourful they are)
+  const all = [...buckets.values()].map(e => {
+    const c = new THREE.Color(e.r / e.w / 255, e.g / e.w / 255, e.b / e.w / 255), hsl = c.getHSL({});
+    const usable = hsl.l > .08 && hsl.l < .95 ? 1 : .25;
+    return { c, hsl, score: Math.sqrt(e.w) * (.12 + hsl.s) ** 2 * usable };
+  }).sort((a, b) => b.score - a.score);
+  const hueGap = (a, b) => { const d = Math.abs(a - b); return Math.min(d, 1 - d); };
+  const picked = [];
+  for(const x of all){
+    if(picked.every(p => hueGap(p.hsl.h, x.hsl.h) > .07 || Math.abs(p.hsl.s - x.hsl.s) > .35)) picked.push(x);
+    if(picked.length === 3) break;
+  }
+  while(picked.length < 3) picked.push(picked[picked.length - 1] ?? { c: new THREE.Color(.4, .3, .2), hsl: { h: .08, s: .3, l: .3 } });
+  const base = new THREE.Color().setHSL(picked[0].hsl.h, picked[0].hsl.s * .6, .035);
+  const lit = picked.map(p => new THREE.Color().setHSL(p.hsl.h, Math.min(1, p.hsl.s * 1.35 + .1), Math.min(.62, Math.max(.32, p.hsl.l * 1.2))))
+    .sort((a, b) => a.getHSL({}).l - b.getHSL({}).l);
+  return [base, ...lit];
 }
 Object.values(frames).forEach(fr => fr.addEventListener('load', () => { syncSite(); setTimeout(syncSite, 900); }));   // again once the site's own load cover lifts
 
@@ -276,6 +329,62 @@ if(gl) Promise.all([loadLaptop(), new GLTFLoader().loadAsync(shot.dataset.model)
     });
   }
 
+  // ===== the websites backdrop: a drifting band of light in the three main colours on the laptop's screen, drawn at
+  // 1/16 size and scaled up in chunky pixels like the landing's light, with CRT scan lines over it (.ow-scan, in CSS). Each highlight gets its own band (angle, curve, position), picked at random but the
+  // same every visit, and the band glides from one to the next as the laptop moves.
+  const backdrop = site.querySelector('.ow-backdrop'), backdropWrap = backdrop.parentElement, BG_PX = 16, bgGl = new THREE.WebGLRenderer({ canvas: backdrop });
+  const bgScene = new THREE.Scene(), bgCam = new THREE.Camera(), shade = { value: [new THREE.Color(), new THREE.Color(), new THREE.Color(), new THREE.Color()] };
+  const bgMat = new THREE.ShaderMaterial({
+    uniforms: { uRes: { value: new THREE.Vector2() }, uTime: { value: 0 }, uCol: shade, uBand: { value: new THREE.Vector4() }, uSeed: { value: 0 } },
+    vertexShader: 'void main(){ gl_Position = vec4(position.xy, 0., 1.); }',
+    fragmentShader: `
+      uniform vec2 uRes; uniform float uTime, uSeed; uniform vec3 uCol[4]; uniform vec4 uBand;   // band: angle, offset, curve, width
+      float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+      float noise(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f);
+        return mix(mix(hash(i), hash(i + vec2(1, 0)), f.x), mix(hash(i + vec2(0, 1)), hash(i + vec2(1, 1)), f.x), f.y); }
+      float fbm(vec2 p){ float v = 0., a = .5; for(int i = 0; i < 4; i++){ v += a * noise(p); p *= 2.03; a *= .5; } return v; }
+      void main(){
+        vec2 px = gl_FragCoord.xy, p = (px - .5 * uRes) / uRes.y;   // centred; the window's height is 1
+        float ca = cos(uBand.x), sa = sin(uBand.x);
+        vec2 q = vec2(ca * p.x - sa * p.y, sa * p.x + ca * p.y);
+        q += (vec2(fbm(q * 1.3 + uTime * .035 + uSeed), fbm(q * 1.3 - uTime * .03 + uSeed + 7.)) - .5) * .4;   // slow drifting warp
+        float d = (q.y - (uBand.y + uBand.z * q.x * q.x)) / uBand.w;   // across the band
+        float glow = d > 0. ? exp(-d * d * 2.5) : exp(d * .8);          // a crisp bright edge, a long soft glow behind it
+        float core = exp(-d * d * 10.);
+        float along = clamp(.5 + q.x * .5 + (fbm(q * 2. + uSeed) - .5) * .5, 0., 1.);
+        vec3 col = mix(mix(uCol[1], uCol[2], along), uCol[3], core * .35);
+        vec3 c = col * glow * (.45 + .2 * fbm(q * 3. + uTime * .04));   // kept dim: a glow in a dark room, not a light show
+        gl_FragColor = vec4(uCol[0] + c, 1.);
+      }`,
+    depthTest: false,
+  });
+  bgScene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), bgMat));
+  // each highlight's band, from a little seeded random: neighbours lean opposite ways and sit on opposite sides
+  const bands = features.map((f, n) => {
+    let r = (n + 1) * 9301 % 233280;
+    const rnd = () => (r = (r * 9301 + 49297) % 233280) / 233280;
+    const side = n % 2 ? 1 : -1;
+    return new THREE.Vector4(side * (.35 + rnd() * .7), side * (.08 + rnd() * .22), (rnd() < .5 ? -1 : 1) * (.35 + rnd() * .8), .16 + rnd() * .14);
+  });
+  let colourGoal = null, sampledAt = -1e9;
+  function drawBackdrop(now, dt){
+    const r = site.getBoundingClientRect();
+    if(r.bottom < 0 || r.top > innerHeight) return;
+    const w = Math.ceil(backdrop.clientWidth / BG_PX), h = Math.ceil(backdrop.clientHeight / BG_PX);
+    if(backdrop.width !== w || backdrop.height !== h){ bgGl.setSize(w, h, false); bgMat.uniforms.uRes.value.set(w, h); }
+    // fades in as the section comes up, so it never arrives as a hard edge under the landing
+    const entry = easeCubic(clamp(1 - r.top / innerHeight));
+    backdropWrap.style.opacity = entry;
+    backdropWrap.style.setProperty('--edge', `${(1 - entry) * 45}vh`);   // and its top edge melts away until it's in
+    if(now - sampledAt > 500){ colourGoal = screenColours() ?? colourGoal; sampledAt = now; }   // what's on screen now
+    if(colourGoal) shade.value.forEach((c, n) => c.lerp(colourGoal[n], reduceMotion ? 1 : 1 - Math.exp(-dt / .7)));   // eases across
+    const ch = chapter();
+    bgMat.uniforms.uBand.value.lerpVectors(bands[ch.i], bands[ch.j], easeCubic(ch.u));
+    bgMat.uniforms.uSeed.value = mix(ch.i, ch.j, easeCubic(ch.u)) * 3.7;
+    bgMat.uniforms.uTime.value = reduceMotion ? 0 : now / 1000;
+    bgGl.render(bgScene, bgCam);
+  }
+
   // the ways the laptop gets from one highlight to the next (a highlight's data-move): how high it arcs, how much it
   // swells towards you, how far it banks into the move, and what extra turn it makes (k: 0 to 1 through the turn)
   const MOVES = {
@@ -295,7 +404,7 @@ if(gl) Promise.all([loadLaptop(), new GLTFLoader().loadAsync(shot.dataset.model)
     lastNow = now;
     // follow the scroll with a short lag, so it glides (reduced motion: straight to it)
     const follow = (now, goal) => now === null || reduceMotion ? goal : now + (goal - now) * (1 - Math.exp(-dt / .14));
-    if(pick === 'site'){ smoothC = follow(smoothC, rawC()); syncSite(); }
+    if(pick === 'site'){ smoothC = follow(smoothC, rawC()); syncSite(); drawBackdrop(now, dt); }
     if(pick === 'pc'){
       const top = pc.getBoundingClientRect().top;
       glidePc = follow(glidePc, clamp(scrollY / Math.max(1, scrollY + top)));

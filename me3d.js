@@ -1,7 +1,7 @@
 // The 3D figure on the About page: me (assets/models/me.glb, made with Meshy AI), turned a little towards the stats.
 // Drag it (or focus it and use the arrow keys) to spin it round. The model has no skeleton, so it can't play animations: it just breathes and sways a little
 // (scripted below). If it gets rigged later (e.g. in Blender), put its animation names in IDLE and GESTURES and the
-// idle / nod code takes over. (placeholder-me.glb, three.js's "Xbot" mannequin, is the old stand-in, unused.)
+// idle / nod code takes over.
 // No WebGL: the card shows its lit floor only. Reduced motion: it holds still in its idle pose.
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';

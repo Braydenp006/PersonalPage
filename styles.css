@@ -797,7 +797,8 @@ html:has(.ow-page),.ow-page{background:#09090b;background-image:none}
 .ow-page .print-top{position:absolute;top:0;left:0;right:0;z-index:2}   /* over the landing, so the landing fills the window */
 .ow-hero{position:relative;min-height:100vh;display:grid;grid-template-rows:auto 1fr auto;gap:12px;padding:76px var(--gutter) 28px;color:#fafafa;background:#09090b}
 .ow-hero>*{position:relative;z-index:1}
-.ow-light{position:absolute;inset:0;z-index:0;width:100%;height:100%;image-rendering:pixelated;pointer-events:none;opacity:0;animation:ow-light-on 1.6s ease .5s forwards}
+.ow-light{position:absolute;inset:0;z-index:0;width:100%;height:100%;image-rendering:pixelated;-webkit-mask:linear-gradient(#000 78%,transparent);mask:linear-gradient(#000 78%,transparent);   /* fades out at the bottom, into the next section */
+  pointer-events:none;opacity:0;animation:ow-light-on 1.6s ease .5s forwards}
 @keyframes ow-light-on{to{opacity:1}}
 @media (prefers-reduced-motion:reduce){.ow-light{animation:none;opacity:1}}
 .ow-head{display:flex;flex-direction:column;align-items:flex-start;gap:22px}
@@ -837,8 +838,13 @@ html:has(.ow-page),.ow-page{background:#09090b;background-image:none}
 .ow-copy{max-width:340px}
 .ow-copy h2,.ow-feature h2{font:500 clamp(28px,2.6vw,44px)/1.1 var(--font-name);letter-spacing:-.025em;margin:0 0 14px}
 .ow-copy p,.ow-feature p{color:#d4d4d8;line-height:1.6}
-/* websites: --ow-bg/--ow-fg are set from the colour on the laptop's screen */
-.ow-site{height:450vh;background:var(--ow-bg,#09090b);color:var(--ow-fg,#fafafa);transition:background-color .8s ease,color .8s ease}
+/* websites: .ow-backdrop is a band of light in the colours on the laptop's screen (drawn by other-work.js) */
+.ow-site{height:450vh;background:#09090b;color:#fafafa}
+.ow-crt{position:absolute;inset:0;z-index:0;opacity:0;-webkit-mask:linear-gradient(transparent,#000 var(--edge,0px));mask:linear-gradient(transparent,#000 var(--edge,0px))}
+.ow-backdrop{width:100%;height:100%;display:block;image-rendering:pixelated}
+/* CRT: dark scan lines every 3px, and the corners falling off into the dark */
+.ow-crt::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(rgba(0,0,0,0) 0 2px,rgba(0,0,0,.45) 2px 3px),radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.55))}
+.ow-site .ow-feature{z-index:1;text-shadow:0 1px 14px rgba(0,0,0,.7)}   /* stays readable where the band of light passes behind it */
 .ow-screen{width:1280px;height:890px;background:#000;backface-visibility:hidden}   /* the glass's shape (2.418 x 1.682), at a desktop width; hidden from behind while the laptop spins */
 .ow-screen{position:relative}
 .ow-screen iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;pointer-events:none}
@@ -852,6 +858,11 @@ html:not(.ow-3d) .ow-screen{width:min(900px,90vw);height:auto;aspect-ratio:1280/
 .ow-callouts{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:12px;counter-reset:c}
 .ow-callouts li{counter-increment:c;display:flex;gap:12px;align-items:baseline;color:#e4e4e7}
 .ow-callouts li::before{content:counter(c);flex:none;display:grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1px solid #ffc46e;color:#ffc46e;font-size:12px;transform:translateY(-2px)}
+.ow-did{margin:22px 0 0;padding-top:16px;border-top:1px solid rgba(255,255,255,.1)}
+.ow-did b{display:block;margin-bottom:4px;font-weight:500;color:#ffc46e}
+.ow-visit{display:inline-flex;align-items:center;gap:8px;margin-top:18px;color:#fafafa;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.35);padding-bottom:2px;transition:border-color .2s}
+.ow-visit:hover{border-color:#fafafa}
+.ow-visit:focus-visible{outline:2px solid #ffc46e;outline-offset:4px}
 .ow-feature blockquote{margin:26px 0 0;padding:4px 0 4px 18px;border-left:2px solid #ffc46e;font-size:18px;line-height:1.5}
 .ow-feature cite{display:block;margin-top:8px;font-style:normal;font-size:14px;color:#a1a1aa}
 .ow-arrows{position:fixed;inset:0;width:100%;height:100%;overflow:visible}

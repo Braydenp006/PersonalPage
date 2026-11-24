@@ -1,28 +1,20 @@
-# Turns OpenFreeMap's plain "Positron" style (positron-original.json) into the About page's maps:
-#  - rdr-style.json: parchment, like a hand-drawn frontier map: tan paper, grey-green water, thin brown roads, spaced-out
-#    serif capital labels (IM Fell, built by make-fonts.py)
-#  - lab-style.json (the one in use): light greys in the About page's colours, plain sans labels
-# Both drop everything modern (shields, airports, buildings).
+# Turns OpenFreeMap's plain "Positron" style (positron-original.json) into the About page's map, lab-style.json:
+# light greys in the About page's colours, plain sans labels, with everything modern dropped (shields, airports, buildings).
 # Run it again after changing a colour below:   python3 assets/map/make-style.py
-# Or skip this and edit rdr-style.json directly in Maputnik (maputnik.github.io): Open > Upload, then Export.
+# Or skip this and edit lab-style.json directly in Maputnik (maputnik.github.io): Open > Upload, then Export.
 import json, os
 here = os.path.dirname(os.path.abspath(__file__))
 PALETTES = {
-  'rdr-style.json': dict(name='Parchment', PAPER='#d8c39a', PAPER_DARK='#cbb386', WATER='#9d9a86', WATER_EDGE='#7f7c6a',
-                         INK='#3b2f22', INK_SOFT='#6a5a44', ROAD='#6f5c42', WATER_TEXT='#4d4a3c', serif=True),
   # the About page's map, in its colours: white land, blue water, orange roads, navy text (dithered on the page)
   'lab-style.json': dict(name='Lab', PAPER='#fbfaf7', PAPER_DARK='#fde2c2', WATER='#a7d2f2', WATER_EDGE='#2f8fd0',
-                         INK='#16304a', INK_SOFT='#5f7d96', ROAD='#f7931e', WATER_TEXT='#0a5a8e', serif=False),
+                         INK='#16304a', INK_SOFT='#5f7d96', ROAD='#f7931e', WATER_TEXT='#0a5a8e'),
 }
-def build(out, name, PAPER, PAPER_DARK, WATER, WATER_EDGE, INK, INK_SOFT, ROAD, WATER_TEXT, serif):
+def build(out, name, PAPER, PAPER_DARK, WATER, WATER_EDGE, INK, INK_SOFT, ROAD, WATER_TEXT):
   s = json.load(open(os.path.join(here, 'positron-original.json')))
   DROP = ('building', 'aeroway', 'airport', 'shield', 'road_shield', 'tunnel_', 'highway-name-path', 'highway_path',
              'road_area_pier', 'road_pier', 'landcover_ice', 'landcover_glacier', 'highway_major_subtle', 'highway_motorway_subtle')
-  if serif:
-      s['glyphs'] = 'assets/map/fonts/{fontstack}/{range}.pbf'   # our own serif fonts, served from this site
-      SERIF, SERIF_CAPS, SERIF_ITALIC = ['IM Fell English Regular'], ['IM Fell English SC'], ['IM Fell English Italic']
-  else:   # OpenFreeMap's own sans (its glyph server, already in positron-original.json)
-      SERIF, SERIF_CAPS, SERIF_ITALIC = ['Noto Sans Regular'], ['Noto Sans Bold'], ['Noto Sans Italic']
+  # OpenFreeMap's own sans (its glyph server, already in positron-original.json); the names are left over from a serif look
+  SERIF, SERIF_CAPS, SERIF_ITALIC = ['Noto Sans Regular'], ['Noto Sans Bold'], ['Noto Sans Italic']
   layers = []
   for l in s['layers']:
       i, p, lay = l['id'], l.setdefault('paint', {}), l.setdefault('layout', {})

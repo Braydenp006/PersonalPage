@@ -37,13 +37,15 @@
 </section>
 
 <!-- Websites: a showcase of highlights from each client site, shown live on the laptop (other-work.js). Each
-     .ow-feature is one highlight; scrolling moves from one to the next: the laptop spins across when it changes side,
+     .ow-feature is one highlight; behind them a band of light takes the main colours on the laptop's screen.
+     Scrolling moves from one to the next: the laptop moves across,
      the site on its screen scrolls to the highlight, and each callout draws an arrow to the part of the site it's about.
      ===== EDIT HERE: one <article> per highlight =====
        data-side    which side the laptop sits on (the text takes the other side)
        data-y       how far below the middle the laptop sits, as a fraction of the window (0.1 = a little lower)
        data-move    how the laptop gets here from the last one: spin (a full 360), quarter (turns a quarter and back)
-                    or slide (default). Use spin when the page changes: the swap happens while the screen faces away
+                    or slide (default). A change of site swaps mid-spin on a spin, and fades across on the others
+       data-site    which client's folder in work/ (default: the one on .ow-screen, Bandits); data-title names it for screen readers
        data-page    which page of their site to show (default index.html)
        data-at      the part of that page to scroll to (a CSS selector inside it)
        data-drift   how far (px) their page scrolls on while this highlight is up; data-drift-in names a sideways
@@ -51,49 +53,60 @@
        data-point   on a callout: the part of their site its arrow points at (a CSS selector) -->
 <section class="ow-site" id="ow-site" hidden>
   <div class="ow-stage">
+    <div class="ow-crt" aria-hidden="true"><canvas class="ow-backdrop"></canvas></div>
+    <!-- Two clients for now, alternating. The goal: one key part of each client's site. -->
     <article class="ow-feature" data-side="left" data-y="0" data-at="#top">
-      <p class="ow-kicker">Bandits Custom Tables · 01</p>
+      <p class="ow-kicker">Bandits Custom Tables · a mobile sawmill and table maker</p>
       <h2>Lead with the wood</h2>
       <p>[TODO: why the first screen is one big photo of a slab and a short line, and what you were going for]</p>
       <ul class="ow-callouts">
         <li data-point=".hero h1">[TODO: why this headline]</li>
         <li data-point=".hero .btn">[TODO: why "Start a project" is the first button]</li>
       </ul>
+      <p class="ow-did"><b>What I did</b>[TODO: what you did for them, e.g. design, build, photos, hosting]</p>
+      <a class="ow-visit" href="#">Visit the site <span aria-hidden="true">↗</span></a><!-- TODO: Bandits' live address -->
     </article>
-    <article class="ow-feature" data-side="right" data-y="0" data-at=".process" data-move="slide">
-      <p class="ow-kicker">Bandits Custom Tables · 02</p>
-      <h2>Tree to table in four steps</h2>
-      <p>[TODO: why the process is laid out as four steps with photos]</p>
+    <article class="ow-feature" data-side="right" data-y="0" data-move="slide" data-site="work/bike-and-hammer/" data-title="Bike &amp; Hammer website" data-at=".hero">
+      <p class="ow-kicker">Bike &amp; Hammer · custom mountain bike builds and servicing</p>
+      <h2>Straight onto the trail</h2>
+      <p>[TODO: why the home page opens on one big trail photo]</p>
       <ul class="ow-callouts">
-        <li data-point=".steps .step:first-child b">[TODO: the numbered steps]</li>
-        <li data-point=".steps .step:last-child .ph">[TODO: ending on a finished piece]</li>
+        <li data-point=".hero-title">[TODO: the headline]</li>
       </ul>
+      <p class="ow-did"><b>What I did</b>[TODO: what you did for them, e.g. design, build, photos, hosting]</p>
+      <a class="ow-visit" href="https://www.bikeandhammer.com/">Visit the site <span aria-hidden="true">↗</span></a><!-- TODO: check this is the new site once it's live -->
     </article>
     <article class="ow-feature" data-side="left" data-y="0.05" data-move="spin" data-page="gallery.html" data-at="main" data-drift="1400" data-drift-in=".carousel">
-      <p class="ow-kicker">Bandits Custom Tables · 03</p>
+      <p class="ow-kicker">Bandits Custom Tables</p>
       <h2>A gallery that turns like a drum</h2>
       <p>[TODO: why the gallery page is one big turning row of every photo instead of a grid]</p>
       <ul class="ow-callouts">
         <li data-point=".carousel .item.active">[TODO: the photo in the middle, the one you'd click to enlarge]</li>
         <li data-point=".car-block .scrub">[TODO: the scrubber for moving through the photos]</li>
       </ul>
+      <p class="ow-did"><b>What I did</b>[TODO: what you did for them, e.g. design, build, photos, hosting]</p>
+      <a class="ow-visit" href="#">Visit the site <span aria-hidden="true">↗</span></a><!-- TODO: Bandits' live address -->
     </article>
-    <article class="ow-feature" data-side="right" data-y="0.1" data-at=".woods" data-move="spin">
-      <p class="ow-kicker">Bandits Custom Tables · 04</p>
-      <h2>Every species, at a glance</h2>
-      <p>[TODO: why each wood gets its own colour ring and a one-line description]</p>
+    <article class="ow-feature" data-side="right" data-y="0.05" data-move="quarter" data-site="work/bike-and-hammer/" data-at=".cards" data-drift="380">
+      <p class="ow-kicker">Bike &amp; Hammer</p>
+      <h2>What they do, at a glance</h2>
+      <p>[TODO: why the services are photo cards]</p>
       <ul class="ow-callouts">
-        <li data-point=".species .sp:first-child i">[TODO: the colour rings]</li>
+        <li data-point=".cards .btn">[TODO: the orange buttons]</li>
       </ul>
+      <p class="ow-did"><b>What I did</b>[TODO: what you did for them, e.g. design, build, photos, hosting]</p>
+      <a class="ow-visit" href="https://www.bikeandhammer.com/">Visit the site <span aria-hidden="true">↗</span></a><!-- TODO: check this is the new site once it's live -->
     </article>
-    <article class="ow-feature" data-side="left" data-y="0" data-at="#contact" data-move="quarter">
-      <p class="ow-kicker">Bandits Custom Tables · 05</p>
-      <h2>An enquiry in four fields</h2>
-      <p>[TODO: why the contact form is this short]</p>
+    <article class="ow-feature" data-side="left" data-y="0" data-move="spin" data-at=".process">
+      <p class="ow-kicker">Bandits Custom Tables</p>
+      <h2>Tree to table in four steps</h2>
+      <p>[TODO: why the process is laid out as four steps with photos]</p>
       <ul class="ow-callouts">
-        <li data-point="#form select">[TODO: picking a service up front]</li>
+        <li data-point=".steps .step:first-child b">[TODO: the numbered steps]</li>
+        <li data-point=".steps .step:last-child .ph">[TODO: ending on a finished piece]</li>
       </ul>
-      <blockquote>[TODO: what the client said about the site]<cite>[TODO: client name], Bandits Custom Tables</cite></blockquote>
+      <p class="ow-did"><b>What I did</b>[TODO: what you did for them, e.g. design, build, photos, hosting]</p>
+      <a class="ow-visit" href="#">Visit the site <span aria-hidden="true">↗</span></a><!-- TODO: Bandits' live address -->
     </article>
   </div>
   <!-- the client's site, laid on the laptop's glass by other-work.js (shown flat here without WebGL) -->
@@ -246,6 +259,7 @@
   </dialog>
 </section>
 
+<!-- the enquiry: says "build" or "website" to match what was picked at the top (other-work.js swaps the words) -->
 <div class="print-sheet" id="ask">
   <h2>Ask about a build</h2>
   <p class="print-lede">Tell me what it's for and your budget, and I'll get back to you.</p>
