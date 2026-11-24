@@ -1,8 +1,10 @@
 // Remakes the home page's preview pictures (assets/previews/*.webp) from the real pages.
-// Run it while the site is being served on port 3000:  python3 -m http.server 3000   then:  node make-home-previews.mjs
+// Run it while the site is being served on port 3000:  python3 tools/serve.py   then:  node tools/make-home-previews.mjs
 // Needs Playwright (with its Chromium) and ImageMagick (`magick`).
 import { chromium } from '/usr/lib/node_modules/playwright/index.mjs';
 import { execFileSync } from 'node:child_process';
+
+process.chdir(new URL('..', import.meta.url).pathname);   // the repo root, so assets/previews/ is found from anywhere
 
 const PAGES = ['index', 'resume', 'how-it-runs', 'about', 'projects', 'other-work'];   // the home page's previews, plus index for the Resume page's CRT (crt-channel.js)
 const browser = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });   // so the 3D models draw

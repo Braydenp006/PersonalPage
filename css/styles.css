@@ -21,10 +21,10 @@ a{color:inherit}
 
 /* ===== Home: a teletext service. Black screen, the eight broadcast colours, one blocky face, every page a number =====
    Colours are tokens on .tt below. Text sizes come from --fs; one character is .6 of it wide. */
-@font-face{font-family:'Satoshi';src:url('assets/fonts/satoshi-400.woff2') format('woff2');font-weight:400;font-display:swap}   /* Satoshi, by Indian Type Foundry (Fontshare free licence); Other work only */
-@font-face{font-family:'Satoshi';src:url('assets/fonts/satoshi-500.woff2') format('woff2');font-weight:500;font-display:swap}
-@font-face{font-family:'Satoshi';src:url('assets/fonts/satoshi-700.woff2') format('woff2');font-weight:700;font-display:swap}
-@font-face{font-family:'Bedstead';src:url('assets/fonts/bedstead.woff2') format('woff2');font-display:block}   /* public domain (CC0), by bjh21: the classic teletext character set */
+@font-face{font-family:'Satoshi';src:url('../assets/fonts/satoshi-400.woff2') format('woff2');font-weight:400;font-display:swap}   /* Satoshi, by Indian Type Foundry (Fontshare free licence); Other work only */
+@font-face{font-family:'Satoshi';src:url('../assets/fonts/satoshi-500.woff2') format('woff2');font-weight:500;font-display:swap}
+@font-face{font-family:'Satoshi';src:url('../assets/fonts/satoshi-700.woff2') format('woff2');font-weight:700;font-display:swap}
+@font-face{font-family:'Bedstead';src:url('../assets/fonts/bedstead.woff2') format('woff2');font-display:block}   /* public domain (CC0), by bjh21: the classic teletext character set */
 html:has(.tt){background:#000;scrollbar-color:#fff #000;scroll-padding-top:var(--head,76px)}
 .tt{--tt-black:#000;--tt-white:#fff;--tt-yellow:#ffeb1a;--tt-cyan:#2ee0f0;--tt-green:#38e05a;--tt-red:#ff4433;--tt-magenta:#ff4df2;--tt-blue:#1f33ff;
   --tt-font:'Bedstead',ui-monospace,monospace;

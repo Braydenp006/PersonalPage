@@ -1,6 +1,6 @@
 // The homepage: one screen. Every word comes from about-data.js; this file only
 // shows it. The 3D figure is me3d.js.
-import { ME, LIVE, PLACES, EQUIPMENT, JOURNAL } from './about-data.js';
+import { ME, LIVE, PLACES, EQUIPMENT, JOURNAL } from '../data/about-data.js';
 import { cover, uncover } from './pixel-wipe.js';
 
 const $ = id => document.getElementById(id);
@@ -14,7 +14,9 @@ $('char-role').textContent = `${ME.role} · ${ME.school}`;
 $('char-status').textContent = ME.status;
 $('facts').innerHTML = rows(ME.facts);
 // what I'm after, as symbols lit on the sign
-$('marks').innerHTML = ME.marks.map(([label, ic]) => `<li><span class="mark"><span class="icon" style="--icon:url(assets/icons/${ic}.svg)" aria-hidden="true"></span></span>${esc(label)}</li>`).join('');
+// absolute, because the url() inside --icon is read by css/styles.css, and browsers differ on which base it resolves against
+const ICONS = new URL('assets/icons/', document.baseURI).href;
+$('marks').innerHTML = ME.marks.map(([label, ic]) => `<li><span class="mark"><span class="icon" style="--icon:url(${ICONS}${ic}.svg)" aria-hidden="true"></span></span>${esc(label)}</li>`).join('');
 // live stats: a value, or a dash until its server script exists
 $('counters').innerHTML = rows(LIVE.map(s => [s.label, s.value ?? '–']));
 // the Links box: each with its logo (Simple Icons paths for GitHub and LinkedIn, CC0; an envelope for email)
@@ -32,7 +34,7 @@ $('contact').innerHTML = ME.contact.map(([label, href]) => {
 }).join('');
 
 // ===== EQUIPMENT (a row of slots per group) and hobbies (one row, under Stats), sharing one readout, like an item's inspect panel =====
-const icon = it => it.icon ? `<span class="icon" style="--icon:url(assets/icons/${it.icon}.svg)" aria-hidden="true"></span>`
+const icon = it => it.icon ? `<span class="icon" style="--icon:url(${ICONS}${it.icon}.svg)" aria-hidden="true"></span>`
   : `<span class="icon initials" aria-hidden="true">${esc(it.name.split(/\s+/).map(w => w[0]).join('').slice(0, 2))}</span>`;
 const things = [...EQUIPMENT, ...JOURNAL.map(j => ({ name: j.title, group: j.kind, icon: j.icon, text: j.text }))];
 const slot = (it, i) => `<button type="button" class="pick" data-i="${i}" aria-label="${esc(it.name)}">${icon(it)}</button>`;

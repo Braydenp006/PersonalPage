@@ -2,8 +2,8 @@
 // the header's page counter and clock, typing a number, the laptop's screen and its pages (the 3D laptop itself is
 // laptop3d.js, the ASCII me on page 100 is head-ascii.js), the guide on the desk, the drawn Z420 and its live numbers.
 import { watchStats } from './stats.js';
-import { VARIANTS, GENERAL } from './resume-data.js';
-import { PLACES } from './about-data.js';
+import { VARIANTS, GENERAL } from '../data/resume-data.js';
+import { PLACES } from '../data/about-data.js';
 
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $ = id => document.getElementById(id);

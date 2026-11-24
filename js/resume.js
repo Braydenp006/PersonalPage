@@ -1,6 +1,6 @@
 // The resume terminal: types out the questions, collects answers as button presses, scores them, and hands over a PDF.
 // Content and scoring live in resume-data.js; this file only runs the conversation.
-import { VARIANTS, GENERAL, QUESTIONS } from './resume-data.js';   // GENERAL breaks ties
+import { VARIANTS, GENERAL, QUESTIONS } from '../data/resume-data.js';   // GENERAL breaks ties
 
 const screen = document.querySelector('.crt-screen');
 const out = document.getElementById('term');

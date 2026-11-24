@@ -1,7 +1,9 @@
 # Serves this folder for local testing, like `python3 -m http.server`, but tells the browser to check for a newer copy of
 # every file each time. Plain http.server sends no cache rules, so Firefox keeps reusing old pages and scripts after edits.
-# Run:  python3 serve.py        (port 3000; or  python3 serve.py 8000)
-import http.server, sys
+# Run:  python3 tools/serve.py        (port 3000; or  python3 tools/serve.py 8000). Serves the repo root wherever it's run from.
+import http.server, os, sys
+
+os.chdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 
 class NoCache(http.server.SimpleHTTPRequestHandler):
     def end_headers(self):
