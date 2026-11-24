@@ -13,6 +13,7 @@ import { loadLaptop, onGlass, MIDDLE, ACROSS } from './laptop-model.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 const hero = document.getElementById('ow-hero'), chosen = hero.querySelector('.ow-chosen'), hint = hero.querySelector('.ow-hint');
+const goBtn = hero.querySelector('.ow-go');
 const site = document.getElementById('ow-site'), pc = document.getElementById('ow-pc');
 const TITLES = { site: 'Websites', pc: "Custom PC's" };
 const ask = document.getElementById('ask'), askBtn = ask.querySelector('.print-btn');
@@ -30,7 +31,8 @@ picks.forEach(b => b.addEventListener('click', () => {
   pick = b.dataset.path;
   hero.dataset.pick = pick;
   chosen.textContent = TITLES[pick];
-  hint.textContent = 'Scroll to discover ↓';
+  hint.textContent = 'or scroll to discover ↓';
+  goBtn.hidden = false;
   site.hidden = pick !== 'site';
   pc.hidden = pick !== 'pc';
   picks.forEach(x => x.setAttribute('aria-pressed', x === b));
@@ -58,10 +60,10 @@ function bgOf(el, win){
     if(m && (m[3] === undefined || +m[3] > 0)) return m.slice(0, 3).map(Number);
   }
 }
-// the highlights: scrolling the section steps through them. Each one gets 180% of the window's height of scrolling:
+// the highlights: scrolling the section steps through them. Each one gets 340% of the window's height of scrolling:
 // the first half holds it (h: 0 to 1, its site drifting by data-drift), the second half is the move to the next
 // (e: 0 to 1), a full spin when the laptop changes side
-const features = [...site.querySelectorAll('.ow-feature')], N = features.length, STEP = 1.8;
+const features = [...site.querySelectorAll('.ow-feature')], N = features.length, STEP = 3.4;
 site.style.height = `${((N - .5) * STEP + 1) * 100}vh`;
 const pageOf = f => (f.dataset.site || screenEl.dataset.base) + (f.dataset.page || 'index.html');
 for(const f of features){
@@ -76,7 +78,7 @@ for(const f of features){
 // smoothC: the scroll position eased by the 3D loop, so wheel steps glide instead of jump (null: use the raw one)
 let smoothC = null;
 const rawC = () => through(site) * (N - .5);
-function chapter(c = smoothC ?? rawC()){
+function chapter(c = glideC ?? smoothC ?? rawC()){
   const i = Math.min(N - 1, Math.floor(c)), j = Math.min(N - 1, i + 1), f = c - i;
   const u = j === i ? 0 : clamp((f - .5) / .5), e = ease(u);   // u: linear through the move, e: eased
   return { i, j, u, e, h: clamp(f / .5), on: e > .5 ? j : i };
@@ -108,6 +110,8 @@ function syncSite(){
   if(textOn !== lastText){ lastText = textOn; onAt = performance.now(); }   // the arrows draw in after the text arrives
   if(ch.on !== onNow){
     onNow = ch.on;
+    arrows[0].disabled = onNow === 0;
+    arrows[1].disabled = onNow === N - 1;
   }
   // which page is on the glass: a change of page swaps mid-spin (while the screen faces away), or else fades across
   const fadeIn = pageOf(A) === pageOf(B) ? 0 : (B.dataset.move === 'spin' ? +(ch.e > .5) : clamp((ch.e - .3) / .4));
@@ -171,6 +175,56 @@ function screenColours(){
     .sort((a, b) => a.getHSL({}).l - b.getHSL({}).l);
   return [base, ...lit];
 }
+// glides at a set pace, so the moves always play at the same speed. Any scroll of your own takes over.
+//  - "Check it out" on the landing: flies the picked model down into its section (FLY_SECS)
+//  - the arrows on each side of the websites: on to the next highlight or back. A step is the laptop moving
+//    across (MOVE_SECS), then that highlight's site drifting (DRIFT_SECS), and it stops there
+const FLY_SECS = 2.6, MOVE_SECS = 3.2, DRIFT_SECS = 1.6;
+let glide = 0, glideC = null;   // glideC: the chapter a glide is driving (null: none, follow the scroll)
+const stopGlide = () => { cancelAnimationFrame(glide); glideC = null; };
+['wheel', 'touchstart', 'keydown'].forEach(ev => addEventListener(ev, stopGlide, { passive: true }));
+const absTop = el => el.getBoundingClientRect().top + scrollY;
+const scrollOfC = c => absTop(site) + c / (N - .5) * (site.offsetHeight - innerHeight);
+goBtn.addEventListener('click', () => {
+  stopGlide();
+  const from = scrollY, to = absTop(pick === 'site' ? site : pc), t0 = performance.now();
+  const tick = now => {
+    const k = reduceMotion ? 1 : clamp((now - t0) / 1000 / FLY_SECS);
+    scrollTo({ top: mix(from, to, easeCubic(k)), behavior: 'instant' });
+    if(k < 1) glide = requestAnimationFrame(tick);
+  };
+  glide = requestAnimationFrame(tick);
+});
+// time along the chapters: each one's first half (the drift) takes DRIFT_SECS and its second (the move) MOVE_SECS;
+// the chapter itself eases the move, so a glide runs through this at an even pace
+const secsOf = c => { const i = Math.floor(c), f = c - i; return i * (DRIFT_SECS + MOVE_SECS) + (f < .5 ? f * 2 * DRIFT_SECS : DRIFT_SECS + (f - .5) * 2 * MOVE_SECS); };
+const cOf = s => { const per = DRIFT_SECS + MOVE_SECS, i = Math.floor(s / per), r = s - i * per; return i + (r < DRIFT_SECS ? r / DRIFT_SECS / 2 : .5 + (r - DRIFT_SECS) / MOVE_SECS / 2); };
+function stepTo(dir){
+  const c = glideC ?? smoothC ?? rawC();
+  const here = glideC === null ? chapter(c).on : Math.round(c - .5);   // mid-glide: from where it's headed
+  const to = Math.min(N - 1, Math.max(0, here + dir)) + .5;           // stops with its drift done, text up
+  stopGlide();
+  if(reduceMotion){ scrollTo({ top: scrollOfC(to), behavior: 'instant' }); return; }
+  const s0 = secsOf(c), s1 = secsOf(to), t0 = performance.now();
+  const tick = now => {
+    const k = clamp((now - t0) / 1000 / Math.max(.01, Math.abs(s1 - s0)));
+    glideC = cOf(mix(s0, s1, k));
+    scrollTo({ top: scrollOfC(glideC), behavior: 'instant' });
+    if(k < 1) glide = requestAnimationFrame(tick);
+    else { smoothC = glideC; glideC = null; }
+  };
+  glide = requestAnimationFrame(tick);
+}
+const arrows = ['prev', 'next'].map((dir, n) => {
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = `ow-arrow ow-arrow-${dir}`;
+  b.setAttribute('aria-label', n ? 'Next highlight' : 'Previous highlight');
+  b.innerHTML = '<svg viewBox="0 0 16 64" aria-hidden="true"><polyline points="2,2 14,32 2,62"/></svg>';
+  b.addEventListener('click', () => stepTo(n ? 1 : -1));
+  site.querySelector('.ow-stage').append(b);
+  return b;
+});
 Object.values(frames).forEach(fr => fr.addEventListener('load', () => { syncSite(); setTimeout(syncSite, 900); }));   // again once the site's own load cover lifts
 
 // ===== PC builds: the model of my build glides down from the landing into the frame of its photo (the 3D loop does
@@ -397,14 +451,18 @@ if(gl) Promise.all([loadLaptop(), new GLTFLoader().loadAsync(shot.dataset.model)
     return t < .5 ? (2 * t) ** 2 * ((d + 1) * 2 * t - d) / 2 : ((2 * t - 2) ** 2 * ((d + 1) * (t * 2 - 2) + d) + 2) / 2;
   };
 
-  let W = 0, H = 0, lastNow = 0, glidePc = null;
+  let W = 0, H = 0, lastNow = 0, glidePc = null, glideSite = null;
   function frameLoop(now){
     requestAnimationFrame(frameLoop);
     const t = reduceMotion ? 0 : now / 1000, dt = Math.min(.1, (now - lastNow) / 1000 || 0);
     lastNow = now;
     // follow the scroll with a short lag, so it glides (reduced motion: straight to it)
     const follow = (now, goal) => now === null || reduceMotion ? goal : now + (goal - now) * (1 - Math.exp(-dt / .14));
-    if(pick === 'site'){ smoothC = follow(smoothC, rawC()); syncSite(); drawBackdrop(now, dt); }
+    if(pick === 'site'){
+      if(glideC === null) smoothC = follow(smoothC, rawC());
+      glideSite = follow(glideSite, clamp(scrollY / Math.max(1, scrollY + site.getBoundingClientRect().top)));
+      syncSite(); drawBackdrop(now, dt);
+    }
     if(pick === 'pc'){
       const top = pc.getBoundingClientRect().top;
       glidePc = follow(glidePc, clamp(scrollY / Math.max(1, scrollY + top)));
@@ -423,7 +481,7 @@ if(gl) Promise.all([loadLaptop(), new GLTFLoader().loadAsync(shot.dataset.model)
       const sec = key === 'site' ? site : pc, a = box(heroSlot[key]);
       // k: 0 on the landing, 1 once its section's stage pins (the picked one flies across; the other stays behind)
       const top = sec.getBoundingClientRect().top;
-      const k = pick === key ? (reduceMotion ? +(top <= 0) : ease(clamp(scrollY / Math.max(1, scrollY + top)))) : 0;
+      const k = pick === key ? (reduceMotion ? +(top <= 0) : ease(key === 'site' ? glideSite ?? 0 : clamp(scrollY / Math.max(1, scrollY + top)))) : 0;   // smoothed, so wheel steps don't judder
       let b = a, yaw = 0, bump = 0, tilt = 0, bank = 0;
       if(key === 'site' && k > 0){
         // the highlight it's on, or partway between two, moving the way the next one's data-move says
