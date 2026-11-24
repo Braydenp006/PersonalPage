@@ -1,6 +1,9 @@
 # PersonalPage
 
 Brayden Paterson's personal site. Plain HTML + CSS + vanilla JS, no build step.
+<img width="1600" height="825" alt="server" src="https://github.com/user-attachments/assets/98f8f000-e58f-4a63-b9d2-3746cf0f940d" />
+<img width="1600" height="824" alt="resume" src="https://github.com/user-attachments/assets/180f187a-403e-4ec7-86ba-6531ce783c05" />
+<img width="1600" height="827" alt="home" src="https://github.com/user-attachments/assets/a8e8f968-ec92-442d-9adf-6dc9c5e6dcab" />
 
 - **Run locally:** `python3 serve.py` in this folder, then open http://localhost:3000 (it tells the browser not to reuse stale copies; plain `python3 -m http.server` works too, but Firefox may keep running old pages and scripts after edits). (Pages using JS modules, like the resume page, don't work when opened straight from the file.)
 - **Colours and fonts:** all in the `:root` block at the top of `styles.css`.
