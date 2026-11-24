@@ -11,11 +11,9 @@ assets/Pictures/work/temp-*
 # my local Claude Code settings (permissions, hooks): machine-specific
 .claude/settings.local.json
 
-# Impeccable's installed copies (reinstall with: npx impeccable install). PRODUCT.md, DESIGN.md and
-# .impeccable/config.json, design.json and surfaces/ are the parts worth committing.
+# Impeccable (the design tool): its installed copies (reinstall with: npx impeccable install) and its
+# working folder. The site doesn't use any of it, so it stays local.
 .claude/skills/impeccable/
 .claude/agents/impeccable-*
 .opencode/
-.impeccable/hook.cache.json
-# downloaded style reference images (not mine to publish)
-.impeccable/reference/
+.impeccable/
