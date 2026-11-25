@@ -20,7 +20,7 @@ export async function loadLaptop(){
   Object.assign(tex, { magFilter: THREE.NearestFilter, minFilter: THREE.NearestFilter, colorSpace: THREE.SRGBColorSpace });
 
   // the model is one mesh; split the lid off (every triangle with a corner above the keyboard) so it can open and shut
-  const src = obj.children[0].geometry.toNonIndexed(), pos = src.attributes.position, uv = src.attributes.uv;
+  const geo = obj.children[0].geometry, src = geo.index ? geo.toNonIndexed() : geo, pos = src.attributes.position, uv = src.attributes.uv;
   const parts = { base: { p: [], u: [] }, lid: { p: [], u: [] } };
   for(let t = 0; t < pos.count; t += 3){
     const isLid = [0, 1, 2].some(k => pos.getY(t + k) > .3);

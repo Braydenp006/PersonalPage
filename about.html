@@ -5,18 +5,33 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>About me · Brayden Paterson</title>
 <meta name="description" content="About Brayden Paterson: where he's worked, what he works with and what he does for fun.">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="canonical" href="https://braydenpaterson.ca/about.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Brayden Paterson">
+<meta property="og:title" content="About me · Brayden Paterson">
+<meta property="og:description" content="About Brayden Paterson: where he's worked, what he works with and what he does for fun.">
+<meta property="og:url" content="https://braydenpaterson.ca/about.html">
+<meta property="og:image" content="https://braydenpaterson.ca/assets/previews/share.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The home page of Brayden Paterson's site, styled like a teletext screen.">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#f7f7f5">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600&display=block" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600&display=swap" rel="stylesheet">
 <!-- MapLibre: draws the map (OpenStreetMap data served by OpenFreeMap, styled by assets/map/teal-style.json) -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.css" integrity="sha384-MinO0mNliZ3vwppuPOUnGa+iq619pfMhLVUXfC4LHwSCvF9H+6P/KO4Q7qBOYV5V" crossorigin="anonymous">
 <link rel="stylesheet" href="css/styles.css?v=48">
 <!-- arriving from another page of this site: that page's transition already showed this one settled, so skip the
      panels' pop-out (otherwise they'd vanish and pop back in right after the swap) -->
 <script>if(document.referrer.startsWith(location.origin)) document.documentElement.classList.add('arrived')</script>
 </head>
 <body class="about-page">
+<noscript><p style="position:fixed;left:0;right:0;bottom:0;z-index:100;margin:0;padding:12px 16px;background:#ffc46e;color:#000;font:15px/1.5 system-ui,sans-serif;text-align:center">This page is interactive and needs JavaScript to show its content. <a href="index.html" style="color:#000">The home page</a> has the short version.</p></noscript>
 
 <!-- About me, one screen, as a test chamber: the chamber sign down the left (my name, what I'm after as lit symbols,
      my details, and a dark foot with my availability and links); me standing on a plate in the middle; the map as an
@@ -82,7 +97,7 @@
          To add a photo, replace the <span class="ph">…</span> with: <img src="assets/Pictures/your-photo.webp" alt="" loading="lazy"> ===== -->
     <nav class="cards" aria-label="More">
       <a class="tile" href="projects.html" style="--to:#f4ead6;--tint:#6f8199"><span class="frame"><span class="ph">[PHOTO: a project on the bench]</span></span><b>Projects</b></a>
-      <a class="tile" href="resume.html" style="--to:#050706;--tint:#5d7262"><span class="frame"><img src="assets/Pictures/funnyres.webp" alt="" loading="lazy"></span><b>Resume</b></a>
+      <a class="tile" href="resume.html" style="--to:#050706;--tint:#5d7262"><span class="frame"><img src="assets/Pictures/funnyres.webp" width="800" height="1131" alt="" loading="lazy"></span><b>Resume</b></a>
       <a class="tile" href="how-it-runs.html" style="--to:#4148d8;--tint:#5a62a8"><span class="frame net"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><ellipse cx="12" cy="12" rx="4.2" ry="10"/><path d="M2 12h20M3.5 7h17M3.5 17h17"/></svg></span><b>How this site runs</b></a>
       <a class="tile" href="other-work.html" style="--to:#f4ead6;--tint:#9a8350"><span class="frame"><span class="ph">[PHOTO: a PC build]</span></span><b>Other work</b></a>
     </nav>
@@ -101,8 +116,8 @@
   <span>© 2026 Brayden Paterson · <a href="privacy.html">Privacy</a></span>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
-<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
+<script src="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js" integrity="sha384-SYKAG6cglRMN0RVvhNeBY0r3FYKNOJtznwA0v7B5Vp9tr31xAHsZC0DqkQ/pZDmj" crossorigin="anonymous"></script>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"},"integrity":{"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js":"sha384-IDC7sAMAIMB/TZ6dgKKPPAKZ2bXXXP8+FBMBC8cU319eBhKITx+PaalhfDkDNH28","https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/loaders/GLTFLoader.js":"sha384-Lq1Wl94so5JCKGDvezrdVMJhdeKQkwb8iwRo59QrPPd61CnrCJZLxYmFlQ8ZuOKR","https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/loaders/OBJLoader.js":"sha384-RKqc/KL7HrXk9eZXJ3lGhyR3x7c1FYpZUuvbF33bV7CwKDjRzddX4JsSu/bxlfAE","https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/renderers/CSS3DRenderer.js":"sha384-65+1CYkcJjDa3V4uvfnMeAckHhx9Iyw/dUhkPGni0an1YZIAnMlECvDVv/qxR3dV","https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/utils/BufferGeometryUtils.js":"sha384-wOjwauvHlJO7K6APr7FmMGH2nupQa3Ndzas9bJZhsAMOK055efJud8ns4aYmASKv","https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/environments/RoomEnvironment.js":"sha384-9ItPPH2vgKbkvgrqTKq7ptGYe+WuAnqlZtlqleJW4/CJjnM5R7C+efD6iS7ADPJ9","https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/controls/OrbitControls.js":"sha384-aJoe4qqS/DgF2jh9njAuvA6QIveJYoCuYOfYjdFY8P3eawzmc9bEQ40jq2TvOyuP"}}</script>
 <script type="module" src="js/about.js?v=46"></script>
 <script type="module" src="js/home.js?v=7"></script>
 <script type="module" src="js/me3d.js?v=9"></script>

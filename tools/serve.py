@@ -10,4 +10,15 @@ class NoCache(http.server.SimpleHTTPRequestHandler):
         self.send_header('Cache-Control', 'no-cache')   # may keep a copy, but must ask first (a 304 if unchanged, so still fast)
         super().end_headers()
 
+    def send_error(self, code, message=None, explain=None):
+        if code != 404 or not os.path.exists('404.html'):
+            return super().send_error(code, message, explain)
+        body = open('404.html', 'rb').read()   # same page nginx will serve via error_page 404
+        self.send_response(404)
+        self.send_header('Content-Type', 'text/html; charset=utf-8')
+        self.send_header('Content-Length', str(len(body)))
+        self.end_headers()
+        if self.command != 'HEAD':
+            self.wfile.write(body)
+
 http.server.ThreadingHTTPServer(('', int(sys.argv[1]) if len(sys.argv) > 1 else 3000), NoCache).serve_forever()

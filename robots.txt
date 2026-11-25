@@ -1,0 +1,5 @@
+User-agent: *
+# copies of client sites, shown inside the laptop on Other work; the clients' real sites should rank, not these
+Disallow: /work/
+
+Sitemap: https://braydenpaterson.ca/sitemap.xml

@@ -240,7 +240,7 @@ function makeCarousel(root, rows){
   const rnd = () => (rand = rand * 16807 % 2147483647) / 2147483647; // same "random" layout every visit
   const between = ([lo, hi]) => Math.round(lo + rnd() * (hi - lo));
   const items = () => [...car.querySelectorAll('.item')];
-  const centreOf = el => el.offsetParent.offsetLeft + el.offsetLeft + el.offsetWidth / 2;
+  const centreOf = el => (el.offsetParent?.offsetLeft ?? 0) + el.offsetLeft + el.offsetWidth / 2;
   const goTo = (i, smooth = true) => {
     const el = items()[Math.max(0, Math.min(i, items().length - 1))];
     if(el) car.scrollTo({ left: centreOf(el) - car.clientWidth / 2, behavior: smooth && !reduceMotion ? 'smooth' : 'instant' });
