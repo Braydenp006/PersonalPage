@@ -1,0 +1,44 @@
+/* Projects page: a three.js universe (js/projects.js). Without JS the <ol id="list"> is shown as a plain list. */
+html:has(.sky-page),.sky-page{background:#000;color:#efe6da;overflow:hidden}
+html:not(.js):has(.sky-page),html:not(.js) .sky-page{overflow:auto}
+.sky-page{font:400 16px/1.5 var(--font-name,ui-monospace,monospace)}
+#intro{max-width:640px;margin:0 auto;padding:80px var(--gutter)}
+.js #intro,html:not(.js) #sky,html:not(.js) #bang,html:not(.js) #flash{display:none}
+#intro li{margin:0 0 18px}#intro h2{margin:0;font-size:1.1rem}#intro a{color:#9ec5ff;margin-right:12px}
+#sky{position:fixed;inset:0;width:100%;height:100%;display:block}
+#flash{position:fixed;inset:0;background:radial-gradient(circle,#fff 0,#f0e6ff 45%,#c3a6ff 100%);opacity:0;pointer-events:none}
+.sky-home,.sky-priv{position:fixed;z-index:3;color:#efe6da;text-decoration:none;font-size:14px;padding:6px 8px}
+.sky-home{top:14px;left:var(--gutter);font-weight:600;font-size:16px}.sky-priv{bottom:10px;left:var(--gutter);opacity:.5}
+.sky-home:hover,.sky-priv:hover{text-decoration:underline}
+#bang{position:fixed;left:50%;top:50%;width:260px;height:260px;margin:-130px 0 0 -130px;border:0;border-radius:50%;background:none;color:#fff;cursor:pointer;z-index:2;font:inherit}
+#bang span{position:absolute;left:0;right:0;top:calc(100% + 6px);letter-spacing:.35em;text-transform:uppercase;font-size:14px}
+#bang small{position:absolute;left:0;right:0;top:calc(100% + 30px);opacity:.5;font-size:12px;animation:blink 2s infinite}
+@keyframes blink{50%{opacity:.1}}
+#bang.gone{display:none}
+#labels{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:0;transition:opacity 1s}
+#labels.on{opacity:1}
+.lbl{position:absolute;left:0;top:0;pointer-events:auto;background:none;border:0;color:#efe6da;font:inherit;font-size:13px;padding:2px 6px;cursor:pointer;white-space:nowrap;opacity:.65;text-shadow:0 0 6px #000,0 0 3px #000;transition:opacity .2s}
+.lbl:hover,.lbl:focus-visible,.lbl.hot{opacity:1;color:#fff}
+.lbl.sel{opacity:0}
+#panel{position:fixed;z-index:3;right:var(--gutter);top:50%;transform:translateY(-50%);width:min(340px,40vw);padding:24px;background:rgba(10,10,16,.72);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.18);border-radius:6px}
+#panel[hidden]{display:none}
+#panel h2{margin:0 0 10px;font-size:1.5rem}#panel p{margin:0 0 16px;color:#d8d0c4}
+#panel a{color:#9ec5ff;margin-right:14px}
+#panel nav{display:flex;gap:8px;margin-top:20px}
+#panel nav button{background:none;border:1px solid rgba(255,255,255,.3);color:#fff;font:inherit;padding:6px 12px;cursor:pointer;border-radius:3px}
+#panel nav button:hover{background:rgba(255,255,255,.12)}#panel #back{flex:1}
+@media (prefers-reduced-motion:reduce){#bang small{animation:none}}
+#panel ul{list-style:none;margin:0 0 14px;padding:0;font-size:14px}#panel ul li{margin:0 0 10px;color:#d8d0c4}
+#panel ul a[data-play]{display:inline-block;margin:0 4px 0 0;padding:2px 8px;border:1px solid #ff8be0;border-radius:3px;color:#ffc6f0;text-decoration:none;font-weight:600}
+#panel ul a[data-play]:hover{background:#ff8be0;color:#1a1020}
+#cab{position:fixed;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;background:rgba(0,0,8,.55)}
+#cab:not([hidden]) .cab-box{animation:camIn .55s cubic-bezier(.2,.8,.2,1)}
+@keyframes camIn{from{transform:scale(.4);opacity:0}}
+#cab[hidden]{display:none}
+.cab-box{display:flex;flex-direction:column;width:min(920px,94vw);height:min(760px,90vh);background:#150f2a;border:3px solid #3b2a78;border-radius:14px 14px 4px 4px;box-shadow:0 0 60px #8f5cff88,inset 0 0 30px #000}
+.cab-marquee{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:linear-gradient(#3b1f7a,#1c1038);border-radius:11px 11px 0 0}
+#cab-title{font-size:1.15rem;letter-spacing:.3em;text-transform:uppercase;color:#ffc6f0;text-shadow:0 0 12px #ff5fd2}
+#cab-x{background:none;border:1px solid #ffc6f0;color:#ffc6f0;font:inherit;padding:4px 10px;cursor:pointer;border-radius:3px}
+#cab-x:hover{background:#ffc6f0;color:#1a1020}
+#cab-frame{flex:1;margin:12px;border:6px solid #07040f;border-radius:6px;background:#000;min-height:0}
+body.dotc,body.dotc *{cursor:none!important}

@@ -1,0 +1,22 @@
+- generic [active]:
+  - link "◂ Home" [ref=e2] [cursor=pointer]:
+    - /url: index.html
+  - link "Privacy" [ref=e3] [cursor=pointer]:
+    - /url: privacy.html
+  - generic:
+    - button "willbot" [ref=e7] [cursor=pointer]
+    - button "styli" [ref=e10] [cursor=pointer]
+    - button "William mod" [ref=e13] [cursor=pointer]
+    - button "Linux setup" [ref=e15] [cursor=pointer]
+    - button "Tube radio mod" [ref=e16] [cursor=pointer]
+    - button "VrankFighters" [ref=e18] [cursor=pointer]
+  - complementary [ref=e19]:
+    - generic [ref=e20]:
+      - heading "willbot" [level=2] [ref=e21]
+      - paragraph [ref=e22]: "A talking-head voice assistant: faster-whisper, a local LLM, Chatterbox voice and a three.js head that lip-syncs."
+      - link "Source" [ref=e23] [cursor=pointer]:
+        - /url: https://github.com/Braydenp006/willbot
+    - navigation [ref=e24]:
+      - button "Previous project" [ref=e25] [cursor=pointer]: ‹
+      - button "Back to the system" [ref=e26] [cursor=pointer]
+      - button "Next project" [ref=e27] [cursor=pointer]: ›

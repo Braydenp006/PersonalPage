@@ -1,0 +1,21 @@
+- generic [active]:
+  - link "◂ Home" [ref=f1e2] [cursor=pointer]:
+    - /url: index.html
+  - link "Privacy" [ref=f1e3] [cursor=pointer]:
+    - /url: privacy.html
+  - 'button "Projects: click to explode the universe open" [ref=f1e4] [cursor=pointer]':
+    - generic [ref=f1e5]: Projects
+    - generic [ref=f1e6]: click
+  - generic:
+    - button "willbot" [ref=f1e7] [cursor=pointer]
+    - button "Phisher" [ref=f1e8] [cursor=pointer]
+    - button "Home server" [ref=f1e9] [cursor=pointer]
+    - button "styli" [ref=f1e10] [cursor=pointer]
+    - button "Meteor Shower" [ref=f1e11] [cursor=pointer]
+    - button "Light-following car" [ref=f1e12] [cursor=pointer]
+    - button "William mod" [ref=f1e13] [cursor=pointer]
+    - button "PC building" [ref=f1e14] [cursor=pointer]
+    - button "Linux setup" [ref=f1e15] [cursor=pointer]
+    - button "Tube radio mod" [ref=f1e16] [cursor=pointer]
+    - button "11-bit encoder" [ref=f1e17] [cursor=pointer]
+    - button "VrankFighters" [ref=f1e18] [cursor=pointer]

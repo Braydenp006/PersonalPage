@@ -1,0 +1,166 @@
+[  346595ms] [WARNING] Unrecognized feature: 'monetization'. @ http://localhost:3000/arcade/tictacminmax/:358
+[  346595ms] [WARNING] Unrecognized feature: 'xr'. @ http://localhost:3000/arcade/tictacminmax/:358
+[  346595ms] [WARNING] Allow attribute will take precedence over 'allowfullscreen'. @ http://localhost:3000/arcade/tictacminmax/:358
+[  346630ms] [WARNING] Connection: Wired @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:1782
+[  346631ms] [LOG] AUTOSTART https://pygame-web.github.io/cdn/0.9.3/pythons.js http://localhost:3000/arcade/tictacminmax/ undefined @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2261
+[  346631ms] [LOG] Location of pythons.js overrides script https://pygame-web.github.io/cdn/0.9.3/pythons.js => https://pygame-web.github.io/cdn/0.9.3/pythons.js?# @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2283
+[  346631ms] [LOG] {"xtermjs":"1","_sdl2":"canvas","user_canvas":0,"user_canvas_managed":0,"gui_divider":2,"ume_block":1,"can_close":0,"archive":"ttt","gui_debug":2,"cdn":"https://pygame-web.github.io/cdn/0.9.3/","autorun":0,"PYBUILD":"3.12","fb_ar":1.77,"fb_width":"1280","fb_height":"720","pydigits":"312","executable":"https://pygame-web.github.io/cdn/0.9.3/cpython312/main.js","debug":false,"interactive":false,"columns":132,"lines":"42","console":10,"fbdev":false,"quiet":false,"features":["vtx","snd","gui"]} @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2392
+[  346631ms] [LOG] config.xtermjs = 1 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  346631ms] [LOG] config._sdl2 = canvas @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  346631ms] [LOG] config.user_canvas = 0 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  346631ms] [LOG] config.user_canvas_managed = 0 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  346631ms] [LOG] config.gui_divider = 2 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  346631ms] [LOG] config.ume_block = 1 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  346631ms] [LOG] config.can_close = 0 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  346631ms] [LOG] config.archive = ttt @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  346631ms] [LOG] config.gui_debug = 2 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  346631ms] [LOG] config.cdn = https://pygame-web.github.io/cdn/0.9.3/ @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  346631ms] [LOG] config.autorun = 0 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  346631ms] [LOG] config.PYBUILD = 3.12 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  346631ms] [LOG] config.fb_ar = 1.77 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  346631ms] [LOG] config.fb_width = 1280 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  346631ms] [LOG] config.fb_height = 720 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  346632ms] [LOG] config.pydigits = 312 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  346632ms] [LOG] config.executable = https://pygame-web.github.io/cdn/0.9.3/cpython312/main.js @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  346632ms] [LOG] config.debug = false @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  346632ms] [LOG] config.interactive = false @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  346632ms] [LOG] config.columns = 132 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  346632ms] [LOG] config.lines = 42 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  346632ms] [LOG] config.console = 10 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  346632ms] [LOG] config.fbdev = false @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  346632ms] [LOG] config.quiet = false @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  346632ms] [LOG] config.features = [vtx, snd, gui] @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  346632ms] [LOG] interpreter= cpython @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2446
+[  346632ms] [LOG] orig_argv [] @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2447
+[  346632ms] [LOG] sys.argv:  [] @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2448
+[  346632ms] [LOG] docurl= http://localhost:3000/arcade/tictacminmax/ @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2449
+[  346632ms] [LOG] srcurl= https://pygame-web.github.io/cdn/0.9.3/pythons.js @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2450
+[  346632ms] [LOG] data-os= vtx,snd,gui @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2452
+[  346632ms] [LOG] data-python= python3.12 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2453
+[  346632ms] [LOG] script: id= site @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2454
+[  346632ms] [LOG] code :  3627  as site.py @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2455
+[  347263ms] [WARNING] 
+
+
+== FLAGS : is_mobile(false) dev=false debug_user=false debug_mobile=false ==
+
+
+
+ @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2077
+[  347263ms] [WARNING] ======= IFRAME ========= @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2086
+[  347264ms] [WARNING] Event "focus" queued : too early @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:1190
+[  347264ms] [LOG] focus set @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:1100
+[  347311ms] [LOG] Terminal+ImageAddon importing from CDN : https://pygame-web.github.io/cdn/0.9.3/../vt/ @ https://pygame-web.github.io/cdn/vtx.js:19
+[  347480ms] [LOG] vtx font: -5% @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:1023
+[  347480ms] [WARNING] vtx font: 552 / 52 = 6  Cols: 132 Cons: 10 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:1028
+[  347484ms] [WARNING] terminal 132 52 {url: https://pygame-web.github.io/cdn/0.9.3/xtermjsixel/xterm-addon-image-worker.js, sixelSupport: true} @ https://pygame-web.github.io/cdn/vtx.js:87
+[  347499ms] [WARNING] Auto ume unlocker safari== false @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:1165
+[  347499ms] [WARNING] TODO: user defined canvas @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:639
+[  347500ms] [LOG] pythons.js:  custom_onload @ http://localhost:3000/arcade/tictacminmax/:383
+[  347500ms] [WARNING] Loading python interpreter from https://pygame-web.github.io/cdn/0.9.3/cpython312/main.js @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2223
+[  347669ms] [LOG] main.js:  locateData: main.data  -> https://pygame-web.github.io/cdn/0.9.3/cpython312/main.data @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:481
+[  347675ms] [LOG] main.js:  locateFile: main.wasm https://pygame-web.github.io/cdn/0.9.3/cpython312/ @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:484
+[  348437ms] [WARNING] VM.prerun:Begin @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:285
+[  348437ms] [WARNING] VM.prerun:End @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:383
+[  348598ms] [LOG] PyMain: running in main thread, faking onCustomMessage @ https://pygame-web.github.io/cdn/0.9.3/cpython312/main.js:1
+[  348598ms] [ERROR] PyMain: BrowserFS not found @ https://pygame-web.github.io/cdn/0.9.3/cpython312/main.js:1
+[  348779ms] [WARNING] VM.postrun Begin @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:388
+[  348779ms] [LOG] Maybe RC https://pygame-web.github.io/cdn/0.9.3/cpythonrc.py @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:394
+[  348866ms] [WARNING] VM.postrun End @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:403
+[  350001ms] [LOG] Begin.cross_file.fetch https://pygame-web.github.io/cdn/index-0.9.3-cp312.json {redirect: follow, credentials: omit} @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:200
+[  350064ms] [LOG] cross_file.fetch 200 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:205
+[  350084ms] [LOG] End.cross_file.fetch /tmp/tmp-1-0 r/w= 1451 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:230
+[  350188ms] [LOG] Begin.cross_file.fetch ttt.tar.gz {redirect: follow, credentials: omit} @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:200
+[  350202ms] [LOG] cross_file.fetch 200 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:205
+[  350232ms] [LOG] End.cross_file.fetch /tmp/tmp-11-1 r/w= 117205 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:230
+[  350310ms] [LOG] Begin.cross_file.fetch https://pygame-web.github.io/cdn/cp312/pygame_ce-2.5.7-cp312-cp312-wasm32_bi_emscripten.whl# {redirect: follow, credentials: omit} @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:200
+[  350411ms] [LOG] cross_file.fetch 200 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:205
+[  350450ms] [LOG] End.cross_file.fetch /tmp/tmp-17-2 r/w= 1527290 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:230
+[  350650ms] [WARNING] The ScriptProcessorNode is deprecated. Use AudioWorkletNode instead. (https://bit.ly/audio-worklet) @ :1
+[  663288ms] [WARNING] window.onbeforeunload @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:1128
+[  663288ms] [WARNING] not track playing @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:1134
+[  663288ms] [ERROR] Blocked confirm('Are you sure you want to navigate away from this page ?') during beforeunload. @ http://localhost:3000/arcade/tictacminmax/:1
+[  736398ms] [WARNING] Unrecognized feature: 'monetization'. @ http://localhost:3000/arcade/tictacminmax/:358
+[  736398ms] [WARNING] Unrecognized feature: 'xr'. @ http://localhost:3000/arcade/tictacminmax/:358
+[  736398ms] [WARNING] Allow attribute will take precedence over 'allowfullscreen'. @ http://localhost:3000/arcade/tictacminmax/:358
+[  736400ms] [WARNING] Connection: Wired @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:1782
+[  736401ms] [LOG] AUTOSTART https://pygame-web.github.io/cdn/0.9.3/pythons.js http://localhost:3000/arcade/tictacminmax/ undefined @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2261
+[  736401ms] [LOG] Location of pythons.js overrides script https://pygame-web.github.io/cdn/0.9.3/pythons.js => https://pygame-web.github.io/cdn/0.9.3/pythons.js?# @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2283
+[  736401ms] [LOG] {"xtermjs":"1","_sdl2":"canvas","user_canvas":0,"user_canvas_managed":0,"gui_divider":2,"ume_block":1,"can_close":0,"archive":"ttt","gui_debug":2,"cdn":"https://pygame-web.github.io/cdn/0.9.3/","autorun":0,"PYBUILD":"3.12","fb_ar":1.77,"fb_width":"1280","fb_height":"720","pydigits":"312","executable":"https://pygame-web.github.io/cdn/0.9.3/cpython312/main.js","debug":false,"interactive":false,"columns":132,"lines":"42","console":10,"fbdev":false,"quiet":false,"features":["vtx","snd","gui"]} @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2392
+[  736401ms] [LOG] config.xtermjs = 1 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  736401ms] [LOG] config._sdl2 = canvas @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  736401ms] [LOG] config.user_canvas = 0 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  736401ms] [LOG] config.user_canvas_managed = 0 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  736401ms] [LOG] config.gui_divider = 2 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  736402ms] [LOG] config.ume_block = 1 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  736402ms] [LOG] config.can_close = 0 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  736402ms] [LOG] config.archive = ttt @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  736402ms] [LOG] config.gui_debug = 2 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  736402ms] [LOG] config.cdn = https://pygame-web.github.io/cdn/0.9.3/ @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  736402ms] [LOG] config.autorun = 0 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  736402ms] [LOG] config.PYBUILD = 3.12 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  736402ms] [LOG] config.fb_ar = 1.77 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  736402ms] [LOG] config.fb_width = 1280 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  736402ms] [LOG] config.fb_height = 720 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  736402ms] [LOG] config.pydigits = 312 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  736402ms] [LOG] config.executable = https://pygame-web.github.io/cdn/0.9.3/cpython312/main.js @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  736402ms] [LOG] config.debug = false @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  736402ms] [LOG] config.interactive = false @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  736402ms] [LOG] config.columns = 132 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  736402ms] [LOG] config.lines = 42 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  736402ms] [LOG] config.console = 10 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  736402ms] [LOG] config.fbdev = false @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  736402ms] [LOG] config.quiet = false @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  736402ms] [LOG] config.features = [vtx, snd, gui] @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2444
+[  736402ms] [LOG] interpreter= cpython @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2446
+[  736402ms] [LOG] orig_argv [] @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2447
+[  736402ms] [LOG] sys.argv:  [] @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2448
+[  736402ms] [LOG] docurl= http://localhost:3000/arcade/tictacminmax/ @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2449
+[  736402ms] [LOG] srcurl= https://pygame-web.github.io/cdn/0.9.3/pythons.js @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2450
+[  736402ms] [LOG] data-os= vtx,snd,gui @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2452
+[  736402ms] [LOG] data-python= python3.12 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2453
+[  736402ms] [LOG] script: id= site @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2454
+[  736402ms] [LOG] code :  3627  as site.py @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2455
+[  736442ms] [WARNING] 
+
+
+== FLAGS : is_mobile(false) dev=false debug_user=false debug_mobile=false ==
+
+
+
+ @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2077
+[  736442ms] [WARNING] ======= IFRAME ========= @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2086
+[  736442ms] [WARNING] Event "focus" queued : too early @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:1190
+[  736442ms] [LOG] focus set @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:1100
+[  736518ms] [LOG] Terminal+ImageAddon importing from CDN : https://pygame-web.github.io/cdn/0.9.3/../vt/ @ https://pygame-web.github.io/cdn/vtx.js:19
+[  736682ms] [LOG] vtx font: -5% @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:1023
+[  736682ms] [WARNING] vtx font: 552 / 52 = 6  Cols: 132 Cons: 10 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:1028
+[  736685ms] [WARNING] terminal 132 52 {url: https://pygame-web.github.io/cdn/0.9.3/xtermjsixel/xterm-addon-image-worker.js, sixelSupport: true} @ https://pygame-web.github.io/cdn/vtx.js:87
+[  736698ms] [WARNING] Auto ume unlocker safari== false @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:1165
+[  736699ms] [WARNING] TODO: user defined canvas @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:639
+[  736700ms] [LOG] pythons.js:  custom_onload @ http://localhost:3000/arcade/tictacminmax/:383
+[  736700ms] [WARNING] Loading python interpreter from https://pygame-web.github.io/cdn/0.9.3/cpython312/main.js @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:2223
+[  736796ms] [LOG] main.js:  locateData: main.data  -> https://pygame-web.github.io/cdn/0.9.3/cpython312/main.data @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:481
+[  736804ms] [LOG] main.js:  locateFile: main.wasm https://pygame-web.github.io/cdn/0.9.3/cpython312/ @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:484
+[  737219ms] [WARNING] VM.prerun:Begin @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:285
+[  737219ms] [WARNING] VM.prerun:End @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:383
+[  737480ms] [LOG] PyMain: running in main thread, faking onCustomMessage @ https://pygame-web.github.io/cdn/0.9.3/cpython312/main.js:1
+[  737480ms] [ERROR] PyMain: BrowserFS not found @ https://pygame-web.github.io/cdn/0.9.3/cpython312/main.js:1
+[  737589ms] [WARNING] VM.postrun Begin @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:388
+[  737590ms] [LOG] Maybe RC https://pygame-web.github.io/cdn/0.9.3/cpythonrc.py @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:394
+[  737691ms] [WARNING] VM.postrun End @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:403
+[  738763ms] [LOG] Begin.cross_file.fetch https://pygame-web.github.io/cdn/index-0.9.3-cp312.json {redirect: follow, credentials: omit} @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:200
+[  738799ms] [LOG] cross_file.fetch 200 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:205
+[  738873ms] [LOG] End.cross_file.fetch /tmp/tmp-1-0 r/w= 1451 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:230
+[  739079ms] [LOG] Begin.cross_file.fetch ttt.tar.gz {redirect: follow, credentials: omit} @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:200
+[  739114ms] [LOG] cross_file.fetch 200 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:205
+[  739184ms] [LOG] End.cross_file.fetch /tmp/tmp-9-1 r/w= 117205 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:230
+[  739325ms] [LOG] Begin.cross_file.fetch https://pygame-web.github.io/cdn/cp312/pygame_ce-2.5.7-cp312-cp312-wasm32_bi_emscripten.whl# {redirect: follow, credentials: omit} @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:200
+[  739366ms] [LOG] cross_file.fetch 200 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:205
+[  739447ms] [LOG] End.cross_file.fetch /tmp/tmp-15-2 r/w= 1527290 @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:230
+[  739697ms] [WARNING] The ScriptProcessorNode is deprecated. Use AudioWorkletNode instead. (https://bit.ly/audio-worklet) @ :1
+[ 1225416ms] [WARNING] window.onbeforeunload @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:1128
+[ 1225416ms] [WARNING] not track playing @ https://pygame-web.github.io/cdn/0.9.3/pythons.js:1134
+[ 1225416ms] [ERROR] Blocked confirm('Are you sure you want to navigate away from this page ?') during beforeunload. @ http://localhost:3000/arcade/tictacminmax/:1
+[ 1225419ms] dialog.accept: Cannot accept dialog which is already handled!
+    at _Page.<anonymous> (evalmachine.<anonymous>:1:42)
